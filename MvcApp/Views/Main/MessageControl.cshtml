@@ -1,0 +1,57 @@
+﻿
+@{
+    string div1 = @"
+                        <div class='input_container'>
+                            <input type='file' id='inputfile' onchange='sendAvatar();return false;' />
+                        </div>
+                        <div id='addNewPhotos' class='addNewPhotos' onclick='upload()' onmouseover='changeColor(this)' onmouseout='changeColor(this)'>
+                             Upload avatar
+                        </div>";
+
+    string div2 = @"
+                        <div id='send_message'>
+                            <label for='modal-1' class='send_message_btn'>Send message</label>
+                            <div>You are friend</div>
+                        </div>";
+
+    string div3 = @"
+                        <div id='send_message'>
+                            <label for='modal-1' class='send_message_btn'>Send message</label>
+                            <div>You are subscriber</div>
+                        </div>";
+
+    string div4 = @"
+                        <div id='send_message'>
+                            <label for='modal-1' class='send_message_btn'>Send message</label>
+                            <input
+                                type='button'
+                                id='AddToFriends'
+                                class='send_message_btn'
+                                value='Add to friends' onclick='addToFriends();return false;' />
+                        </div>";
+
+   
+    string messageForm = null;
+
+    switch ((int)ViewBag.RelationshipDefinitionIDOfCurrentVisitor)
+    {
+        case 1:
+            messageForm = div1;
+            break;
+
+        case 2:
+            messageForm = div2;
+            break;
+
+        case 3:
+            messageForm = div3;
+            break;
+
+        case 4:
+            messageForm = div4;
+            break;
+    }
+}
+ 
+
+@Html.Raw(messageForm)

@@ -1,0 +1,47 @@
+﻿@model MvcApp.ViewModel.EducationViewModel
+
+
+<table>
+    <tr>
+        <td class="profiles">Страна:</td>
+        <td>
+            @Html.DropDownListFor(a => a.SchoolCountry, Model.SchoolCountries, new { onchange = "ddlCountryQueryForTowns()" })
+        </td>
+    </tr>
+    <tr>
+        <td class="profiles">Город:</td>
+        <td>
+            @Html.DropDownListFor(a => a.SchoolTown, Model.SchoolTowns)
+        </td>
+    </tr>
+    <tr>
+        <td class="profiles">Школа:</td>
+        <td>
+            @Html.TextBoxFor(a => a.School)
+        </td>
+    </tr>
+    <tr>
+        <td class="profiles">Год начала обучения:</td>
+        <td>
+            @Html.DropDownListFor(a => a.StartSchoolYear, Model.StartYears, new { onchange = "updateFinishYears()" })
+        </td>
+    </tr>
+    <tr>
+        <td class="profiles">Год окончания обучения:</td>
+        <td>
+            @Html.DropDownListFor(a => a.FinishSchoolYear, Model.FinishYears)
+        </td>
+    </tr>
+</table>
+
+<br />
+<hr />
+<br />
+
+<input id="btnSaveEducationInfo"
+       type="button"
+       onclick="updateEducationInfo()"
+       class="btnSave"
+       value="Save education info" />
+<br />
+@Html.ValidationSummary()

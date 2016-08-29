@@ -1,0 +1,93 @@
+﻿
+@{
+    ViewBag.Title = "View";
+    Layout = "~/Views/Shared/_NestedLayout.cshtml";
+}
+
+@section styles{
+    <link href="@Url.Content("~/Content/people_friends.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/friends.css")" rel="stylesheet" />
+}
+
+<div id="searchForm" data-userid="">
+    <ul>
+        <li>
+            Страна :
+        </li>
+        <li>
+
+            <select id="ddlCountry" name="D1" class="auto-style1"></select>
+
+            <br />
+            <div id="Towns">
+                Город :<br />
+
+                <select id="ddlTown" name="D1" class="auto-style2">
+                    <option value="0"></option>
+                </select>
+            </div>
+
+        </li>
+        <li>
+            Возраст :
+        </li>
+        <li>
+            <select id="ddlFrom" name="D1" class="auto-style3"></select>
+            -
+            <select id="ddlTo" name="D1" class="auto-style4"></select>
+
+        </li>
+        <li>
+            Пол :
+        </li>
+
+
+        <li style="margin-left: 0px">
+            <input name="gender" type="radio" value="Any" checked="checked" />All<br />
+            <input name="gender" type="radio" value="Man" />Man<br />
+            <input name="gender" type="radio" value="Woman" />Woman<br />
+        </li>
+
+    </ul>
+</div>
+
+<div id="friendsList">
+    <table>
+        <tbody id="users"></tbody>
+    </table>
+</div>
+
+
+
+<link href="/Content/main_popup_window.css" rel="stylesheet" />
+<input class="modal-state" id="modal-1" type="checkbox" />
+<div class="modal">
+    <label class="modal__bg" for="modal-1"></label>
+    <div class="modal__inner">
+        <label class="modal__close" for="modal-1"></label>
+        <div>
+            <span>Message</span>
+            <textarea id="messageBody"></textarea>
+            <input type="button" id="sendBtn" onclick="createNewDialog()" value="Send" />
+        </div>
+    </div>
+</div>
+
+
+
+
+
+@section scripts{
+
+    @Scripts.Render("~/bundles/modalPopLite")
+
+    <script src="@Url.Content("~/Scripts/shared.js")"></script>
+    <script src="@Url.Content("~/Scripts/people.js")"></script>
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"></script>
+
+    @Scripts.Render("~/bundles/bootstrap")
+
+    <script src="@Url.Content("~/Scripts/sweetalert.min.js")"></script>
+}
+

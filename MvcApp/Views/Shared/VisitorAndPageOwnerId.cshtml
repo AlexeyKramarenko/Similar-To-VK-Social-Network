@@ -1,0 +1,22 @@
+﻿@using Microsoft.AspNet.Identity;
+
+@{
+    string PageOfUserID = HttpContext.Current.Request.RequestContext.RouteData.Values["UserID"] as string;
+
+    string PageOfUserIdValue = null;
+
+    if (PageOfUserID != null)
+    {
+        PageOfUserIdValue = PageOfUserID;
+    }
+    else
+    {
+        PageOfUserIdValue = HttpContext.Current.User.Identity.GetUserId();
+    }
+
+    string CurrentUserIDValue = HttpContext.Current.User.Identity.GetUserId();
+}
+
+
+@Html.Raw(string.Format("<input type='hidden' id='hdnCurrentUserID' value='{0}' />", CurrentUserIDValue))
+@Html.Raw(string.Format("<input type='hidden' id='hdnPageOfUserID' value='{0}' />", PageOfUserIdValue)) 

@@ -1,0 +1,65 @@
+﻿@model MvcApp.ViewModel.LoginViewModel
+
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles{
+    <style>
+        .loginInput {
+            width: 125px;
+        }
+
+        .field-validation-valid {
+            display: none;
+        }
+    </style>
+}
+
+<div id="nav_content_footer">
+    <nav>
+        @using (Html.BeginForm("Login", "Account", FormMethod.Post))
+        {
+            <ul>
+                <li>
+                    Username
+                </li>
+
+                <li>
+                    @Html.TextBoxFor(a => a.UserName, new { @class = "loginInput" })
+                    @Html.ValidationMessageFor(a => a.UserName)
+                </li>
+
+                <li>Password</li>
+
+                <li>
+                    @Html.PasswordFor(a => a.Password, new { @class = "loginInput" })
+                    @Html.ValidationMessageFor(a => a.Password)
+                </li>
+
+                <li>
+                    <input type="submit" class="loginInput" value="Login" />
+                </li>
+
+
+                <li>
+                    @Html.ActionLink("Forgot password?", "RecoverPassword", "Account")
+                </li>
+            </ul>
+        }
+    </nav>
+
+    <br />
+
+    @Html.ValidationSummary()
+</div>
+
+
+@*<script>
+    var ROOT = '@Url.Content("~/")';
+</script>*@
+
+
+
+

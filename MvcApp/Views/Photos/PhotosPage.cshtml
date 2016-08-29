@@ -1,0 +1,30 @@
+﻿
+@{
+    ViewBag.Title = "PhotosPage";
+    Layout = "~/Views/Shared/_NestedLayout.cshtml";
+}
+
+
+@section styles{
+    <link href="@Url.Content("~/Content/photos.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/sweetalert.css")" rel="stylesheet" />
+}
+
+
+<input type="hidden" id="hdnProfileID" value="" />
+<div class="container" style="margin-top: 25px; border-left: 1px solid grey; border-right: 1px solid grey;"></div>
+<div id="hiddenAlbumLinks"></div>
+
+
+
+
+
+
+@section scripts{
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="@Url.Content("~/Scripts/sweetalert.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/photos.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery-multidownload.js")"></script>
+}
+

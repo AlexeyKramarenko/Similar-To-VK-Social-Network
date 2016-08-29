@@ -1,0 +1,41 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="SiteMaster.master.cs" Inherits="WebFormsApp.SiteMaster" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head runat="server">
+
+    <title>Social network</title>
+
+    <link href="Content/master_page.css" rel="stylesheet" />
+
+    <asp:ContentPlaceHolder ID="_Styles" runat="server">
+    </asp:ContentPlaceHolder>
+
+</head>
+
+<body>
+
+    <form id="form1" runat="server" role="form" class="registration-form">
+
+
+        <div id="header">
+            <img id="logo" src="Content/img/network.png" />
+            <span id="hrefPlaceholder" runat="server"></span>
+        </div>
+
+
+        <asp:ContentPlaceHolder ID="PlaceHolder" runat="server">
+        </asp:ContentPlaceHolder>
+
+
+        <asp:ContentPlaceHolder ID="Scripts" runat="server">
+        </asp:ContentPlaceHolder>
+
+
+    </form>
+
+
+</body>
+</html>

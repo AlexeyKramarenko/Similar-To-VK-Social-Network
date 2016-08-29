@@ -1,0 +1,38 @@
+﻿@model IEnumerable<Core.POCO.Status>
+
+@if (Model != null)
+{
+    foreach (var status in Model)
+    {
+        <li>
+            <div class="table3">
+                <div class="table3row">
+                    <div class="table3leftCell">
+                        <img src="@status.AvatarUrl" class="post_image" width="30" />
+                    </div>
+                    <div class="table3rightCell">
+                        <b>@status.UserName</b>
+
+                        @if (ViewBag.CurrentVisitorIsOwnerOfCurrentPage==true)
+                        {
+                            @Html.Raw("<a class='delete' onclick='deletePost(this)'>delete</a>")
+                        }
+
+                        <br />
+                        @status.Post
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" value="@status.ID" data-statusid="hdnStatusId" />
+
+            @status.CreateDate  |
+
+            @if (ViewBag.DisplayComments == true)
+            { 
+                @Html.Partial("Comments", status)
+            }
+             
+        </li>
+    }
+
+}

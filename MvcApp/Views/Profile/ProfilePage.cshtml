@@ -1,0 +1,229 @@
+﻿
+@{
+    ViewBag.Title = "ProfilePage";
+    Layout = "~/Views/Shared/_NestedLayout.cshtml";
+}
+
+@section styles{
+
+
+    <link href="@Url.Content("~/Content/bootstrap_settings_page.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/settings_profile.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/profile.css")" rel="stylesheet" />
+
+    <style>
+        .btnSave {
+            margin-left: 190px;
+        }
+    </style>
+}
+
+<div class="container">
+
+    <ul class="nav nav-tabs">
+        <li><a data-toggle="tab" id="main_" href="#main">Common data</a></li>
+        <li><a data-toggle="tab" id="contacts_" href="#contacts">Contacts</a></li>
+        <li><a data-toggle="tab" id="hobby_" href="#hobby">Interests</a></li>
+        <li><a data-toggle="tab" id="education_" href="#education">Education</a></li>
+    </ul>
+
+    <div class="tab-content unvisible">
+
+        <div id="main" class="tab-pane fade in active tableSize">
+            @{
+                Html.RenderAction("MainInfo");
+            }
+
+        </div>
+
+        <div id="contacts" class="tab-pane fade tableSize">
+            @{
+                Html.RenderAction("ContactInfo");
+            }
+        </div>
+
+
+        <div id="hobby" class="tab-pane fade tableSize">
+            @{
+                Html.RenderAction("InterestsInfo");
+            }
+
+        </div>
+
+        <div id="education" class="tab-pane fade tableSize">
+            @{
+                Html.RenderAction("EducationInfo");
+            }
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+
+@section scripts{
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"></script>
+
+    @Scripts.Render("~/bundles/bootstrap")
+
+    <script src="@Url.Content("~/Scripts/sweetalert.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/profile.js")"></script>
+
+    <script>
+        function updateMainInfo() {
+
+            var mainInfoVM = {
+
+                ProfileID: $("#ProfileID").val(),
+                FirstName: $("#FirstName").val(),
+                LastName: $("#LastName").val(),
+                Gender: $("#Gender").val(),
+                Married: $("#Married").val(),
+                BirthDay: $("#BirthDay").val(),
+                BirthMonth: $("#BirthMonth").val(),
+                BirthYear: $("#BirthYear").val(),
+                HomeTown: $("#HomeTown").val(),
+                Language: $("#Language").val()
+            };
+
+            var json = JSON.stringify(mainInfoVM);
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("MainInfo", "Profile")",
+                contentType: 'application/json; charset=utf-8',
+                data: json,
+                success: function () {
+
+                    onSuccess();
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+
+                    onFailure();
+                }
+            })
+        };
+
+        function updateContactInfo() {
+
+            var contactsVM = {
+
+                ProfileID: $("#ProfileID").val(),
+                Country: $("#Country").val(),
+                Town: $("#Town").val(),
+                PhoneNumber: $("#PhoneNumber").val(),
+                Skype: $("#Skype").val(),
+                WebSite: $("#WebSite").val()
+            };
+
+            var json = JSON.stringify(contactsVM);
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("ContactInfo", "Profile")",
+                contentType: 'application/json; charset=utf-8',
+                data: json,
+                success: function () {
+                    onSuccess();
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+
+                    onFailure();
+                }
+            })
+        };
+
+        function updateInterestsInfo() {
+
+            var interestsVM = {
+
+                ProfileID: $("#ProfileID").val(),
+                Activity: $("#Activity").val(),
+                Interests: $("#Interests").val(),
+                Music: $("#Music").val(),
+                Films: $("#Films").val(),
+                Books: $("#Books").val(),
+                Games: $("#Games").val(),
+                Quotes: $("#Quotes").val(),
+                AboutMe: $("#AboutMe").val()
+            };
+
+            var json = JSON.stringify(interestsVM);
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("InterestsInfo", "Profile")",
+                contentType: 'application/json; charset=utf-8',
+                data: json,
+                success: function () {
+
+                    onSuccess();
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+
+                    onFailure();
+                }
+            })
+        };
+
+        function updateEducationInfo() {
+
+            var VM = {
+
+                ProfileID: $("#ProfileID").val(),
+                SchoolCountry: $("#SchoolCountry").val(),
+                SchoolTown: $("#SchoolTown").val(),
+                School: $("#School").val(),
+                StartSchoolYear: $("#StartSchoolYear").val(),
+                FinishSchoolYear: $("#FinishSchoolYear").val(),
+
+                SchoolCountries: null,
+                SchoolTowns: null,
+                StartYears: null,
+                FinishYears: null
+            };
+
+            var json = JSON.stringify(VM);
+
+            $.ajax({
+                type: "POST",
+
+                url: "@Url.Action("EducationInfo", "Profile")",
+                contentType: 'application/json; charset=utf-8',
+                data: json,
+                success: function () {
+
+                    onSuccess();
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+
+                    onFailure();
+                }
+            })
+        };
+
+        function onSuccess() {
+            alert("Profile updated successfully");
+        }
+
+        function onFailure() {
+            alert("An error occurred");
+        }
+
+    </script>
+
+
+}
+
+
+
+
+
+
+
+
+

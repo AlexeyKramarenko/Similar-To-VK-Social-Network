@@ -1,0 +1,40 @@
+﻿.sr-only {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 40px;
+}
+
+.form-group {
+    width: 550px;
+    position: relative;
+}
+
+.form-bottom {
+    border-top: 1px solid gray;
+    padding-left: 80px;
+    min-height: 170px;
+}
+
+ul {
+    padding-top: 20px;
+}
+
+fieldset {
+    border: 1px solid gray;
+    border-top: none;
+}
+
+.form-top {
+    margin-left: 80px;
+}
+
+#endRegistration {
+    margin-top: 50px;
+    margin-left: 60px;
+}
+
+#valSummary {
+    margin-left: 50px;
+    margin-bottom: 25px;
+}

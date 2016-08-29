@@ -1,0 +1,95 @@
+﻿<%@ Master Language="C#" MasterPageFile="~/SiteMaster.Master" AutoEventWireup="true" CodeBehind="NestedSiteMaster.master.cs" Inherits="WebFormsApp.NestedSiteMaster" %>
+
+<%@ Import Namespace="System.Web.Optimization" %>
+
+
+
+<asp:Content
+    ClientIDMode="Static"
+    ContentPlaceHolderID="_Styles"
+    runat="server">
+
+    <link href="Content/nestedSiteMaster.css" rel="stylesheet" />
+
+    <asp:ContentPlaceHolder ID="Styles" runat="server">
+    </asp:ContentPlaceHolder>
+
+</asp:Content>
+
+
+
+
+<asp:Content
+    ClientIDMode="Static"
+    ContentPlaceHolderID="PlaceHolder"
+    runat="server">
+
+
+    <asp:HiddenField ID="hdnUserID" ClientIDMode="Static" runat="server" />
+    <asp:HiddenField ID="hdnPageOfUserID" ClientIDMode="Static" runat="server"></asp:HiddenField>
+
+    <script src="Scripts/nestedSiteMaster.js"></script>
+
+    <asp:ScriptManager ID="ScriptManager1" runat="server">
+        <Scripts>
+            <asp:ScriptReference Path="~/Scripts/jquery-2.1.4.min.js" />
+        </Scripts>
+    </asp:ScriptManager>
+
+
+    <div id="nav_content_footer">
+
+
+        <div style="margin-left: 140px; margin-top: -37px;">
+
+            <div style="padding: 5px 0 5px 10px;">
+
+                <input id="txtName" type="text" />
+                <input id="btnPeople" type="button" value="People" onclick="checkUrl()" />
+                <input id="btnFriends" type="button" value="Friends" onclick="var id = document.getElementById('hdnUserID').value; checkUrl(id)" />
+                <span id="searchMode"></span>
+            </div>
+
+
+
+
+            <nav id="nav" style="margin-top: 40px;">
+                <ul>
+                    <li>
+                        <asp:HyperLink ID="lnkMainPage" NavigateUrl="~/main.aspx" runat="server">Моя Страница</asp:HyperLink></li>
+                    <li>
+                        <asp:HyperLink ID="lnkPeople" runat="server">Мои Друзья</asp:HyperLink></li>
+                    <li>
+                        <asp:HyperLink ID="lnkPhotos" NavigateUrl="~/photos.aspx" runat="server">Мои Фотографии</asp:HyperLink></li>
+                    <li>
+                        <asp:HyperLink ID="lnkMessages" NavigateUrl="~/messages.aspx" runat="server">
+                            Мои Сообщения  
+                        <asp:Label ID="litMessagesCount" Text="" runat="server" />
+                        </asp:HyperLink></li><li>
+                        <asp:HyperLink ID="lnkSettings" NavigateUrl="~/settings.aspx" runat="server">Мои Настройки</asp:HyperLink></li></ul></nav><div id="content">
+
+                <div id="innerContent" style="margin-top: 9px;">
+                    <asp:ContentPlaceHolder ID="NestedPlaceHolder" runat="server">
+                    </asp:ContentPlaceHolder>
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+
+
+   <asp:ContentPlaceHolder ID="Scripts" runat="server">
+    </asp:ContentPlaceHolder>
+
+
+    <script src="Scripts/jquery.signalR-2.2.0.min.js"></script>
+    <script src="Scripts/hubs.js"></script>
+    <script src="Scripts/signalRscriptForDefaultPages.js"></script>
+
+
+
+</asp:Content>
+
+

@@ -1,0 +1,114 @@
+/*решение смещения окна при появлении полосы прокрутки*/
+/* если окно браузера больше максимальной ширины сайта */
+@media screen and (min-width: 1200px) {
+    html {
+        margin-left: calc(100vw - 100%);
+        margin-right: 0;
+    }
+}
+
+a {
+    text-decoration: none;
+    color: #2B587A;
+    cursor: pointer;
+}
+
+#header {
+    padding: 15px;
+    padding-bottom: 5px;
+    background-color: #7EE0E0;
+    border-radius: 0 0 10px 10px;
+    width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: -10px;
+    border: 1px solid grey;
+    position: relative;
+}
+
+.link {
+    margin-left: 20px;
+    margin-right: 20px;
+    vertical-align: top;
+}
+
+#name {
+    font-style: italic;
+    font-size: 20px;
+}
+
+li {
+    color: #395b3e;
+    list-style-type: none;
+    line-height: 30px;
+}
+
+#nav_content_footer {
+    position: relative;
+    width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+    #nav_content_footer > nav {
+        width: 300px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+        #nav_content_footer > nav > ul {
+            margin-left: -35px;
+        }
+
+nav#nav {
+    position: absolute;
+    top: 0;
+    left: -35px;
+    /*width: 150px;*/
+    text-align: left;
+}
+
+#content {
+    width: 650px;
+    min-height: 200px;
+    position: absolute;
+    /*top: 0;*/
+    right: 0;
+}
+
+    #content > #innerContent {
+        /*border-left: 1px solid gray;*/
+        min-height: 300px;
+        /*padding-top: 20px;*/
+        /*border-right: 1px solid gray;*/
+    }
+
+#Content {
+    min-height: calc(100vh -30px);
+}
+
+footer {
+    height: 30px;
+}
+
+#logo {
+    width: 35px;
+    height: 35px;
+    margin-top: -8px;
+}
+
+#logout {
+    position: absolute;
+    right: 40px;
+}
+
+#hrefPlaceholder {
+    z-index: 10;
+    position: absolute;
+    right: 35px;
+    top: 15px;
+}
+
+#form1 {
+    margin-bottom: 700px;
+}

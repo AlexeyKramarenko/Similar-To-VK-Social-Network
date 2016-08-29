@@ -1,0 +1,46 @@
+﻿@model MvcApp.ViewModel.ContactsViewModel
+
+
+
+@Html.HiddenFor(a => a.ProfileID)
+<table>
+    <tr>
+        <td class="profiles">Страна:</td>
+        <td>
+            @Html.TextBoxFor(a => a.Country)
+        </td>
+    </tr>
+    <tr>
+        <td class="profiles">Город:</td>
+        <td>
+            @Html.TextBoxFor(a => a.Town)
+        </td>
+    </tr>
+    <tr>
+        <td class="profiles">Мобильный телефон:</td>
+        <td>
+            @Html.ValidationMessageFor(a => a.PhoneNumber)
+            @Html.TextBoxFor(a => a.PhoneNumber)
+        </td>
+    </tr>
+    <tr>
+        <td class="profiles">Skype:</td>
+        <td>
+            @Html.TextBoxFor(a => a.Skype)
+        </td>
+    </tr>
+    <tr>
+        <td class="profiles">Личный сайт:</td>
+        <td>
+            @Html.TextBoxFor(a => a.WebSite)
+        </td>
+    </tr>
+</table>
+
+<br />
+<hr />
+<br />
+<input type="button" id="btnSaveContacts" class="btnSave" onclick="updateContactInfo()" value="Save contacts" />
+
+
+

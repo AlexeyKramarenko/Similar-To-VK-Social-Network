@@ -1,0 +1,32 @@
+﻿.container > ul > li > a {
+    color: #352e2e;
+}
+
+.auto-style1 {
+    height: 25px;
+}
+
+.profiles {
+    width: 170px;
+    height: 25px;
+    text-align: right;
+    font-style: italic;
+    padding-right: 15px;
+}
+
+
+.unvisible {
+    display: none;
+}
+
+.tableSize {
+    font-size: 14px;
+    width: 380px;
+    margin-top: 60px;
+    margin-bottom: 40px;
+    margin-left: 90px;
+}
+
+.dropdownlist {
+    width: 120px;
+}

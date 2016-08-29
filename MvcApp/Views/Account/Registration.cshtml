@@ -1,0 +1,230 @@
+﻿
+@model MvcApp.ViewModel.RegistrationViewModel
+
+@{
+    ViewBag.Title = "Registration";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@section styles{
+    <link href="@Url.Content("~/Content/login.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/registration.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/index.css")" rel="stylesheet" />
+}
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"></script>
+
+
+
+<script src="@Url.Content("~/Scripts/jquery.validate.js")"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")"></script>
+
+<div style="display:block;width: 650px; margin-left: auto; margin-right: auto;">
+
+    @using (Html.BeginForm("Registration", "Account", FormMethod.Post, new { role = "form", @class = "registration-form" }))
+    {
+        <fieldset style="display: block;">
+
+            <div class="form-top">
+                <div class="form-top-left">
+                    <h3>Шаг 1  </h3>
+                    <h4>Введите свое имя и фамилию</h4>
+                </div>
+                <div class="form-top-right">
+                    <i class="fa fa-user"></i>
+                </div>
+            </div>
+            <div class="form-bottom">
+                <div class="form-group">
+                    <label class="sr-only" for="form-first-name">Ваше имя</label><br />
+
+                    @Html.ValidationMessageFor(a => a.FirstName)
+
+                    @Html.TextBoxFor(a => a.FirstName, new { @class = "form-first-name form-control" })
+
+                </div>
+                <div class="form-group">
+
+                    <label class="sr-only" for="form-last-name">Ваша фамилия</label><br />
+
+                    @Html.ValidationMessageFor(a => a.LastName)
+
+                    @Html.TextBoxFor(a => a.LastName, new { @class = "form-last-name form-control" })
+
+                </div>
+                <button type="button" class="btn btn-next">Далее</button>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <div class="form-top">
+                <div class="form-top-left">
+                    <h3>Шаг 2  </h3>
+                    <h4>Данные аккаунта</h4>
+                </div>
+                <div class="form-top-right">
+                    <i class="fa fa-key"></i>
+                </div>
+            </div>
+            <div class="form-bottom">
+                <div class="form-group">
+                    <label class="sr-only" for="form-email">Телефон</label><br />
+
+                    @Html.ValidationMessageFor(a => a.PhoneNumber)
+
+                    @Html.TextBoxFor(a => a.PhoneNumber, new { @class = "form-email form-control" })
+
+                </div>
+                <div class="form-group">
+                    <label class="sr-only" for="form-email">Email</label><br />
+
+                    @Html.ValidationMessageFor(a => a.Email)
+
+                    @Html.TextBoxFor(a => a.Email, new { @class = "form-email form-control" })
+
+                </div>
+                <div class="form-group">
+                    <label class="sr-only" for="form-last-name">Имя пользователя</label><br />
+
+                    @Html.ValidationMessageFor(a => a.UserName)
+
+                    @Html.TextBoxFor(a => a.UserName, new { @class = "form-last-name form-control" })
+
+                </div>
+                <div class="form-group">
+                    <label class="sr-only" for="form-password">Пароль</label><br />
+
+                    @Html.ValidationMessageFor(a => a.Password)
+
+                    @Html.PasswordFor(a => a.Password, new { @class = "form-password form-control" })
+
+                </div>
+                <div class="form-group">
+                    <label class="sr-only" for="form-repeat-password">Повторите пароль</label><br />
+
+                    @Html.ValidationMessageFor(a => a.PasswordConfirm)
+
+                    @Html.PasswordFor(a => a.PasswordConfirm, new { @class = "form-repeat-password form-control" })
+
+                </div>
+
+                <div class="form-group">
+                    <label class="sr-only" for="form-repeat-password">Укажите Вашу дату рождения</label><br />
+
+                    <select id="BirthDay" name="BirthDay"></select>
+                    <select id="BirthMonth" name="BirthMonth"></select>
+                    <select id="BirthYear" name="BirthYear"></select>
+
+                </div>
+                <button type="button" class="btn btn-previous">Назад</button>
+                <button type="button" class="btn btn-next">Далее</button>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <div class="form-top">
+                <div class="form-top-left">
+                    <h3>Шаг 3</h3>
+                    <h4>Укажите Ваше место жительства</h4>
+                </div>
+            </div>
+            <div class="form-top-right">
+                <i class="fa fa-key"></i>
+            </div>
+
+            <div class="form-bottom">
+                <div class="form-group">
+                    <label class="sr-only" for="form-facebook">Страна</label><br />
+                    <select id="Country" class="dwellingPlace" name="Country"></select>
+                </div>
+                <div class="form-group">
+                    <label class="sr-only" for="form-twitter">Город</label><br />
+                    <select id="Town" class="dwellingPlace" name="Town"></select>
+                </div>
+
+                <button type="button" class="btn btn-previous">Назад</button>
+                <button type="button" class="btn btn-next">Далее</button>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <div class="form-top">
+                <div class="form-top-left">
+                    <h3>Шаг 4</h3>
+                    <h4>Укажите Ваши личные данные</h4>
+                </div>
+            </div>
+            <div class="form-top-right">
+                <i class="fa fa-key"></i>
+            </div>
+
+            <div class="form-bottom">
+                <div class="form-group">
+                    <label class="sr-only" for="form-facebook">Ваш пол</label><br />
+
+                    <select>
+                        <option value="man">мужской</option>
+                        <option value="woman">женский</option>
+                    </select>
+
+                </div>
+                <div class="form-group">
+                    <label class="sr-only" for="form-twitter">Семейное положение</label><br />
+
+                    <select>
+                        <option value="false">не женат/не замужем</option>
+                        <option value="true">женат/замужем</option>
+                    </select>
+
+                </div>
+
+                <button type="button" class="btn btn-previous">Назад</button>
+                <button type="button" class="btn btn-next">Далее</button>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <div class="form-top">
+                <div class="form-top-left">
+                    <h3>Шаг 5</h3>
+                    <h4>Завершение регистрации</h4>
+                </div>
+                <div class="form-top-right">
+                    <i class="fa fa-twitter"></i>
+                </div>
+            </div>
+            <div class="form-bottom">
+                <div id="endRegistration">
+                    <button type="button" class="btn btn-previous">Назад</button>
+                    <br />
+                    <br />
+
+                    <input type="submit" value="Зарегистрироваться!" height="45" width="150" />
+
+                </div>
+            </div>
+        </fieldset>
+
+    }
+
+</div>
+<br />
+
+
+@Html.ValidationSummary(true)
+
+@section scripts{
+
+    <!-- Javascript -->
+    <script src="@Url.Content("~/Content/assets/js/jquery-1.11.1.min.js")"></script>
+    <script src="@Url.Content("~/Content/assets/js/jquery.backstretch.js")"></script>
+    <script src="@Url.Content("~/Content/assets/js/scripts.js")" type="text/javascript"></script>
+    <!--[if lt IE 10]>
+        <script src="assets/js/placeholder.js"></script>
+    <![endif]-->
+    <script src="@Url.Content("~/Scripts/registration.js")"></script>
+
+
+}
+

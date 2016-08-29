@@ -1,0 +1,74 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    Html.RenderPartial("VisitorAndPageOwnerId");
+}
+
+
+@section styles{
+
+    @RenderSection("styles", required: false)
+
+    <link href="@Url.Content("/Content/nestedSiteMaster.css")" rel="stylesheet" />
+}
+
+<script src="@Url.Content("~/Scripts/nestedSiteMaster.js")"></script>
+ 
+
+<div id="nav_content_footer">
+
+    <div style="margin-left: 140px; margin-top: -52px;">
+        <div style="padding: 5px 0 5px 10px;">
+            <input id="txtName" type="text" />
+            <input id="btnPeople" type="button" value="People" onclick="goToPeoplePage(friendsOnly=false, online=false)" />
+            <input id="btnFriends" type="button" value="Friends" onclick="goToPeoplePage(friendsOnly=true, online=false)" />
+            <span id="searchMode"></span>
+        </div>
+
+        <nav id="nav" style="margin-top: 40px;">
+            <ul>
+                <li>
+                    @Html.ActionLink("Моя Страница", "MainPage", "Main", new { UserID = "" }, null)
+                </li>
+                <li>
+                    <a onclick="goToPeoplePage(friendsOnly = true, online = false)">Мои Друзья</a>
+                </li>
+                <li>
+                    @Html.ActionLink("Мои Фотографии", "PhotosPage", "Photos", null, null)
+                </li>
+                <li>
+                    @Html.ActionLink("Мои Сообщения", "MessagesPage", "Messages", null, null)
+                </li>
+                <li>
+                    @Html.ActionLink("Мои Настройки", "SettingsPage", "Settings", null, null)
+                </li>
+            </ul>
+        </nav>
+        <div id="/Content">
+            <div id="innerContent" style="margin-top: 31px;">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section scripts{
+
+    @RenderSection("scripts", false)
+
+
+
+    <script src="@Url.Content("~/Scripts/jquery.signalR-2.2.0.min.js")"></script>
+    <script src="@Url.Content("~/signalr/hubs")"></script>
+    <script src="@Url.Content("~/Scripts/signalRscriptForDefaultPages.js")"></script>
+}
+
+
+
+
+

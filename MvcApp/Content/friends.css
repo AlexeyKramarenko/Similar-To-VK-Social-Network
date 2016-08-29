@@ -1,0 +1,23 @@
+﻿tr td:last-child {
+    font-size: 12px;
+    width: 160px;
+}
+td {
+            border-bottom: 1px solid #ddd;
+        }
+
+        .auto-style1 {
+            width: 106px;
+        }
+
+        .auto-style2 {
+            width: 104px;
+        }
+
+        .auto-style3 {
+            width: 45px;
+        }
+
+        .auto-style4 {
+            width: 50px;
+        }

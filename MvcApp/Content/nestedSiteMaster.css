@@ -1,0 +1,18 @@
+﻿.message {
+    background-color: #2B587A;
+    border-radius: 6px;
+    padding: 3px;
+    color: white;
+    font-family: sans-serif;
+}
+
+#searchMode {
+    font-weight: bold;
+}
+
+.container_ {
+    background-color: #99CCFF;
+    border: thick solid #808080;
+    padding: 20px;
+    margin: 20px;
+}

@@ -1,0 +1,35 @@
+﻿.privacy {
+    color: blue;
+}
+
+    .privacy:hover {
+        text-decoration: underline;
+        color: blue;
+    }
+
+ table {
+    min-width: 380px;
+}
+ 
+
+td.settings_privacy_row1 {
+    width: 200px;
+    height: 25px;
+    text-align: right;
+}
+
+td.settings_privacy_row2 {
+    width: 335px;
+    height: 25px;
+    text-align: right;
+    font-style: italic;
+    padding-right: 15px;
+}
+
+.hideTextBox {
+    display: none;
+}
+
+.showTextBox {
+    visibility: visible;
+}

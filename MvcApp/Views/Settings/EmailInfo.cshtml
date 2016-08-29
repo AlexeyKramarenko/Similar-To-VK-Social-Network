@@ -1,0 +1,25 @@
+﻿@model MvcApp.ViewModel.EmailViewModel
+
+@using (Ajax.BeginForm("EmailInfo", "Settings", new AjaxOptions { HttpMethod = "POST", OnFailure = "onEmailFailure", OnSuccess = "onSuccess", UpdateTargetId = "EmailInfo" }))
+{
+    <table>
+        <tr>
+            <td class="settings_privacy_row1">Электронный адрес:</td>
+            <td>
+                @Html.HiddenFor(a => a.OldEmail)
+                @Html.DisplayFor(a => a.OldEmail)
+            </td>
+        </tr>
+        <tr>
+            <td class="settings_privacy_row1"></td>
+            <td>
+                @Html.TextBoxFor(a => a.NewEmail, new { id = "txtEmail" })
+
+                <input type="submit" value="Change email" id="btnChangeEmail" />
+            </td>
+        </tr>
+    </table>
+
+    @Html.ValidationSummary()
+
+}

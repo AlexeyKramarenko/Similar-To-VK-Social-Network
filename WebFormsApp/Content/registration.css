@@ -1,0 +1,21 @@
+﻿
+.dwellingPlace {
+    width: 120px;
+}
+
+#innerContent > fieldset {
+    border-left: 1px solid gray;
+    border-right: 1px solid gray;
+}
+
+#content {
+    top: 15px;
+}
+
+.modelErrorMessage {
+    display: block;
+}
+
+#valSummary {
+    margin-left: 200px;
+}

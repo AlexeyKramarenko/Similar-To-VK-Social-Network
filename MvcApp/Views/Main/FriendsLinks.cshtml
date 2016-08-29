@@ -1,0 +1,19 @@
+﻿@model IEnumerable<MvcApp.ViewModel.FriendsViewModel>
+
+
+<div class="header_bottom">
+    @ViewBag.FriendsCount friend(s)
+</div>
+<div class="Friends">
+
+    @if (Model != null)
+    {
+        foreach (var item in Model)
+        {
+            <a href='@item.FriendsPageUrl'>
+                <img src='@item.ImageUrl' width="100" />
+            </a>
+        }
+    }
+
+</div>

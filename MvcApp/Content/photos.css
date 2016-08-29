@@ -1,0 +1,193 @@
+﻿.btn {
+    background: #2B587A;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+    padding: 7px;
+    color: white;
+}
+
+.addNewPhotos {
+    background-color: #F3F3F3;
+    padding: 25px;
+    display: block;
+    text-align: center;
+}
+
+.overAddNewPhotos {
+    background-color: #DBD6E8;
+    padding: 25px;
+    display: block;
+    text-align: center;
+}
+
+#link {
+    color: #2B587A;
+}
+
+.A {
+    position: relative;
+    margin-top: 5px;
+    border-bottom: solid;
+    border-width: 1px;
+    padding-bottom: 5px;
+}
+
+.B {
+    margin-left: 15px;
+}
+
+.C {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: #2B587A;
+    margin-right: 15px;
+}
+
+.D {
+    margin-left: 15px;
+    margin-right: 15px;
+    padding-bottom: 3px;
+    border-bottom: 1px solid grey;
+}
+
+.addNewPhotos:hover {
+    cursor: pointer;
+}
+
+#overlay {
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,.5);
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    display: none;
+}
+
+#modal {
+    width: 400px;
+    background: #fff;
+    box-shadow: 0 0 10px #000;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    margin-top: -200px;
+    margin-left: -200px;
+    z-index: 11;
+    display: none;
+}
+
+    #modal .head {
+        background: #eee;
+        padding: 10px;
+    }
+
+    #modal p {
+        margin: 15px;
+    }
+
+    #modal .close {
+        position: absolute;
+        right: 5px;
+        top: 5px;
+        font-size: 16px;
+        font-weight: bold;
+        background: #ddd;
+        padding: 5px 10px;
+        border: 1px solid #ccc;
+        cursor: pointer;
+    }
+
+
+.input_container {
+    width: 0px;
+    height: 0px;
+    overflow: hidden;
+}
+
+.download {
+    font-weight: bold;
+}
+
+#myphotos {
+    font-weight: bold;
+    color: #45688E;
+}
+
+#table {
+    display: table;
+    width: 600px;
+    margin: 25px;
+}
+
+.tableRow {
+    display: table-row;
+    position: relative;
+}
+
+.tableCol {
+    display: table-cell;
+    vertical-align: top;
+    width: 200px;
+}
+
+#btnCreateAlbum {
+    position: absolute;
+    width: 110px;
+    height: 30px;
+    right: 100px;
+    bottom: 10px;
+    background-color: #6d8cb0;
+}
+
+#_close {
+    position: absolute;
+    right: 100px;
+    color: white;
+    top: 20px;
+}
+
+#newAlbum {
+    background-color: #597BA5;
+    color: white;
+    padding: 20px;
+}
+
+#GALLERY {
+    width: 620px;
+    margin: 20px;
+}
+
+.list {
+    display: inline;
+}
+
+#F {
+    width: 470px;
+    position: relative;
+}
+
+#K {
+    background-color: #eee9e9;
+    padding: 15px;
+}
+
+/*выровнять картинку посередине, независимо от её размера*/
+#albums > a > img {
+    display: block;
+    margin: 0 auto;
+}
+
+#albums > b {
+    display: block;
+    text-align: center;
+    color: #6E5D6F;
+}
+
+#hiddenAlbumLinks {
+    display: none;
+}

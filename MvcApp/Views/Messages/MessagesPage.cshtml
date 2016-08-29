@@ -1,0 +1,93 @@
+﻿@model IEnumerable<MvcApp.ViewModel.MessagesViewModel>
+
+@{
+    ViewBag.Title = "Messages";
+    Layout = "~/Views/Shared/_NestedLayout.cshtml";
+}
+
+@section styles{
+    <link href="~/Content/bootstrap_settings_page.css" rel="stylesheet" />
+    <link href="~/Content/settings_profile.css" rel="stylesheet" />
+    <link href="~/Content/messages.css" rel="stylesheet" />
+}
+
+
+<div class="container">
+
+    <ul class="nav nav-tabs">
+        <li class="active" id="li_dialogs">
+            <a data-toggle="tab" href="#dialogs">Dialogs</a>
+
+        </li>
+        <li id="li_lookDialog">
+            <a data-toggle="tab" href="#menu1">Dialog viewer</a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+
+        <div id="dialogs" class="tab-pane fade in active">
+
+            <input type="hidden" id="hdnActiveDialogID" />
+            <input type="hidden" id="hdnMyCurrentInterlocutor" />
+
+            @if(Model != null)
+            {
+                foreach (var item in Model)
+                {
+                    <a data-toggle="tab"
+                       data-dialogid='@item.DialogID'
+                       data-interlocutoruserid='@item.InterlocutorUserID '
+                       href="#menu1"
+                       onclick="goToDialog(this); getUsersInfoForDialogForm(this);"
+                       class="linkToDialog">
+
+                        <table class="dialogs_row_t">
+
+                            <tbody>
+                                <tr>
+                                    <td class="dialogs_photo">
+                                        <img src='@item.InterlocutorAvatar' width="50" height="50">
+                                    </td>
+                                    <td class="dialogs_info">
+                                        <div class="dialogs_user wrapped" data-interlocutoruserid='@item.InterlocutorUserID'>@item.InterlocutorUserName</div>
+
+                                        <div class="dialogs_date">@item.CreateDate</div>
+                                    </td>
+                                    <td class="dialogs_msg_contents">
+                                        <div class="dialogs_msg_body  clear_fix" style="opacity: 1;">
+                                            <img src='@item.CurrentUserAvatar' width="32" height="32">
+                                            <div class="dialogs_comment">@item.MessageText</div>
+                                        </div>
+                                    </td>
+                                    <td class="dialogs_unread_td">
+                                        <div class="dialogs_unread unshown"></div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </a>
+                }
+            }
+        </div>
+
+        <div id="menu1" class="tab-pane fade dialogs" style="">
+            <div class="myBox">
+                <table>
+                    <tbody id="conversation"></tbody>
+                </table>
+            </div>
+            <table id="write_form"></table>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"></script>
+
+    @Scripts.Render("~/bundles/bootstrap")
+
+    <script src="@Url.Content("~/Scripts/sweetalert.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/signalRmessagesPage.js")"></script>
+    <script src="@Url.Content("~/Scripts/messages.js")"></script>
+}

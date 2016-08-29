@@ -1,0 +1,156 @@
+﻿@*@model Core.BLL.DTO.PrivacyRestrictions*@
+
+@{
+    ViewBag.Title = "Main page";
+    Layout = "~/Views/Shared/_NestedLayout.cshtml";
+}
+
+@section styles{
+
+    <link href="@Url.Content("~/Content/main.css")" rel="stylesheet" />
+
+    <link href="@Url.Content("~/Content/sweetalert.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/photos.css")" rel="stylesheet" />
+
+    <link href="@Url.Content("~/Content/modalPopLite.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/main_popup_window.css")" rel="stylesheet" />
+
+
+    <style>
+        #photosHeader {
+            background-color: #DEE5EB;
+            border: 1px solid grey;
+            border-right: none;
+            display: block;
+            padding-left: 10px;
+            font-weight: bold;
+            color: #45688E;
+        }
+
+        #postsList {
+            margin-right: -1px;
+            border-right: 1px solid gray;
+            padding-right: 10px;
+            padding-left: 10px;
+        }
+
+        .COMMENT {
+            width: 300px;
+        }
+    </style>
+}
+
+
+<div id="mainContent">
+
+    <div id="popup-wrapper">
+        <a href="#" id="close-btn">Close</a>
+        <img class="imgLargeAvatar" src="" width="650" />
+        <br />
+    </div>
+
+    <div id="leftColumn">
+        <ul>
+            <li>
+                <img id="imgAvatar" src="" onclick="GetLargeAvatarImg();return false;" />
+            </li>
+            <li>
+                @Html.Action("MessageControl", "Main")
+            </li>
+            <li>
+                <span id="extender"></span>
+                <div class="header_top">
+                    <b>Friends</b>
+                </div>
+
+                @Html.Action("FriendsLinks")
+
+            </li>
+
+            <li>
+                <div class="header_top">
+                    <b><a id="onlineFriendsLink" href="@ViewBag.OnlineFriendsLink">Online friends</a></b>
+                </div>
+
+                <div class="Friends" id="onlineFriends">
+                </div>
+            </li>
+            <li>
+                <div class="header_top">
+                    <b>
+                        Photoalbums
+                    </b>
+                </div>
+
+                <div id="albums">
+
+                    @Html.Action("Albums")
+
+
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div id="rightColumn">
+
+        @Html.Action("ProfileInfo")
+
+        <div id="allPhotos">
+            <span id="photosHeader">All photos</span>
+
+            <div class="container">
+            </div>
+
+            <div class="container_album">
+            </div>
+
+            <div>
+            </div>
+        </div>
+
+        @if (ViewBag.DisplayMessageForm == true)
+        {
+            @Html.Partial("MessageForm")
+        }
+
+
+        <ul id="postsList">
+
+            @if (ViewBag.DisplayPosts == true)
+            {
+                @Html.Action("Statuses")
+            }
+
+        </ul>
+
+    </div>
+</div>
+
+
+
+<input class="modal-state" id="modal-1" type="checkbox" />
+<div class="modal">
+    <label class="modal__bg" for="modal-1"></label>
+    <div class="modal__inner">
+        <label class="modal__close" for="modal-1"></label>
+        <div>
+            <span>Message</span>
+            <textarea id="messageBody"></textarea>
+            <input type="button" id="sendBtn" value="Send" />
+        </div>
+    </div>
+</div>
+
+
+
+
+@section scripts{
+
+    @Scripts.Render("~/bundles/modalPopLite")
+
+    <script src="@Url.Content("~/Scripts/sweetalert.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/main.js")"></script>
+    <script src="@Url.Content("~/Scripts/signalRmainPage.js")"></script>
+}
+
+

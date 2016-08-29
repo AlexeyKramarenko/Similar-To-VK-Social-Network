@@ -1,0 +1,150 @@
+﻿
+@{
+    ViewBag.Title = "SettingsPage";
+    Layout = "~/Views/Shared/_NestedLayout.cshtml";
+}
+
+@section styles{
+    <link href="@Url.Content("~/Content/bootstrap_settings_page.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/settings_profile.css")" rel="stylesheet" />
+}
+
+
+<div class="container">
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#home">Общее</a></li>
+        <li><a data-toggle="tab" href="#menu1">Приватность</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="home" class="tab-pane fade in active" style="font-size: 14px; width: 500px; margin-top: 60px; margin-bottom: 40px; margin-left: auto; margin-right: auto;">
+
+            <b>Изменить пароль</b>
+            <hr />
+            <br />
+
+            <div id="PasswordInfo">
+                @{
+                    Html.RenderAction("PasswordInfo");
+                }
+            </div>
+
+            <br />
+            <b>Адрес Вашей электронной почты</b>
+            <hr />
+            <br />
+
+            <div id="EmailInfo">
+                @{
+                    Html.RenderAction("EmailInfo");
+                }
+            </div>
+
+            <br />
+            <b>Номер Вашего телефона</b>
+            <hr />
+            <br />
+
+            <div id="PhoneNumberInfo">
+                @{
+                    Html.RenderAction("PhoneNumberInfo");
+                }
+            </div>
+
+            <br />
+        </div>
+        <div id="menu1" class="tab-pane fade" style="font-size: 14px; width: 500px; margin-top: 60px; margin-bottom: 40px; margin-left: auto; margin-right: auto;">
+
+            <b>Моя страница</b>
+            <hr />
+            <br />
+            <table>
+                <tr>
+                    <td class="settings_privacy_row2">Кто видит основную информацию моей страницы</td>
+                    <td>
+                        <a class="privacy" id="privacy_1"></a>
+                    </td>
+                </tr>
+            </table>
+            <br />
+
+            <b>Записи на странице</b>
+            <hr />
+            <br />
+
+            <input type="hidden" id="hdnProfileID" value="" />
+
+
+            <table>
+                <tr>
+                    <td class="settings_privacy_row2">Кто видит чужие записи на моей странице</td>
+                    <td>
+                        <a class="privacy" id="privacy_2"></a>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="settings_privacy_row2">Кто может оставлять записи на моей странице</td>
+                    <td>
+                        <a class="privacy" id="privacy_3"></a>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="settings_privacy_row2">Кто видит комментарии к записям</td>
+                    <td>
+                        <a class="privacy" id="privacy_4"></a>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="settings_privacy_row2">Кто может комментировать мои записи</td>
+                    <td>
+                        <a class="privacy" id="privacy_5"></a>
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+
+
+@section scripts{
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"></script>
+
+    <script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.min.js")"></script>
+
+    @Scripts.Render("~/bundles/bootstrap")
+
+    <script src="@Url.Content("~/Scripts/settings.js")"></script>
+
+    <script>
+        function onSuccess() {
+            alert("Profile updated successfully");
+        }
+        function onPasswordFailure(data) {
+
+            alert("An error occured");
+
+            $('#PasswordInfo').html('');
+            $('#PasswordInfo').html(data.responseText);
+        }
+
+        function onEmailFailure(data) {
+
+            alert("An error occured");
+
+            $('#EmailInfo').html('');
+            $('#EmailInfo').html(data.responseText);
+        }
+
+        function onPhoneNumberFailure(data) {
+
+            alert("An error occured");
+
+            $('#PhoneNumberInfo').html('');
+            $('#PhoneNumberInfo').html(data.responseText);
+        }
+
+    </script>
+}

@@ -1,0 +1,61 @@
+﻿@model MvcApp.ViewModel.MainViewModel
+
+
+<table>
+    <tr>
+        <td class="profiles">Gender: </td>
+        <td>
+            @Html.DropDownListFor(a => a.Gender, Model.GenderList)
+        </td>
+    </tr>
+    <tr>
+        <td class="profiles">Marital status: </td>
+        <td>
+            @Html.DropDownListFor(a => a.Married, Model.MaritalStatuses)
+        </td>
+    </tr>
+    <tr>
+        <td class="profiles">Birthday: </td>
+        <td>
+            @Html.DropDownListFor(a => a.BirthDay, Model.BirthDays)
+
+            @Html.DropDownListFor(a => a.BirthMonth, Model.BirthMonths)
+
+            @Html.DropDownListFor(a => a.BirthYear, Model.BirthYears)
+
+        </td>
+    </tr>
+    <tr>
+        <td class="profiles">
+            First name:
+        </td>
+        <td>
+            @Html.TextBoxFor(a => a.FirstName)
+        </td>
+    </tr>
+    <tr>
+        <td class="profiles">Last name:</td>
+        <td>
+            @Html.TextBoxFor(a => a.LastName)
+        </td>
+    </tr>
+    <tr>
+        <td class="profiles">Home town: </td>
+        <td>
+            @Html.TextBoxFor(a => a.HomeTown)
+        </td>
+    </tr>
+    <tr>
+        <td class="profiles">Native language:</td>
+        <td>
+            @Html.DropDownListFor(a => a.Language, Model.Languages)
+        </td>
+    </tr>
+</table>
+ 
+<br />
+<hr />
+<br />
+
+<input type="button" id="btnSaveMainInfo" class="btnSave" onclick="updateMainInfo()" value="Save main info" />
+

@@ -1,0 +1,62 @@
+﻿@model MvcApp.ViewModel.ProfileViewModel
+
+<div id="profile_info">
+    <br />
+    <b>@Html.Raw(Model.ApplicationUser.UserName) </b>
+
+    @*@Html.HiddenFor(a => a.ApplicationUser.Id, new { id = "hdnCurrentUserID" })*@
+
+    <br />
+
+    <div style="border-top: 1px solid #C3B6B6; margin-top: 15px; margin-right: 10px;"></div>
+
+    <br />
+    <div id="info">
+        <div id="mainInfo">
+            <div class="profile_info">
+                <div class="row">
+                    <div class="label">Birthday:</div>
+                    <div class="value">
+                        @Html.Raw(Model.BirthDay + "." + Model.BirthMonth + "." + Model.BirthYear)
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="label">Hometown:</div>
+                    <div class="value">@Model.HomeTown</div>
+                </div>
+                <div class="row">
+                    <div class="label">Relationship status:</div>
+                    <div class="value">@Model.MaritalStatus</div>
+                </div>
+                <div class="row">
+                    <div class="label">Language:</div>
+                    <div class="value">@Model.Language</div>
+                </div>
+                <div class="row">
+                    <div class="label">Country:</div>
+                    <div class="value">@Model.Country</div>
+                </div>
+                <div class="row">
+                    <div class="label">Town:</div>
+                    <div class="value">@Model.Town</div>
+                </div>
+
+            </div>
+        </div>
+
+        @if (ViewBag.DisplayDetailsInfo == true)
+        {
+             Html.RenderPartial("DetailsInfo", Model);
+        }
+
+
+
+
+
+
+
+        <hr />
+    </div>
+</div>
+
+

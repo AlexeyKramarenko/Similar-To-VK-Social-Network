@@ -1,0 +1,26 @@
+﻿@model MvcApp.ViewModel.PhoneNumberViewModel
+
+@using (Ajax.BeginForm("PhoneNumberInfo", "Settings", new AjaxOptions { HttpMethod = "POST", OnFailure = "onPhoneNumberFailure", OnSuccess = "onSuccess", UpdateTargetId = "PhoneNumberInfo" }))
+{
+    <table>
+        <tr>
+            <td class="settings_privacy_row1">Current number:</td>
+            <td>
+                @Html.HiddenFor(a => a.PhoneNumber)
+                @Html.DisplayFor(a => a.PhoneNumber)
+            </td>
+        </tr>
+        <tr>
+            <td class="settings_privacy_row1"></td>
+            <td>
+                @Html.TextBoxFor(a => a.NewPhoneNumber)
+
+                <input type="submit" id="btnChangePhoneNumber" value="Change telephone number" />
+            </td>
+        </tr>
+    </table>
+
+    @Html.ValidationSummary()
+
+}
+

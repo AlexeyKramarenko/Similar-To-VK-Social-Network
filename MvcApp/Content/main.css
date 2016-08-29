@@ -1,0 +1,384 @@
+#mainContent {
+    margin-top: -10px;
+    width: 650px;
+    position: relative;
+    height: auto;
+    /*--------------------------*/
+    /*text-align: left;
+    direction: ltr;*/
+}
+
+#leftColumn {
+    width: 240px;
+    background-color: #F4F3F2;
+    border: 1px solid gray;
+    border-top: none;
+    /*border-left: none;*/
+    /*border-left: 1px solid blue*/
+}
+
+#rightColumn {
+    width: 400px;
+    position: absolute;
+    top: 0px;
+    right: 1px;
+    border-right: 1px solid gray;
+}
+
+#createMessages {
+    background-color: #F1F1F1;
+    border: 1px solid gray;
+    border-right: none;
+    padding-top: 10px;
+}
+
+.messageForm {
+    margin: 5px 10px 5px 10px;
+    max-width: 370px;
+    max-height: 45px;
+}
+
+#headerLine {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #E9EDF1;
+    color: #607387;
+    height: 30px;
+    width: 650px;
+    border-bottom: 1px solid black;
+}
+
+#online_in_corner {
+    position: absolute;
+    top: 20px;
+    right: 10px;
+    font-weight: bold;
+    color: #607387;
+}
+/*------------------------*/
+
+.post_table {
+    position: relative;
+    margin-bottom: 100px;
+}
+
+.left_col {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.post_image {
+    width: 50px;
+}
+
+.post_info {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 260px;
+}
+
+.author {
+    font-weight: bold;
+    line-height: 140%;
+    color: #2B587A;
+}
+
+.wall_post_text {
+    overflow: hidden;
+    word-wrap: break-word;
+}
+
+.post_page_message {
+    max-width: 235px;
+    word-wrap: break-word;
+}
+
+.reply_link_wrap_sm {
+    color: black;
+}
+/*---------------------------*/
+
+td {
+    vertical-align: top;
+}
+
+.post_head {
+    position: relative;
+    height: 30px;
+}
+
+.name {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.delete {
+    position: absolute;
+    top: 8px;
+    right: 0;
+}
+/*------------------------------*/
+
+.profile_info {
+    display: table;
+    margin-left: 5px;
+    font-family: tahoma, arial, verdana, sans-serif, Lucida Sans;
+    margin-bottom: 7px;
+    width: 380px;
+}
+
+.row {
+    display: table-row;
+    line-height: 20px;
+    font-size: 11px;
+    display: table-row;
+    /*width: 150px;*/
+}
+
+.label {
+    display: table-cell;
+    width: 150px;
+}
+
+.value {
+    display: table-cell;
+    width: 230px;
+}
+/*-----------------------------*/
+
+h4,
+b {
+    color: #45688E;
+}
+
+#showDetails {
+    color: #2B587A;
+    padding: 7px;
+    margin-right: 10px;
+    margin-bottom: 12px;
+    text-align: center;
+    display: block;
+    cursor: pointer;
+}
+
+    #showDetails:hover {
+        color: #2B587A;
+        background-color: #F1F1F1;
+        padding: 7px;
+        margin-right: 10px;
+        margin-bottom: 12px;
+        text-align: center;
+        display: block;
+        cursor: pointer;
+    }
+/*---------------------------------*/
+
+.hideInfo {
+    display: none;
+}
+
+#a {
+    margin-right: 50px;
+}
+
+#info {
+    position: relative;
+}
+
+.edit {
+    position: absolute;
+    right: 10px;
+    font-size: 13px;
+    margin-top: -37px;
+}
+
+.line {
+    border-bottom: 1px solid #C3B6B6;
+    margin-bottom: -32px;
+    margin-right: 100px;
+}
+
+.bodyMargin {
+    margin-left: 26px;
+}
+/*-----------------------------*/
+
+.table3 {
+    /*border: solid 3px blue;*/
+    background-color: #F1F1F1;
+    width: 380px;
+    /*margin-left: -31px;*/
+    margin-top: 16px;
+    border: 1px solid gray;
+}
+
+.table3row {
+    display: table-row;
+    /*border: solid 3px green;*/
+}
+
+.table3leftCell {
+    display: table-cell;
+    width: 70px;
+    /*border: solid 3px red;*/
+}
+
+.table3rightCell {
+    display: table-cell;
+    /*border: solid 3px yellow;*/
+    width: 300px;
+    position: relative;
+}
+
+.showInfo {
+    border-bottom: 1px solid gray;
+}
+
+.avatar {
+    width: 50px;
+    display: table-cell;
+}
+
+.commentCell {
+    display: table-cell;
+}
+
+#leftColumn > ul > li {
+    margin-left: -30px;
+    margin-right: 10px;
+}
+
+    #leftColumn > ul > li > #imgAvatar {
+        margin-top: 10px;
+        width: 218px;
+    }
+
+#addNewPhotos {
+    font-size: 16px;
+    padding: 0px;
+    background-color: #DEE5EB;
+    margin-top: -10px;
+    color: #45688E;
+    border: 1px solid gray;
+    border-top: none;
+}
+
+#cropPhoto {
+    font-size: 16px;
+    padding: 0px;
+    background-color: #DEE5EB;
+    margin-top: -1px;
+    color: #45688E;
+    border: 1px solid gray;
+}
+
+.header_top {
+    background-color: #DEE5EB;
+    padding-left: 10px;
+    border: 1px solid gray;
+}
+
+.header_bottom {
+    background-color: #EEE9E9;
+    padding-left: 10px;
+    border: 1px solid gray;
+    margin-top: -1px;
+}
+
+.Friends {
+    /*display: table;*/
+    width: 220px;
+    margin-top: 10px;
+}
+
+/*.row {
+    display: table-row;
+}
+
+.cell {
+    display: table-cell;
+    padding: 5px;
+}
+
+    .cell > img {
+        max-width: 33%;
+    }*/
+
+#extender {
+    display: block;
+    margin-top: 20px;
+}
+
+.album {
+    background-color: #DBCCCB;
+    padding: 5px;
+}
+
+    .album > img {
+        margin: 5px 0px 0px 0px;
+        width: 180px;
+    }
+
+.albumTitle {
+    background-color: #6A6362;
+    padding: 0px 0px 0px 12px;
+    font-size: 12px;
+    font-weight: bold;
+    font-family: tahoma, arial, verdana, sans-serif, Lucida Sans;
+    color: white;
+    margin-bottom: 10px;
+}
+
+#albums {
+    padding: 15px;
+}
+
+.online {
+    padding: 0 0 0 10px;
+    font-weight: bold;
+}
+
+#allPhotosLink > img {
+    padding: 7px 2px 0px 0px;
+    width: 95px;
+}
+
+#imgAvatar {
+    font-size: 20px;
+    cursor: pointer;
+    border: 1px solid grey;
+    /*border-bottom: none;*/
+}
+
+#popup-wrapper {
+    width: 650px;
+    background-color: #ccc;
+    padding: 10px;
+}
+
+#send_message {
+    margin-top: -11px;
+    background-color: #DEE5EB;
+    padding: 15px 0 15px 10px;
+    border: 1px solid grey;
+}
+
+.send_message_btn {
+    padding: 6px 50px 6px 50px;
+    background-color: #7496B9;
+    color: white;
+    font-weight: bold;
+    border: 1px solid grey;
+    width: 200px;
+    height: 30px;
+    border-radius: 7px;
+}
+
+.Friends > a > img {
+    max-width:32%;
+    height: 65px;
+}
