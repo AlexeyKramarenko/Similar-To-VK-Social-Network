@@ -98,7 +98,22 @@ namespace MvcApp.Controllers
 
                 return PartialView("ContactInfo", refreshedContactInfo);
             }
-            return new EmptyResult();
+            else
+            {
+                Response.StatusCode = 400;
+
+                string message = "";
+
+                for (int i = 0; i < ModelState.Values.Count; i++)
+                {
+                    ModelErrorCollection col = ModelState.Values.ElementAt(i).Errors;
+
+                    foreach (var msg in col)
+                        message += msg.ErrorMessage;
+                }
+               
+                return Json(message, JsonRequestBehavior.AllowGet);
+            }
 
         }
 
@@ -144,6 +159,7 @@ namespace MvcApp.Controllers
 
             return new EmptyResult();
         }
+
         [HttpGet]
         public JsonResult GetFinishYears(int selectedStartYear)
         {

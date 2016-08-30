@@ -22,6 +22,7 @@ namespace MvcApp.App_Start
     using System.Web.Http.Dependencies;
     using System.Linq;
     using Ninject.Parameters;
+    using Services;
 
     public static class NinjectWebCommon
     {
@@ -174,6 +175,7 @@ namespace MvcApp.App_Start
             kernel.Bind<IWallStatusService>().To<WallStatusService>().InRequestScope();
             kernel.Bind<IMessagesService>().To<MessagesService>().InRequestScope();
             kernel.Bind<IChatHub>().To<ChatHub>().InRequestScope();
+            kernel.Bind<ISessionService>().To<SessionService>().InRequestScope();
 
         }
     }

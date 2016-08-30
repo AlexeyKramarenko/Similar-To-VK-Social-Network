@@ -25,7 +25,13 @@ namespace MvcApp.Controllers
         ISettingsService settingsService;
         ISessionService sessionService;
 
-        string baseUrl = null;
+        string BaseUrl
+        {
+            get
+            {
+                return Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath;
+            }
+        }
 
         public string CurrentUserId
         {
@@ -44,8 +50,8 @@ namespace MvcApp.Controllers
             this.photoService = photoService;
             this.settingsService = settingsService;
             this.sessionService = sessionService;
-            baseUrl = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath;
         }
+
         [HttpGet]
         public ActionResult MainPage(string UserID)
         {
@@ -82,7 +88,7 @@ namespace MvcApp.Controllers
 
             for (int i = 0; i < albumsDto.Length; i++)
             {
-                albumsDto[i].ThumbnailPhotoUrl = baseUrl + albumsDto[i].ThumbnailPhotoUrl;
+                albumsDto[i].ThumbnailPhotoUrl = BaseUrl + albumsDto[i].ThumbnailPhotoUrl;
             }
 
             AlbumViewModel[] albumsVM = albumsDto.Select(a => mappingService.Map<AlbumDTO, AlbumViewModel>(a)).ToArray();
@@ -119,7 +125,7 @@ namespace MvcApp.Controllers
 
             foreach (var s in statuses)
             {
-                s.AvatarUrl = baseUrl + photoService.GetAvatar(s.PostByUserID);
+                s.AvatarUrl = BaseUrl + photoService.GetAvatar(s.PostByUserID);
                 s.Comments = profileService.GetCommentsByStatusID(s.ID);
             }
 
@@ -150,7 +156,17 @@ namespace MvcApp.Controllers
                 if (pageOfUserID != null)
                     return relationshipsService.GetPrivacyRestrictionsOfCurrentPage(pageOfUserID, CurrentUserId, RelationshipDefinitionIDOfCurrentVisitor);
 
-                return null;
+                return
+                    new PrivacyRestrictions
+                    {
+                        DisplayCommentLink = true,
+                        DisplayComments = true,
+                        DisplayDetailsInfo = true,
+                        DisplayMessageForm = true,
+                        DisplayPosts = true,
+                        SendMessagePossibility = true,
+                        ShowInSearch = true
+                    };
             }
         }
         private bool CurrentVisitorIsOwnerOfCurrentPage
