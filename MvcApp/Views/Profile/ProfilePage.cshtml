@@ -62,7 +62,7 @@
 </div>
 
 
-
+@Html.ValidationSummary()
 
 @section scripts{
 
@@ -132,7 +132,7 @@
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
 
-                    onFailure();
+                    onFailure(xhr.responseText);
                 }
             })
         };
@@ -210,8 +210,11 @@
             alert("Profile updated successfully");
         }
 
-        function onFailure() {
-            alert("An error occurred");
+        function onFailure(message) {
+            if (message == null)
+                alert("An error occurred");
+            else
+                alert(message);
         }
 
     </script>
