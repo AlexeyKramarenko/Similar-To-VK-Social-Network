@@ -38,10 +38,10 @@ namespace Core.BLL
             var userManager = new UserManager<ApplicationUser>(userStore);
 
             //Debug
-            //ApplicationUser user = new ApplicationUserManager(userStore, new DBContext()).GetUserByName(loginObj.UserName);
+            ApplicationUser user = new ApplicationUserManager(userStore, new DBContext()).GetUserByName(loginObj.UserName);
 
             //Release
-            ApplicationUser user = userManager.Find(loginObj.UserName, loginObj.Password);
+            //ApplicationUser user = userManager.Find(loginObj.UserName, loginObj.Password);
 
             if (user != null)
             {

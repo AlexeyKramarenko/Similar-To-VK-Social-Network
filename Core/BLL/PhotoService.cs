@@ -85,6 +85,14 @@ namespace  Core.BLL
 
         public void UpdateAvatar(Photo photo, string userId)
         {
+            #region remove old avatar
+            string path = Database.Photos.GetLargeAvatarImg(userId);
+            string thumbPath = Database.Photos.GetThumbAvatarImg(userId);
+
+            DeletePhotoFromFolder(path);
+            DeletePhotoFromFolder(thumbPath);
+            #endregion
+
             Database.Photos.UpdateAvatar(photo, userId);
             Database.Save();
         }
@@ -128,16 +136,21 @@ namespace  Core.BLL
         }
 
         public void DeletePhotoFromFolder(Photo photo)
-        { 
-            string path = HttpContext.Current.Server.MapPath("~/" + photo.PhotoUrl);
-            
-            if ((File.GetAttributes(path) & FileAttributes.Hidden) == FileAttributes.ReadOnly)
-            {
-                File.SetAttributes(path, FileAttributes.Normal);
+        {
+            DeletePhotoFromFolder(photo.PhotoUrl);
+        }
 
-                if (File.Exists(path))
+        public void DeletePhotoFromFolder(string path)
+        {
+            string physicalPath = HttpContext.Current.Server.MapPath("~/" + path);
+
+            if ((File.GetAttributes(physicalPath) & FileAttributes.Hidden) == FileAttributes.ReadOnly)
+            {
+                File.SetAttributes(physicalPath, FileAttributes.Normal);
+
+                if (File.Exists(physicalPath))
                 {
-                    File.Delete(path);
+                    File.Delete(physicalPath);
                 }
             }
         }

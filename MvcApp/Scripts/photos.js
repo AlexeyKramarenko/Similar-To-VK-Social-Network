@@ -301,7 +301,7 @@ function allAlbumsPanel() {
             "<input type='file' id='inputfile' onchange='sendPhotos();return false;' />" +
         "</div>" +
 
-        "<div id='addNewPhotos' class='addNewPhotos' onclick='upload()' onmouseover='changeColor(this)' onmouseout='changeColor(this)'>Add new photos</div><br /><br />" +
+        "<div id='addNewPhotos' class='addNewPhotos' onclick='upload()' onmouseover='changeColor(this)' onmouseout='changeColor(this)'>Change avatar</div><br /><br />" +
 
         "<div class='D'>" +
             "You have <span id='albumsCount'></span> albums" +
@@ -512,7 +512,7 @@ function sendPhotos() {
                 data: data,
                 success: function (result) {
 
-                    sweetAlert("Photo was sent to main album")
+                    sweetAlert("Photo saved successfully")
                 },
                 error: function (xhr, status, p3) {
                     sweetAlert(status);
