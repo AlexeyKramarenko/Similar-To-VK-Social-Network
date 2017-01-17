@@ -21,17 +21,19 @@ namespace Core.BLL
 
         public List<string> GetFriendsIDsOfUser(string UserID)
         {
-            string key = "FriendsIDs_" + UserID;
+            //string key = "FriendsIDs_" + UserID;
 
             List<string> ids = null;
 
-            if (Cache[key] != null)
-                ids = (List<string>)Cache[key];
-            else
-            {
-                ids = Database.Relationships.GetFriendsIDsOfUser(UserID);
-                Cache[key] = ids;
-            }
+            //if (Cache[key] != null)
+            //    ids = (List<string>)Cache[key];
+            //else
+            //{
+            //    ids = Database.Relationships.GetFriendsIDsOfUser(UserID);
+            //    Cache[key] = ids;
+            //}
+
+            ids = Database.Relationships.GetFriendsIDsOfUser(UserID);
             return ids;
         }
         public void AddToFriendsMessage(Message message)
@@ -43,7 +45,7 @@ namespace Core.BLL
             PurgeCacheItems("FriendsIDs_" + message.SendersUserID);
         }
 
-        public void RemoveFromFriends(IQueryable<Relationship> relationship, string FirstUserID, string SecondUserID)
+        public void RemoveFromFriends(Relationship relationship, string FirstUserID, string SecondUserID)
         {
             Database.Relationships.RemoveFromFriends(relationship);
             Database.Save();
@@ -58,38 +60,23 @@ namespace Core.BLL
         }
         public int GetRelationshipDefinitionIdOfPageVisitor(string visitorId, string pageOfUserId)
         {
-            string key = "RelationshipDefinitionIdOfPageVisitor_" + visitorId + "_" + pageOfUserId;
+            //string key = "RelationshipDefinitionIdOfPageVisitor_" + visitorId + "_" + pageOfUserId;
 
-            int id;
+            //int id;
 
-            if (Cache[key] != null)
-                id = (int)Cache[key];
-            else
-            {
-                id = Database.Relationships.GetRelationshipDefinitionIdOfPageVisitor(visitorId, pageOfUserId);
-                Cache[key] = id;
-            }
+            //if (Cache[key] != null)
+            //    id = (int)Cache[key];
+            //else
+            //{
+            //    id = Database.Relationships.GetRelationshipDefinitionIdOfPageVisitor(visitorId, pageOfUserId);
+            //    Cache[key] = id;
+            //}
+            int id = Database.Relationships.GetRelationshipDefinitionIdOfPageVisitor(visitorId, pageOfUserId);
 
             return id;
         }
+
         public PrivacyRestrictions GetPrivacyRestrictionsOfCurrentPage(string pageOfUserId, string CurrentUserId, int RelationshipDefinitionIDOfCurrentVisitor)
-        {
-            string key = "PrivacyRestrictionsOfCurrentPage_" + pageOfUserId + "_" + CurrentUserId;
-
-            PrivacyRestrictions privacy;
-
-            if (Cache[key] != null)
-                privacy = (PrivacyRestrictions)Cache[key];
-            else
-            {
-                privacy = __GetPrivacyRestrictionsOfCurrentPage(pageOfUserId, CurrentUserId, RelationshipDefinitionIDOfCurrentVisitor);
-                Cache[key] = privacy;
-            }
-
-            return privacy;
-        }
-
-        private PrivacyRestrictions __GetPrivacyRestrictionsOfCurrentPage(string pageOfUserId, string CurrentUserId, int RelationshipDefinitionIDOfCurrentVisitor)
         {
             if (pageOfUserId != null && pageOfUserId != CurrentUserId)
             {
@@ -101,77 +88,53 @@ namespace Core.BLL
 
                     List<PrivacyFlag> privacyFlags = Database.Privacy.GetPrivacyCollection(profileId);
 
-                    List<UserRights> userRights = Database.UserRights.GetUserRights();
+                    List<RightsOfVisitorOnThePage> userRights = Database.UserRights.GetUserRights();
 
                     var restrictions = new PrivacyRestrictions();
 
-                    var A = userRights.FirstOrDefault(a => a.VisibilityLevelId == privacyFlags[0].VisibilityLevelID && a.RelationshipDefinitionID == RelationshipDefinitionIDOfCurrentVisitor);
+                    var displayDetailsRestriction = userRights.FirstOrDefault(a => a.VisibilityLevelId == privacyFlags[0].VisibilityLevelID && a.RelationshipDefinitionID == RelationshipDefinitionIDOfCurrentVisitor);
 
-                    if (A != null)
+                    if (displayDetailsRestriction != null)
                         restrictions.DisplayDetailsInfo = true;
                     else
                         restrictions.DisplayDetailsInfo = false;
 
 
-                    var B = userRights.FirstOrDefault(a => a.VisibilityLevelId == privacyFlags[1].VisibilityLevelID && a.RelationshipDefinitionID == RelationshipDefinitionIDOfCurrentVisitor);
+                    var displayPostsRestriction = userRights.FirstOrDefault(a => a.VisibilityLevelId == privacyFlags[1].VisibilityLevelID && a.RelationshipDefinitionID == RelationshipDefinitionIDOfCurrentVisitor);
 
-                    if (B != null)
+                    if (displayPostsRestriction != null)
                         restrictions.DisplayPosts = true;
                     else
                         restrictions.DisplayPosts = false;
 
 
-                    var C = userRights.FirstOrDefault(a => a.VisibilityLevelId == privacyFlags[2].VisibilityLevelID && a.RelationshipDefinitionID == RelationshipDefinitionIDOfCurrentVisitor);
+                    var displayMessageFormRestriction = userRights.FirstOrDefault(a => a.VisibilityLevelId == privacyFlags[2].VisibilityLevelID && a.RelationshipDefinitionID == RelationshipDefinitionIDOfCurrentVisitor);
 
-                    if (C != null)
+                    if (displayMessageFormRestriction != null)
                         restrictions.DisplayMessageForm = true;
                     else
                         restrictions.DisplayMessageForm = false;
 
 
-                    var D = userRights.FirstOrDefault(a => a.VisibilityLevelId == privacyFlags[3].VisibilityLevelID && a.RelationshipDefinitionID == RelationshipDefinitionIDOfCurrentVisitor);
+                    var displayCommentsRestriction = userRights.FirstOrDefault(a => a.VisibilityLevelId == privacyFlags[3].VisibilityLevelID && a.RelationshipDefinitionID == RelationshipDefinitionIDOfCurrentVisitor);
 
-                    if (D != null)
+                    if (displayCommentsRestriction != null)
                         restrictions.DisplayComments = true;
                     else
                         restrictions.DisplayComments = false;
 
 
-                    var E = userRights.FirstOrDefault(a => a.VisibilityLevelId == privacyFlags[4].VisibilityLevelID && a.RelationshipDefinitionID == RelationshipDefinitionIDOfCurrentVisitor);
+                    var displayCommentLinkRestriction = userRights.FirstOrDefault(a => a.VisibilityLevelId == privacyFlags[4].VisibilityLevelID && a.RelationshipDefinitionID == RelationshipDefinitionIDOfCurrentVisitor);
 
-                    if (E != null)
+                    if (displayCommentLinkRestriction != null)
                         restrictions.DisplayCommentLink = true;
                     else
                         restrictions.DisplayCommentLink = false;
 
-
-                    var F = userRights.FirstOrDefault(a => a.VisibilityLevelId == privacyFlags[5].VisibilityLevelID && a.RelationshipDefinitionID == RelationshipDefinitionIDOfCurrentVisitor);
-
-                    if (F != null)
-                        restrictions.SendMessagePossibility = true;
-                    else
-                        restrictions.SendMessagePossibility = false;
-
-
-                    var G = userRights.FirstOrDefault(a => a.VisibilityLevelId == privacyFlags[6].VisibilityLevelID && a.RelationshipDefinitionID == RelationshipDefinitionIDOfCurrentVisitor);
-
-                    if (G != null)
-                        restrictions.ShowInSearch = true;
-                    else
-                        restrictions.ShowInSearch = false;
-
                     return restrictions;
                 }
             }
-
             return null;
-
-            //level = 3 : =1
-            //level = 2 : <=2
-            //level = 1 : <=4
-
-            //  if (RelationshipDefinitionIDOfCurrentVisitor== )
-            //privacyFlags[0] . 
         }
 
         public bool CheckIfTheSameInvitationAlreadyExistsInDB(Message msg)
@@ -186,7 +149,7 @@ namespace Core.BLL
             return id;
         }
 
-        public IQueryable<Relationship> GetRelationship(string FirstUserID, string SecondUserID)
+        public Relationship GetRelationship(string FirstUserID, string SecondUserID)
         {
             return Database.Relationships.GetRelationship(FirstUserID, SecondUserID);
         }

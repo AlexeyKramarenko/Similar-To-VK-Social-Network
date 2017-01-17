@@ -38,7 +38,7 @@ namespace  Core.BLL
             string key = "StatusID_" + status.ID;
 
             InsertStatusResult result = Database.WallStatuses.InsertStatus(status);
-
+            
             PurgeCacheItems(key);
 
             return result;
@@ -52,10 +52,10 @@ namespace  Core.BLL
             PurgeCacheItems(key);
         }
 
-        public object InsertComment(Comment com)
+        public void InsertComment(Comment com)
         {
-            object result = Database.WallStatuses.InsertComment(com);
-            return result;
+            Database.WallStatuses.InsertComment(com);
+            Database.Save();
         }
 
         public void DeleteComment(Comment comment)

@@ -1,6 +1,6 @@
 ﻿@model MvcApp.ViewModel.EmailViewModel
 
-@using (Ajax.BeginForm("EmailInfo", "Settings", new AjaxOptions { HttpMethod = "POST", OnFailure = "onEmailFailure", OnSuccess = "onSuccess", UpdateTargetId = "EmailInfo" }))
+@using (Ajax.BeginForm("EmailInfo", "Settings", new AjaxOptions { HttpMethod = "POST", OnFailure = "view.onEmailFailure", OnSuccess = "view.onSuccess", UpdateTargetId = "EmailInfo" }))
 {
     <table>
         <tr>
@@ -13,8 +13,7 @@
         <tr>
             <td class="settings_privacy_row1"></td>
             <td>
-                @Html.TextBoxFor(a => a.NewEmail, new { id = "txtEmail" })
-
+                @Html.TextBoxFor(a => a.NewEmail) 
                 <input type="submit" value="Change email" id="btnChangeEmail" />
             </td>
         </tr>

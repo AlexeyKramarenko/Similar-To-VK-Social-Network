@@ -1,30 +1,40 @@
-﻿using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
+﻿using Core.BLL.Interfaces;
+using Microsoft.AspNet.Identity;
 using Ninject;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using WebFormsApp.Services;
 using WebFormsApp.ViewModel;
-using System; 
-using Core.BLL.Interfaces;
 
 namespace WebFormsApp
 {
-    public partial class Settings : BasePage
+    public partial class Settings : System.Web.UI.Page
     {
-        private string currentUserId;
-        
         [Inject]
         public IProfileService ProfileService { get; set; }
 
         [Inject]
         public IUserService UserService { get; set; }
 
-        void Page_Init(object s, EventArgs e)
+        [Inject]
+        public ISessionService SessionService { get; set; }
+
+        public string CurrentUserId
         {
-            currentUserId = User.Identity.GetUserId();
+            get
+            {
+                return SessionService.CurrentUserId;
+            }
         }
+
 
         public EmailViewModel SelectEmail()
         {
-            string oldEmail = ProfileService.GetEmail(currentUserId);
+            string oldEmail = ProfileService.GetEmail(CurrentUserId);
             return new EmailViewModel { OldEmail = oldEmail };
         }
 
@@ -32,12 +42,12 @@ namespace WebFormsApp
         {
             try
             {
-                string password = UserService.GetPasswordByUserId(currentUserId);
+                string password = UserService.GetPasswordByUserId(CurrentUserId);
 
                 if (vm.OldPassword == password)
                 {
                     if (ModelState.IsValid)
-                        await UserService.UpdatePassword(vm.NewPassword, currentUserId);
+                        await UserService.UpdatePassword(vm.NewPassword, CurrentUserId);
                 }
                 else
                     ModelState.AddModelError("", "Введен неверный пароль");
@@ -48,13 +58,12 @@ namespace WebFormsApp
             }
         }
 
-       
+
 
         public void UpdateEmail(EmailViewModel vm)
         {
             if (ModelState.IsValid && vm.OldEmail != vm.NewEmail)
-                ProfileService.UpdateEmail(currentUserId, vm.NewEmail);
-
+                ProfileService.UpdateEmail(CurrentUserId, vm.NewEmail);
         }
 
         public PhoneNumberViewModel SelectPhoneNumber()
@@ -69,9 +78,7 @@ namespace WebFormsApp
         public void UpdatePhoneNumber(PhoneNumberViewModel vm)
         {
             if (ModelState.IsValid && vm.PhoneNumber != vm.NewPhoneNumber)
-                UserService.UpdatePhoneNumber(currentUserId, vm.NewPhoneNumber);
-
+                UserService.UpdatePhoneNumber(CurrentUserId, vm.NewPhoneNumber);
         }
-
     }
 }

@@ -1,0 +1,91 @@
+﻿<%@ Master EnableViewState="false" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="NestedMasterPage.master.cs" Inherits="WebFormsApp.NestedMasterPage" %>
+
+<%@ Import Namespace="System.Web.Optimization" %>
+
+
+
+<asp:Content
+    ClientIDMode="Static"
+    ContentPlaceHolderID="_Styles"
+    runat="server">
+
+    <link href="/Content/nestedSiteMaster.css" rel="stylesheet" />
+    
+    <asp:ContentPlaceHolder ID="Styles" runat="server">
+    </asp:ContentPlaceHolder>
+
+</asp:Content>
+
+
+
+
+<asp:Content
+    ClientIDMode="Static"
+    ContentPlaceHolderID="PlaceHolder"
+    runat="server">
+
+    <script>
+        function goToPeoplePage(friendsOnly, online) {
+            var targetUrl = '/people';
+            if (online == undefined)
+                online = false;
+            var UserID = '0';
+            if (friendsOnly == true) {
+                UserID = document.getElementById('hdnCurrentUserID').value;
+            }
+            targetUrl += "/UserID=" + UserID + "/Online=" + online;
+            location.href = targetUrl;
+        }
+    </script>
+
+    <asp:HiddenField ID="hdnCurrentUserID" ClientIDMode="Static" runat="server" />
+    <asp:HiddenField ID="hdnPageOfUserID" ClientIDMode="Static" runat="server"></asp:HiddenField>
+
+
+
+    <div id="nav_content_footer">
+
+
+        <div style="margin-left: 140px; margin-top: -37px;">
+
+            <div style="padding: 5px 0 5px 10px;">
+
+                <input id="txtName" type="text" />
+                <input id="btnPeople" type="button" value="People" onclick="goToPeoplePage(friendsOnly = false, online = false)" />
+                <input id="btnFriends" type="button" value="Friends" onclick="goToPeoplePage(friendsOnly = true, online = false)" />
+                <span id="searchMode"></span>
+            </div>
+
+
+
+
+            <nav id="nav" style="margin-top: 40px;">
+                <ul>
+                    <li>
+                        <asp:HyperLink ID="lnkMainPage" NavigateUrl="~/mypage.aspx" runat="server">My Page</asp:HyperLink></li>
+                    <li>
+                        <a onclick="goToPeoplePage(friendsOnly = true, online = false)">My Friends</a></li>
+                    <li>
+                        <asp:HyperLink ID="lnkPhotos" NavigateUrl="~/photos.aspx" runat="server">My Photos</asp:HyperLink></li>
+                    <li>
+                        <asp:HyperLink ID="lnkMessages" NavigateUrl="~/messages.aspx" runat="server">
+                            My Messages  
+                        <asp:Label ID="litMessagesCount" Text="" runat="server" />
+                        </asp:HyperLink></li><li>
+                        <asp:HyperLink ID="lnkSettings" NavigateUrl="~/settings.aspx" runat="server">My Settings</asp:HyperLink></li></ul></nav><div id="content">
+
+                <div id="innerContent" style="margin-top: 9px;">
+                    <asp:ContentPlaceHolder ID="NestedPlaceHolder" runat="server">
+                    </asp:ContentPlaceHolder>
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+
+
+    <asp:ContentPlaceHolder ID="Scripts" runat="server">
+    </asp:ContentPlaceHolder>
+</asp:Content>

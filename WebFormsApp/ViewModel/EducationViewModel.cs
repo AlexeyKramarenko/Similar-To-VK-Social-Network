@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Core.POCO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.UI.WebControls;
 
 namespace WebFormsApp.ViewModel
 {
@@ -13,7 +15,12 @@ namespace WebFormsApp.ViewModel
         public string SchoolCountry { get; set; }
         public string SchoolTown { get; set; }
         public string School { get; set; }
-        public string StartScoolYear { get; set; }
-        public string FinishScoolYear { get; set; }
+        public int StartSchoolYear { get; set; }
+        public int FinishSchoolYear { get; set; }
+
+        public ListItem[] SchoolCountries { get; set; }
+        public ListItem[] SchoolTowns { get; set; }
+        public ListItem[] StartYears { get; set; }
+        public ListItem[] FinishYears { get; set; }
     }
 }

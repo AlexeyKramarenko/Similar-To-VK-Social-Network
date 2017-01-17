@@ -6,9 +6,7 @@ namespace WebFormsApp.ViewModel
 {
     public class ContactsViewModel  
     {
-        public int ProfileID { get; set; }      
-        public string Country { get; set; }
-        public string Town { get; set; }
+        public int ProfileID { get; set; }   
 
         [Required(ErrorMessage = "Mobile is required")]
         [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Entered mobile format is not valid.")]

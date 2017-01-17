@@ -1,15 +1,17 @@
 ﻿using Core.BLL.DTO;
-using  Core.BLL.Interfaces;
-using  Core.DAL.Interfaces;
-using  Core.POCO;
+using Core.BLL.Interfaces;
+using Core.DAL;
+using Core.DAL.Interfaces;
+using Core.POCO;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
-namespace  Core.BLL
+namespace Core.BLL
 {
     public class MessagesService : LogicLayer, IMessagesService
     {
@@ -61,21 +63,17 @@ namespace  Core.BLL
         }
 
 
-        public string GetDialogByID(int dialogID, string currentUserId)
+        public List<string> GetDialogByID(int dialogID, string currentUserId)
         {
-            string dialog = Database.Messages.GetDialogByID(dialogID, currentUserId);
+            List<string> dialog = Database.Messages.GetDialogByID(dialogID, currentUserId);
             return dialog;
         }
 
         public List<Message> GetLastMessages(string userID)
         {
-           return Database.Messages.GetLastMessages(userID);
+            return Database.Messages.GetLastMessages(userID);
         }
 
-        public string GetLastParagraph(string body)
-        {
-            return Database.Messages.GetLastParagraph(body);
-        }
 
         public void InsertMessage(Message message)
         {
@@ -118,7 +116,7 @@ namespace  Core.BLL
             //Get avatars of current user interlocuters
             if (interlocutorsIds != null)
                 foreach (var id in interlocutorsIds)
-                    if (id != currentUserID)
+                    if (id!=null && id.Trim() != currentUserID.Trim())
                     {
                         string avatar = Database.Photos.GetThumbAvatarImg(id);
                         avatars.Add(avatar);
@@ -140,18 +138,52 @@ namespace  Core.BLL
                 dialogs.Add(new MessageDTO
                 {
                     CreateDate = DateTime.Now,
-                    CurrentUserAvatar = currentUserAvatar,
-                    CurrentUserName = userName,
-                    InterlocutorAvatar = (i < avatars.Count) ? avatars[i] : defaultUrl,
                     DialogID = dialogsIds[i],
-                    InterlocutorUserName =Database.UserManager.GetUsernameByID(interlocutorUserID),
+                    MessageText = lastMessages[i].Body,
+
                     InterlocutorUserID = interlocutorUserID,
-                    MessageText = Database.Messages.GetLastParagraph(lastMessages[i].Body)
+                    InterlocutorAvatar = (i < avatars.Count) ? avatars[i] : defaultUrl,
+                    InterlocutorUserName = Database.UserManager.GetUsernameByID(interlocutorUserID)
                 });
             }
 
 
             return dialogs;
+        }
+
+        public List<DialogDTO> GetLastDialog(int dialogID, string currentUserId)
+        {
+            List<Message> messages = Database.Messages.GetMessagesByDialogId(dialogID,currentUserId);
+
+            string firstInterlocutor = messages.First().SendersUserID;
+            string secondInterlocutor = messages.First().ReceiversUserID;
+
+            string firstInterlocutorAvatar = Database.Photos.GetThumbAvatarImg(firstInterlocutor);
+            string secondInterlocutorAvatar = Database.Photos.GetThumbAvatarImg(secondInterlocutor);
+
+            var avatarsDictionary = new Dictionary<string, string>
+            {
+                { firstInterlocutor, firstInterlocutorAvatar},
+                { secondInterlocutor, secondInterlocutorAvatar}
+            };
+
+            var dialog = new List<DialogDTO>();
+
+            messages.ForEach(a => dialog.Add(
+
+                new DialogDTO
+                {
+                    Body = a.Body,
+                    Date = a.RequestDate,
+                    ImageUrl = avatarsDictionary[a.SendersUserID]
+                }));
+
+            return dialog;
+        }
+
+        public List<Message> GetMessagesByDialogId(int dialogId,string currentUserId)
+        {
+            return Database.Messages.GetMessagesByDialogId(dialogId, currentUserId);
         }
     }
 }

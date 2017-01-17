@@ -2,7 +2,7 @@
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
-using Microsoft.Owin.Security.Cookies; 
+using Microsoft.Owin.Security.Cookies;
 using Owin;
 
 [assembly: OwinStartup(typeof(MvcApp.Startup))]
@@ -14,8 +14,7 @@ namespace MvcApp
         public void Configuration(IAppBuilder app)
         {
             app.MapSignalR();
-
-
+           
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,

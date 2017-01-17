@@ -4,8 +4,6 @@
     <br />
     <b>@Html.Raw(Model.ApplicationUser.UserName) </b>
 
-    @*@Html.HiddenFor(a => a.ApplicationUser.Id, new { id = "hdnCurrentUserID" })*@
-
     <br />
 
     <div style="border-top: 1px solid #C3B6B6; margin-top: 15px; margin-right: 10px;"></div>
@@ -25,7 +23,7 @@
                     <div class="value">@Model.HomeTown</div>
                 </div>
                 <div class="row">
-                    <div class="label">Relationship status:</div>
+                    <div class="label">Married:</div>
                     <div class="value">@Model.MaritalStatus</div>
                 </div>
                 <div class="row">
@@ -46,14 +44,8 @@
 
         @if (ViewBag.DisplayDetailsInfo == true)
         {
-             Html.RenderPartial("DetailsInfo", Model);
+             Html.RenderPartial("Details", Model);
         }
-
-
-
-
-
-
 
         <hr />
     </div>

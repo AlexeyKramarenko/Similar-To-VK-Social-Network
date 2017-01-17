@@ -1,157 +1,248 @@
-﻿
-using Microsoft.AspNet.Identity;
-using Ninject;
-using WebFormsApp.ViewModel;
-using System;
-using System.Linq;
-using System.Web.ModelBinding;
-using System.Web.UI;
+﻿using Core.BLL.DTO;
 using Core.BLL.Interfaces;
 using Core.POCO;
+using Microsoft.AspNet.Identity;
+using Ninject;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.ModelBinding;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using WebFormsApp.Services;
+using WebFormsApp.ViewModel;
 
 namespace WebFormsApp
 {
-    public partial class _Profile : BasePage
+    public partial class Profile : System.Web.UI.Page
     {
         [Inject]
         public IMappingService MappingService { get; set; }
-
         [Inject]
         public IProfileService ProfileService { get; set; }
-
         [Inject]
         public IUserService UserService { get; set; }
+        [Inject]
+        public ISessionService SessionService { get; set; }
 
-
-        private string currentUserId;
-
-
-        void Page_Init(object s, EventArgs e)
+        public string CurrentUserId
         {
-            currentUserId = User.Identity.GetUserId();
-        } 
-
-
-        public void SaveContacts(ContactsViewModel contactsvm)
-        {            
-            if (ModelState.IsValid)
-            { 
-                var profile = MappingService.Map<ContactsViewModel, Profile>(contactsvm);
-
-                ProfileService.SaveContacts(profile);
-
-                UserService.UpdatePhoneNumber(currentUserId, contactsvm.PhoneNumber);
+            get
+            {
+                return SessionService.CurrentUserId;
             }
-
         }
-        public void SaveInterests(InterestsViewModel interests)
+
+
+        #region MainInfo
+
+        public MainViewModel GetMainInfo()
         {
+            var profile = ProfileService.GetMainInfo(CurrentUserId);
+
+            MainViewModel mainInfo = MappingService.Map<Core.POCO.Profile, MainViewModel>(profile);
+            mainInfo.BirthDays = ListItemsFromStringArray(ProfileService.GetBirthDays());
+            mainInfo.BirthMonths = ListItemsFromStringArray(ProfileService.GetBirthMonths());
+            mainInfo.BirthYears = ListItemsFromStringArray(ProfileService.GetBirthYears(CurrentUserId));
+
+            mainInfo.MaritalStatuses = new ListItem[] { new ListItem { Text = "Single", Value = "Single" }, new ListItem { Text = "Married", Value = "Married" } };
+            mainInfo.Languages = new ListItem[] { new ListItem { Text = "Ukrainian", Value = "Ukrainian" }, new ListItem { Text = "English", Value = "English" } };
+            mainInfo.GenderList = new ListItem[] { new ListItem { Text = "Male", Value = "Male" }, new ListItem { Text = "Female", Value = "Female" } };
+            return mainInfo;
+        }
+
+        public void SaveMainInfo(MainViewModel mainInfo)
+        {
+            string message;
+
             if (ModelState.IsValid)
             {
-                var profile = MappingService.Map<InterestsViewModel, Profile>(interests);
-                ProfileService.SaveInterests(profile, currentUserId); 
-            } 
+                try
+                {
+                    var profile = MappingService.Map<MainViewModel, Core.POCO.Profile>(mainInfo);
+                    ProfileService.SaveMainInfo(profile, CurrentUserId);
+                    message = "Main info updated succesfully";
+                }
+                catch
+                {
+                    message = "Error";
+                }
+            }
+            else
+            {
+                message = "Some errors in your form: " + GetAllModelErrors();
+            }
+
+            ResultMessage("main_info", message);
         }
 
+        #endregion
 
+        #region Contacts
         public ContactsViewModel GetContacts()
         {
-            var profile = ProfileService.GetContacts(currentUserId);
+            var profile = ProfileService.GetContacts(CurrentUserId);
 
-            var contacts = MappingService.Map<Profile, ContactsViewModel>(profile);
-            contacts.PhoneNumber = UserService.GetPhoneNumber(User.Identity.GetUserId());
+            var contacts = MappingService.Map<Core.POCO.Profile, ContactsViewModel>(profile);
+            contacts.PhoneNumber = UserService.GetPhoneNumber(CurrentUserId);
 
             return contacts;
         }
-        public MainViewModel GetMainInfo()
+        public void SaveContacts(ContactsViewModel contactsvm)
         {
-            var profile = ProfileService.GetMainInfo(currentUserId);
-            var mainInfo = MappingService.Map<Profile, MainViewModel>(profile);
-            return mainInfo;
-        }
-        public InterestsViewModel GetInterests()
-        {
-            var profile = ProfileService.GetInterests(currentUserId);
-            var interests = MappingService.Map<Profile, InterestsViewModel>(profile);
-            return interests;
-        }
-
-        public void SaveMainInfo(
-        MainViewModel mainInfo,
-        [Control("ddlGender")]string genderValue,
-        [Control("ddlMarried")]bool marriedValue,
-        [Control("ddlBirthDay")]string birthDayValue,
-        [Control("ddlBirthMonth")]string birthMonthValue,
-        [Control("ddlBirthYear")]string birthYearValue,
-        [Control("ddlLanguage")]string languageValue
-        )
-        {
-            mainInfo.Gender = genderValue;
-            mainInfo.Married = marriedValue;
-            mainInfo.BirthDay = birthDayValue;
-            mainInfo.BirthMonth = birthMonthValue;
-            mainInfo.BirthYear = birthYearValue;
-            mainInfo.Language = languageValue;
+            string message;
 
             if (ModelState.IsValid)
             {
-                var profile = MappingService.Map<MainViewModel, Profile>(mainInfo);
-                ProfileService.SaveMainInfo(profile, currentUserId);
-
+                try
+                {
+                    var profile = MappingService.Map<ContactsViewModel, Core.POCO.Profile>(contactsvm);
+                    ProfileService.SaveContacts(profile);
+                    UserService.UpdatePhoneNumber(CurrentUserId, contactsvm.PhoneNumber);
+                    message = "Contact info updated succesfully";
+                }
+                catch
+                {
+                    message = "Error";
+                }
             }
+            else
+            {
+                message = "Some errors in your form: " + GetAllModelErrors();
+            }
+
+            ResultMessage("contact_info", message);
         }
-        public List<SelectListItem> GetLanguages()
+        #endregion
+
+        #region Interests
+        public InterestsViewModel GetInterests()
         {
-            return ProfileService.GetLanguages(currentUserId);
+            var profile = ProfileService.GetInterests(CurrentUserId);
+            var interests = MappingService.Map<Core.POCO.Profile, InterestsViewModel>(profile);
+            return interests;
         }
 
-        public List<SelectListItem> GetMarried()
+        public void SaveInterests(InterestsViewModel model)
         {
-            return ProfileService.GetMaritalStatus(currentUserId);
-        }
+            string message;
 
-        public List<SelectListItem> GetGender()
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var profile = MappingService.Map<InterestsViewModel, Core.POCO.Profile>(model);
+                    ProfileService.SaveInterests(profile, CurrentUserId);
+                    message = "Interests info updated succesfully";
+                }
+                catch
+                {
+                    message = "Error";
+                }
+            }
+            else
+            {
+                message = "Some errors in your form: " + GetAllModelErrors();
+            }
+
+            ResultMessage("interests_info", message);
+        }
+        #endregion
+
+        #region Education
+
+        private int graduationYear = 0;
+        public EducationViewModel GetEducationInfo()
         {
-            return ProfileService.GetGender(currentUserId);
+
+            EducationDTO dto = ProfileService.GetEducationInfoOfUser(CurrentUserId);
+            EducationViewModel model = MappingService.Map<EducationDTO, EducationViewModel>(dto);
+            
+            model.SchoolCountries = ListItemsFromStringArray(dto.CountriesList);
+            model.SchoolTowns = ListItemsFromStringArray(dto.Towns.Select(a => a.TownName));
+            model.StartYears = ListItemsFromStringArray(dto.StartYears);
+            model.FinishYears = ListItemsFromStringArray(dto.FinishYears);
+            graduationYear = model.FinishSchoolYear;
+
+            return model;
         }
 
-        public List<SelectListItem> GetBirthDay()
+        public void UpdateEducationInfo(EducationViewModel vm, [Form]string SchoolTown, [Form]int FinishSchoolYear)
         {
-            return ProfileService.GetBirthDay(currentUserId);
+            string message;
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    vm.SchoolTown = SchoolTown;
+                    vm.FinishSchoolYear = FinishSchoolYear;
+                    var profile = MappingService.Map<EducationViewModel, Core.POCO.Profile>(vm);
+                    ProfileService.SaveEducation(profile, CurrentUserId);
+                    message = "Education info updated succesfully";
+                }
+                catch
+                {
+                    message = "Error";
+                }
+            }
+            else
+            {
+                message = "Some errors in your form: " + GetAllModelErrors();
+            }
+
+            ResultMessage("education_info", message);
         }
 
-        public List<SelectListItem> GetBirthMonth()
+        #endregion 
+
+
+
+        private ListItem[] ListItemsFromStringArray(IEnumerable<string> str)
         {
-            return ProfileService.GetBirthMonth(currentUserId);
+            ListItem[] items = new ListItem[str.Count()];
+
+            for (int i = 0; i < str.Count(); i++)
+            {
+                items[i] = new ListItem { Text = str.ElementAt(i), Value = str.ElementAt(i) };
+            }
+
+            return items;
         }
 
-        public List<SelectListItem> GetBirthYear()
+        private string GetAllModelErrors()
         {
-            return ProfileService.GetBirthYear(currentUserId);
+            string message = "";
+
+            for (int i = 0; i < ModelState.Values.Count; i++)
+            {
+                ModelErrorCollection col = ModelState.Values.ElementAt(i).Errors;
+
+                foreach (var msg in col)
+                    message += msg.ErrorMessage;
+            }
+
+            return message;
         }
 
-
-        public List<SelectListItem> GetSchoolTown()
+        private void ResultMessage(string key, string message)
         {
-            return ProfileService.GetSchoolTown(currentUserId);
+            ScriptManager.RegisterStartupScript(this.Page, Page.GetType(), key, "alert('" + message + "');", true);
         }
 
-        public List<SelectListItem> GetSchoolStartYear()
+        private void FillEducationInfoDropDownLists()
         {
-            return ProfileService.GetSchoolStartYear(currentUserId);
+            string script = @"vm.getProfileSchoolTown();
+                              vm.updateFinishYears("+ graduationYear + ")";
+
+            ScriptManager.RegisterStartupScript(this.Page, Page.GetType(), "dropdownlists", script, true);
         }
 
-        public List<SelectListItem> GetSchoolFinishYear()
+        public void Page_PreRenderComplete(object s, EventArgs e)
         {
-            return ProfileService.GetSchoolFinishYear(currentUserId);
+       //     if (IsPostBack)
+                FillEducationInfoDropDownLists();
         }
-
-        public List<SelectListItem> GetSchoolCountry()
-        {
-            return ProfileService.GetSchoolCountry(currentUserId);
-        }
-
-
     }
 }

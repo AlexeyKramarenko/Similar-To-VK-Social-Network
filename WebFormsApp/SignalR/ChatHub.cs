@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Core.POCO;
 using Core.BLL.Interfaces;
+using WebFormsApp.ViewModel;
 
 namespace WebFormsApp
 {
@@ -13,7 +14,7 @@ namespace WebFormsApp
         public string UserName { get; set; }
         public string Message { get; set; }
     }
-    public class UserDetail
+    public class UserInfo
     {
         public string UserID { get; set; }
         public string FriendsID { get; set; }
@@ -23,7 +24,7 @@ namespace WebFormsApp
     }
     public static class OnlineVariables
     {
-        public static List<UserDetail> OnlineUsers = new List<UserDetail>();
+        public static List<UserInfo> OnlineUsers = new List<UserInfo>();
         public static List<MessageDetail> CurrentMessages = new List<MessageDetail>();
         public static ApplicationUser LoggedInUser;
     }
@@ -32,14 +33,15 @@ namespace WebFormsApp
         IMessagesService messagesService;
         IPhotoService photoService;
         IRelationshipsService relationshipsService;
+        IUserService userService;
 
-        public ChatHub(IMessagesService _messagesService, IPhotoService _photoService, IRelationshipsService _relationshipsService)
+        public ChatHub(IMessagesService messagesService, IPhotoService photoService, IRelationshipsService relationshipsService, IUserService userService)
         {
-            messagesService = _messagesService;
-            photoService = _photoService;
-            relationshipsService = _relationshipsService;
+            this.messagesService = messagesService;
+            this.photoService = photoService;
+            this.relationshipsService = relationshipsService;
+            this.userService = userService;
         }
-
 
         public void CheckTheReceiverOpenedDialogToRead(string userID, int dialogId)
         {
@@ -51,77 +53,68 @@ namespace WebFormsApp
             if (dialogId == 0)
                 dialogId = messagesService.GetDialogIdOfUsers(FromUserId, ToUserId);
 
-            string date = string.Format("{0}.{1}.{2}  {3}:{4}", DateTime.Today.Day, DateTime.Today.Month, DateTime.Today.Year, DateTime.Now.Hour, DateTime.Now.Minute);
 
             string imgPath = photoService.GetThumbAvatarImg(FromUserId);
-
-            string body = "<tr>" +
-                              "<td class='log_author'><img src='" + imgPath + "' /></td>" +
-                              "<td class='log_body'><p>" + message + "</p></td>" +
-                              "<td class='log_date'>" + date + "</td>" +
-                          "</tr>";
+            string userName = userService.GetUserNameByUserID(FromUserId);
 
             messagesService.InsertMessage(new Message
             {
-                Body = body,
+                Body = message,
                 DialogID = dialogId,
                 SendersUserID = FromUserId,
                 ReceiversUserID = ToUserId,
-                RequestDate = date
+                RequestDate = DateTime.Now
             });
 
-            Clients.Caller.getMessage(FromUserId, body, date);
+            string date = string.Format("{0}.{1}.{2}  {3}:{4}", DateTime.Today.Day, DateTime.Today.Month, DateTime.Today.Year, DateTime.Now.Hour, DateTime.Now.Minute);
 
-            var toUser = OnlineVariables.OnlineUsers.FirstOrDefault(a => a.UserID == ToUserId);
+            var _message = new MessageViewModel
+            {
+                CreateDate = date,
+                InterlocutorAvatar = imgPath,
+                InterlocutorUserName = userName,
+                MessageText = message
+            };
+
+            Clients.Caller.getMessage(_message);
+
+            var toUser = OnlineVariables.OnlineUsers.FirstOrDefault(a => a.UserID == ToUserId.Trim());
 
             if (toUser != null)
-                Clients.Client(toUser.ConnectionId).getMessage(FromUserId, body, date);
+                Clients.Client(toUser.ConnectionId).getMessage(_message);
         }
+        
 
-        public void Connect(string userId)
+        public List<UserInfo> ConnectToGetFriends(string userId)
         {
-            if (OnlineVariables.OnlineUsers.FirstOrDefault(a => a.UserID == userId) == null)
+            string thumbnailUrl = photoService.GetThumbAvatarImg(userId);
+
+            var ConnectedUser = new UserInfo
             {
-                string ThumbnailUrl = photoService.GetThumbAvatarImg(userId);
+                UserID = userId,
+                FriendsID = null,
+                ConnectionId = Context.ConnectionId,
+                ThumbnailUrl = thumbnailUrl,
+                PageUrl = "Main.aspx?UserID=" + userId
+            };
 
-                var ConnectedUser = new UserDetail
-                {
-                    UserID = userId,
-                    ConnectionId = Context.ConnectionId,
-                    PageUrl = "Main.aspx?UserID=" + userId,
-                    ThumbnailUrl = ThumbnailUrl,
-                };
+            var user = OnlineVariables.OnlineUsers.FirstOrDefault(a => a.UserID == userId);
 
+            if (user == null)
+            {
                 OnlineVariables.OnlineUsers.Add(ConnectedUser);
             }
-        }
 
-        public List<UserDetail> ConnectToGetFriends(string userId)
-        {
-            var friendsOnline = new List<UserDetail>();
+            var friendsOnline = new List<UserInfo>();
 
             var allFriendsIDs = relationshipsService.GetFriendsIDsOfUser(userId);
 
             for (int i = 0; i < allFriendsIDs.Count; i++)
             {
                 var friend = OnlineVariables.OnlineUsers.FirstOrDefault(a => a.UserID == allFriendsIDs[i]);
+
                 if (friend != null)
                     friendsOnline.Add(friend);
-            }
-
-            string ThumbnailUrl = photoService.GetThumbAvatarImg(userId);
-
-            var ConnectedUser = new UserDetail
-            {
-                UserID = userId,
-                ConnectionId = Context.ConnectionId,
-                PageUrl = "Main.aspx?UserID=" + userId,
-                ThumbnailUrl = ThumbnailUrl,
-            };
-
-            if (OnlineVariables.OnlineUsers.FirstOrDefault(a => a.UserID == userId) == null)
-            {
-                OnlineVariables.OnlineUsers.Add(ConnectedUser);
             }
 
             //send friends list to user that called 'ConnectToGetFriends'             
@@ -135,9 +128,9 @@ namespace WebFormsApp
             return friendsOnline;
         }
 
-        public List<UserDetail> ConnectToGetOnlineInterlocutors(string userId, string[] allInterlocutersIDs)
+        public List<UserInfo> ConnectToGetOnlineInterlocutors(string userId, string[] allInterlocutersIDs)
         {
-            var interlocutorsOnline = new List<UserDetail>();
+            var interlocutorsOnline = new List<UserInfo>();
 
             for (int i = 0; i < allInterlocutersIDs.Length; i++)
             {
@@ -146,17 +139,19 @@ namespace WebFormsApp
                 if (interlocutor != null)
                     interlocutorsOnline.Add(interlocutor);
             }
+            string thumbnailUrl = photoService.GetThumbAvatarImg(userId);
 
-            var ConnectedUser = new UserDetail
+            var ConnectedUser = new UserInfo
             {
                 UserID = userId,
-                ConnectionId = Context.ConnectionId
+                FriendsID = null,
+                ConnectionId = Context.ConnectionId,
+                ThumbnailUrl = thumbnailUrl,
+                PageUrl = "Main.aspx?UserID=" + userId
             };
-
             if (OnlineVariables.OnlineUsers.FirstOrDefault(a => a.UserID == userId) == null)
-            {
                 OnlineVariables.OnlineUsers.Add(ConnectedUser);
-            }
+
 
             //send list of friends to user that called ConnectToGetOnlineInterlocutors            
             Clients.Caller.onConnected(interlocutorsOnline);
@@ -169,9 +164,9 @@ namespace WebFormsApp
             return interlocutorsOnline;
         }
 
-        public List<UserDetail> GetOnlineFriends(string userId)
+        public List<UserInfo> GetOnlineFriends(string userId)
         {
-            var friendsOnline = new List<UserDetail>();
+            var friendsOnline = new List<UserInfo>();
 
             var allFriendsIDs = relationshipsService.GetFriendsIDsOfUser(userId);
 
@@ -188,6 +183,7 @@ namespace WebFormsApp
         public override Task OnDisconnected(bool stopCalled)
         {
             var users = OnlineVariables.OnlineUsers;
+
             var connectionId = Context.ConnectionId;
 
             var item = OnlineVariables.OnlineUsers.FirstOrDefault(x => x.ConnectionId == connectionId);

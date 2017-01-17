@@ -11,5 +11,14 @@ namespace WebFormsApp {
     
     
     public partial class Photos {
+        
+        /// <summary>
+        /// Chat control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::WebFormsApp.CustomControls.Chat Chat;
     }
 }

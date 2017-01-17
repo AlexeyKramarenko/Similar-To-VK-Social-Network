@@ -7,6 +7,12 @@ using Core.POCO;
 using MvcApp.ViewModel;
 using System.Web.Script.Services;
 using System.Web.Services;
+using MvcApp.Services;
+using System.Web;
+using System;
+using System.Linq;
+using Core.BLL.DTO;
+using System.Collections.Generic;
 
 namespace MvcApp.WebServices
 {
@@ -24,64 +30,74 @@ namespace MvcApp.WebServices
         public IRelationshipsService relationshipsService { get; set; }
         [Inject]
         public IMessagesService messagesService { get; set; }
-
         [Inject]
         public IPhotoService photoService { get; set; }
         [Inject]
         public IUserService userService { get; set; }
+        [Inject]
+        public ISessionService sessionService { get; set; }
+        [Inject]
+        public IMappingService mappingService { get; set; }
 
-
-        string currentUserId;
-        public DialogService()
+        string CurrentUserId
         {
-            currentUserId = User.Identity.GetUserId();
+            get
+            {
+                return sessionService.CurrentUserId;
+            }
         }
-
-        [WebMethod]
+        
+        [WebMethod(EnableSession = true)]
         [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
         public MessagesFormViewModel GetUsersInfoForDialogForm(UsersInfo info)
         {
             var vm = new MessagesFormViewModel();
 
-            vm.CurrentUserAvatar = photoService.GetThumbAvatarImg(currentUserId);
-            vm.InterlocutorUserAvatar = photoService.GetThumbAvatarImg(info.receiversId);
+            vm.CurrentUserAvatar =  photoService.GetThumbAvatarImg(CurrentUserId);
+            vm.InterlocutorUserAvatar =  photoService.GetThumbAvatarImg(info.receiversId);
 
-            vm.CurrentUsername = userService.GetUserNameByUserID(currentUserId);
+            vm.CurrentUsername = userService.GetUserNameByUserID(CurrentUserId);
             vm.InterlocutorUsername = userService.GetUserNameByUserID(info.receiversId);
 
             return vm;
         }
 
-
-        [WebMethod]
+        [WebMethod(EnableSession = true)]
         [ScriptMethod(ResponseFormat = ResponseFormat.Json, UseHttpGet = true)]
-        public string GetDialogByID(int id)
+        public List<MessagesViewModel> GetDialogByID(int id)
         {
+            List<Message> dialog = messagesService.GetMessagesByDialogId(id,CurrentUserId);
 
-            string dialog = messagesService.GetDialogByID(id, currentUserId);
+            var list = new List<MessagesViewModel>();
 
+            foreach (var item in dialog)
+            {
+                list.Add(new MessagesViewModel
+                {
+                    InterlocutorAvatar = photoService.GetLargeAvatarImg(item.SendersUserID),
+                    InterlocutorUserName = userService.GetUserNameByUserID(item.SendersUserID),
+                    MessageText = item.Body,
+                    CreateDate = item.RequestDate.ToString()
+                });
+            }
+
+            return list;
+        }
+
+        [WebMethod(EnableSession = true)]
+        [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+        public string CreateNewDialog(Message message)
+        {
+            string dialog = messagesService.CreateNewDialog(message, CurrentUserId);
             string json = JsonConvert.SerializeObject(dialog);
             return json;
         }
 
-        [WebMethod]
-        [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
-        public string CreateNewDialog(Message message)
-        {
-            string response = messagesService.CreateNewDialog(message, currentUserId);
-
-            string json = JsonConvert.SerializeObject(response);
-            return json;
-        }
-
-        [WebMethod]
+        [WebMethod(EnableSession = true)]
         [ScriptMethod]
         public void AddRelationshipDefinition(string senderUserId, int relationshipId)
         {
-            string receiverUserId = User.Identity.GetUserId();
-
-            relationshipsService.SaveRelationshipDefinition(senderUserId, receiverUserId, relationshipId);
-
+            relationshipsService.SaveRelationshipDefinition(senderUserId, receiverUserId: CurrentUserId, relationshipId: relationshipId);
         }
 
     }
@@ -89,4 +105,5 @@ namespace MvcApp.WebServices
     {
         public string receiversId;
     }
+
 }

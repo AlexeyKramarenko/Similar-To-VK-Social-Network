@@ -10,21 +10,29 @@ using System.Linq;
 using System.Net;
 using Microsoft.AspNet.Identity;
 using Core.BLL.Interfaces;
+using MvcApp.Services;
 
 namespace MvcApp.WebAPI
 {
     public class PhotosController : ApiController
     {
         private static int? _albumId; //null - Avatar, 0,1,2.. - id of album         
-        private string userId;
 
-        string baseUrl = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath;
 
         IPhotoService photoService;
-        public PhotosController(IPhotoService _photoService)
+        ISessionService sessionService;
+
+        public string CurrentUserId
         {
-            userId = User.Identity.GetUserId();
-            photoService = _photoService;
+            get
+            {
+                return sessionService.CurrentUserId;
+            }
+        }
+        public PhotosController(IPhotoService photoService, ISessionService sessionService)
+        {
+            this.photoService = photoService;
+            this.sessionService = sessionService;
         }
 
         [HttpGet]
@@ -35,11 +43,6 @@ namespace MvcApp.WebAPI
 
             if (photos != null)
             {
-                for (int i = 0; i < photos.Length; i++)
-                {
-                    photos[i].PhotoUrl = baseUrl + photos[i].PhotoUrl;
-                    photos[i].ThumbnailPhotoUrl = baseUrl + photos[i].ThumbnailPhotoUrl;
-                }
                 return Ok(photos);
             }
 
@@ -55,11 +58,6 @@ namespace MvcApp.WebAPI
 
             if (photos != null)
             {
-                for (int i = 0; i < photos.Length; i++)
-                {
-                    photos[i].PhotoUrl = baseUrl + photos[i].PhotoUrl;
-                    photos[i].ThumbnailPhotoUrl = baseUrl + photos[i].ThumbnailPhotoUrl;
-                }
                 return Ok(photos);
             }
 
@@ -77,14 +75,10 @@ namespace MvcApp.WebAPI
         [ActionName("GetPhotoAlbums")]
         public IHttpActionResult GetPhotoAlbums()
         {
-            PhotoAlbumResult[] albums = photoService.GetPhotoAlbums(userId);
+            PhotoAlbumResult[] albums = photoService.GetPhotoAlbums(CurrentUserId);
 
             if (albums != null)
             {
-                for (int i = 0; i < albums.Length; i++)
-                {
-                    albums[i].LastPhotoUrl = baseUrl + albums[i].LastPhotoUrl;
-                }
                 return Ok(albums);
             }
 
@@ -105,7 +99,7 @@ namespace MvcApp.WebAPI
                     #region Variables
                     if (_albumId == 0) //Wall main album
                     {
-                        PhotoAlbum album = photoService.GetWallMainAlbum(userId);
+                        PhotoAlbum album = photoService.GetWallMainAlbum(CurrentUserId);
 
                         if (album != null)
                             _albumId = album.PhotoAlbumID;
@@ -113,7 +107,7 @@ namespace MvcApp.WebAPI
 
                     // Validate the uploaded image(optional)
                     string path = HttpContext.Current.Server.MapPath("~/UsersFolder/");
-                    string subpath = userId;
+                    string subpath = CurrentUserId;
 
                     string foldersPath = "UsersFolder/" + subpath + "/";
                     string virtualPathFolder = "~/" + foldersPath;
@@ -141,34 +135,30 @@ namespace MvcApp.WebAPI
 
                     #endregion
 
-                    #region Save large file
-
                     httpPostedFile.SaveAs(fileSavePath);
 
-                    #endregion
-
-                    #region Thumbnail
-                    var image = Image.FromFile(fileSavePath);
-
-                    using (Image bigImage = new Bitmap(fileSavePath))
+                    using (Image bigImage = Image.FromStream(httpPostedFile.InputStream))
                     {
                         // Algorithm simplified for purpose of example.
-                        int height = bigImage.Height / 10;
-                        int width = bigImage.Width / 10;
+                        int height = bigImage.Height / 4;
+                        int width = bigImage.Width / 4;
 
-                        // Now create a thumbnail
-                        using (Image smallImage = image.GetThumbnailImage(width, height, new Image.GetThumbnailImageAbort(ThumbnailCallback), IntPtr.Zero))
+                        // Now create a thumbnail                       
+                        using (Image smallImage = Image.FromFile(fileSavePath).GetThumbnailImage(width, height, new Image.GetThumbnailImageAbort(ThumbnailCallback), IntPtr.Zero))
+                        {
                             smallImage.Save(thumbFileSavePath);
+                        }
 
                     }
-                    #endregion
+                    httpPostedFile.InputStream.Dispose();
+
 
                     #region Save img sources
 
                     var photo = new Photo
                     {
                         PhotoAlbumID = _albumId,
-                        UserID = userId,
+                        UserID = CurrentUserId,
                         PhotoUrl = fileUrl,
                         ThumbnailPhotoUrl = thumbFileUrl,
                         Name = fileNameWithExtension
@@ -180,7 +170,7 @@ namespace MvcApp.WebAPI
                         albumID = photoService.AddPhoto(photo);
 
                     else
-                        photoService.UpdateAvatar(photo, userId);
+                        photoService.UpdateAvatar(photo, CurrentUserId);
 
                     _albumId = null; //reset for the next reqest
                     #endregion
@@ -205,10 +195,8 @@ namespace MvcApp.WebAPI
 
             if (img != null)
             {
-                string fullPath = baseUrl + img;
-                return Ok(fullPath);
+                return Ok(img);
             }
-
             else
                 return NotFound();
         }
@@ -219,13 +207,10 @@ namespace MvcApp.WebAPI
         {
             string img = photoService.GetThumbAvatarImg(UserID);
 
-
             if (img != null)
             {
-                string fullPath = baseUrl + img;
-                return Ok(fullPath);
+                return Ok(img);
             }
-
             else
                 return NotFound();
         }
@@ -238,7 +223,6 @@ namespace MvcApp.WebAPI
 
             if (names != null)
                 return Ok(names);
-
             else
                 return NotFound();
         }
@@ -248,9 +232,8 @@ namespace MvcApp.WebAPI
         [ActionName("DownloadImage")]
         public HttpResponseMessage DownloadImage([FromUri] string Name)
         {
-            //начало
             HttpResponseMessage result = null;
-            var localFilePath = HttpContext.Current.Server.MapPath("~/UsersFolder/" + userId + "/" + Name);
+            var localFilePath = HttpContext.Current.Server.MapPath("~/UsersFolder/" + CurrentUserId + "/" + Name);
 
             // check if parameter is valid
             if (String.IsNullOrEmpty(Name))
@@ -280,7 +263,7 @@ namespace MvcApp.WebAPI
         [ActionName("GetPhotoAlbumsIds")]
         public IHttpActionResult GetPhotoAlbumsIds()
         {
-            int[] ids = photoService.GetPhotoAlbumsIds(userId);
+            int[] ids = photoService.GetPhotoAlbumsIds(CurrentUserId);
 
             if (ids != null)
                 return Ok(ids);
@@ -293,21 +276,12 @@ namespace MvcApp.WebAPI
         [ActionName("GetPhotoUrlsByAlbumID")]
         public IHttpActionResult GetPhotoUrlsByAlbumID(int Id)
         {
-            PhotoUrlResult[] urls = photoService.GetPhotoUrlsByAlbumID(Id, userId);
+            PhotoUrlResult[] urls = photoService.GetPhotoUrlsByAlbumID(Id, CurrentUserId);
 
             if (urls != null)
-            {
-                for (int i = 0; i < urls.Length; i++)
-                {
-                    urls[i].ThumbnailPhotoUrl = baseUrl + urls[i].ThumbnailPhotoUrl;
-                    urls[i].Photourl = baseUrl + urls[i].Photourl;
-                }
-
                 return Ok(urls);
-            }
 
-            else
-                return NotFound();
+            return NotFound();
         }
 
         [HttpPut]
@@ -322,7 +296,7 @@ namespace MvcApp.WebAPI
         [ActionName("GetAlbumsCountByUserID")]
         public IHttpActionResult GetAlbumsCountByUserID()
         {
-            int count = photoService.GetAlbumsCountByUserID(userId);
+            int count = photoService.GetAlbumsCountByUserID(CurrentUserId);
 
             if (count >= 0)
                 return Ok(count);
@@ -351,7 +325,7 @@ namespace MvcApp.WebAPI
         {
             if (PhotoAlbum != null)
             {
-                int albumId = photoService.CreatePhotoAlbum(PhotoAlbum, userId);
+                int albumId = photoService.CreatePhotoAlbum(PhotoAlbum, CurrentUserId);
 
                 return Created(Request.RequestUri, albumId);
             }
@@ -363,7 +337,7 @@ namespace MvcApp.WebAPI
         [ActionName("DeletePhotoFromAlbum")]
         public void DeletePhotoFromAlbum([FromBody] Photo photo)
         {
-            photoService.DeletePhotoFromAlbum(photo, userId);
+            photoService.DeletePhotoFromAlbum(photo, CurrentUserId);
             photoService.DeletePhotoFromFolder(photo);
         }
     }

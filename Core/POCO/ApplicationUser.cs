@@ -14,13 +14,13 @@ namespace  Core.POCO
 
         public string Password { get; set; }
         public DateTime? CreateDate { get; set; }
-        public DateTime? LastUpdateDate { get; set; }
-        public byte[] Timestamp { get; set; }
-        public DateTime? AgreedToTermsDate { get; set; }
-        public int StatusesCount { get; set; }
+        //public DateTime? LastUpdateDate { get; set; }
+        //public byte[] Timestamp { get; set; }
+        //public DateTime? AgreedToTermsDate { get; set; }
+        //public int StatusesCount { get; set; }
 
-        [NotMapped]
-        public Profile Profile { get; set; }
+        //[NotMapped]
+        //public Profile Profile { get; set; }
 
         [ForeignKey("Agreement")]
         public int AgreementID { get; set; }

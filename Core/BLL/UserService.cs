@@ -36,34 +36,30 @@ namespace Core.BLL
         {
             var userStore = new UserStore<ApplicationUser>(new DBContext());
             var userManager = new UserManager<ApplicationUser>(userStore);
-
-            //Debug
-            ApplicationUser user = new ApplicationUserManager(userStore, new DBContext()).GetUserByName(loginObj.UserName);
-
-            //Release
-            //ApplicationUser user = userManager.Find(loginObj.UserName, loginObj.Password);
+                      
+            ApplicationUser user = userManager.Find(loginObj.UserName, loginObj.Password);
 
             if (user != null)
             {
-                if (user.EmailConfirmed)
-                {
+                //if (user.EmailConfirmed==false)
+                //{
                     var authenticationManager = HttpContext.Current.GetOwinContext().Authentication;
                     var userIdentity = userManager.CreateIdentity(user, DefaultAuthenticationTypes.ApplicationCookie);
                     authenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = true }, userIdentity);
+                    
+                    return new OperationResult(succedeed: true, id: user.Id);
 
-                    return new OperationResult(succedeed: true);
+                //}
+                //else
+                //{
+                //    emailService.SendEmailAddressVerificationEmail(user.UserName, user.Email, host.Invoke());
 
-                }
-                else
-                {
-                    emailService.SendEmailAddressVerificationEmail(user.UserName, user.Email, host.Invoke());
-
-                    return new OperationResult(succedeed: false,
-                                               message: @"The login information you provided was correct 
-                                                          but your email address has not yet been verified.  
-                                                          We just sent another email verification email to you.  
-                                                          Please follow the instructions in that email.");
-                }
+                //    return new OperationResult(succedeed: false,
+                //                               message: @"The login information you provided was correct 
+                //                                          but your email address has not yet been verified.  
+                //                                          We just sent another email verification email to you.  
+                //                                          Please follow the instructions in that email.");
+                //}
             }
             else
                 return new OperationResult(succedeed: false, message: "We were unable to log you in with that information!");
@@ -91,14 +87,15 @@ namespace Core.BLL
                 var manager = new UserManager<ApplicationUser>(store);
 
                 user.CreateDate = DateTime.Now;
+                
+                OperationResult sendingResult = emailService.SendEmailAddressVerificationEmail(user.UserName, user.Email, host());
+                
+                //if (sendingResult.Succedeed == true)
+                //{
 
-                string sendingResult = emailService.SendEmailAddressVerificationEmail(user.UserName, user.Email, host());
+                    IdentityResult identityResult = manager.Create(user, user.Password);
 
-                if (sendingResult == string.Empty)
-                {
-                    IdentityResult result = manager.Create(user, user.Password);
-
-                    if (result.Succeeded)
+                    if (identityResult.Succeeded)
                     {
                         string userId = user.Id;
 
@@ -106,24 +103,21 @@ namespace Core.BLL
                         settingsService.AttachPrivacyToUserProfile(profileId);
                         photoService.AttachMainWallPhotoAlbumToUser(userId);
                         photoService.CreateDefaultAvatar(userId);
-
-                        manager.AddToRole(userId, "public");
-                        manager.AddToRole(userId, "registered");
-
+                          
                         return new OperationResult(succedeed: true);
                     }
                     else
                     {
                         string errors = "";
 
-                        foreach (string e in result.Errors)
+                        foreach (string e in identityResult.Errors)
                             errors += e;
 
                         return new OperationResult(succedeed: false, message: errors);
                     }
-                }
-                else
-                    return new OperationResult(succedeed: false, message: sendingResult);
+                //}
+                //else
+                //    return new OperationResult(succedeed: false, message: sendingResult.Message);
             }
         }
 

@@ -3,6 +3,8 @@ using Core.POCO;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using Microsoft.AspNet.Identity;
+using Core.BLL;
 
 namespace Core.DAL
 {
@@ -26,23 +28,17 @@ namespace Core.DAL
         public DbSet<PhotoAlbum> PhotoAlbums { get; set; }
         public DbSet<Country> Countries { get; set; }
         public DbSet<Town> Towns { get; set; }
-        public DbSet<UserRights> UserRights { get; set; }
+        public DbSet<RightsOfVisitorOnThePage> UserRights { get; set; }
     }
 
-    //public class DBInitializer : DropCreateDatabaseIfModelChanges<DBContext>
+    public class DBInitializer : DropCreateDatabaseIfModelChanges<DBContext>
 
-    public class DBInitializer : DropCreateDatabaseAlways<DBContext>
+    //public class DBInitializer : DropCreateDatabaseAlways<DBContext>
     {
         protected override void Seed(DBContext db)
         {
             #region Agreement
-            db.Agreements.Add(new Agreement { CreateDate = DateTime.Now, Terms = "aaaaaaaaaaaa" });
-            db.SaveChanges();
-            #endregion
-
-            #region Roles
-            db.Roles.Add(new Role { Id = "1", Name = "registered" });
-            db.Roles.Add(new Role { Id = "2", Name = "public" });
+            db.Agreements.Add(new Agreement { CreateDate = DateTime.Now, Terms = "This is agreement..." });
             db.SaveChanges();
             #endregion
 
@@ -53,9 +49,8 @@ namespace Core.DAL
                 new List<RelationshipDefinition> {
                     new RelationshipDefinition { RelationshipDefinitionID = 1, Definition = "pageOwner" },
                     new RelationshipDefinition { RelationshipDefinitionID = 2, Definition = "friend" },
-                    new RelationshipDefinition { RelationshipDefinitionID = 3, Definition = "subscriber" },
-                    new RelationshipDefinition { RelationshipDefinitionID = 4, Definition = "unknown" } }
-                );
+                    new RelationshipDefinition { RelationshipDefinitionID = 3, Definition = "unknown" }
+                });
 
             db.SaveChanges();
 
@@ -87,19 +82,8 @@ namespace Core.DAL
                 ID = 5,
                 FieldName = "who can leave comments on my main page"
             };
-            var privacyFlagType6 = new PrivacyFlagType()
-            {
-                ID = 6,
-                FieldName = "who can send me messages"
-            };
-            var privacyFlagType7 = new PrivacyFlagType()
-            {
-                ID = 7,
-                FieldName = "who can see my main page on SEARCH request on PEOPLE page"
-            };
 
-
-            db.PrivacyFlagTypes.AddRange(new List<PrivacyFlagType> { privacyFlagType1, privacyFlagType2, privacyFlagType3, privacyFlagType4, privacyFlagType5, privacyFlagType6, privacyFlagType7 });
+            db.PrivacyFlagTypes.AddRange(new List<PrivacyFlagType> { privacyFlagType1, privacyFlagType2, privacyFlagType3, privacyFlagType4, privacyFlagType5 });
             db.SaveChanges();
             #endregion
 
@@ -114,7 +98,7 @@ namespace Core.DAL
             var visLevel2 = new VisibilityLevel()
             {
                 ID = 2,
-                Name = "Only friends"
+                Name = "Friends"
             };
             var visLevel3 = new VisibilityLevel()
             {
@@ -125,66 +109,48 @@ namespace Core.DAL
             db.SaveChanges();
             #endregion
 
-            //level = 3 : =1
-            //level = 2 : <=2
-            //level = 1 : <=4
-
             #region UserRights
-            //owner of page
-            var right1 = new UserRights
+
+            //------Only me------
+            var right1 = new RightsOfVisitorOnThePage
             {
-                UserRightID = 1,
-                RelationshipDefinitionID = 1,
-                VisibilityLevelId = 3
-            };
-            //friend
-            var right2 = new UserRights
-            {
-                UserRightID = 2,
-                RelationshipDefinitionID = 1,
-                VisibilityLevelId = 2
-            };
-            //subscriber
-            var right3 = new UserRights
-            {
-                UserRightID = 3,
-                RelationshipDefinitionID = 2,
-                VisibilityLevelId = 2
-            };
-            //unknown
-            var right4 = new UserRights
-            {
-                UserRightID = 4,
-                RelationshipDefinitionID = 1,
-                VisibilityLevelId = 1
-            };
-            var right5= new UserRights
-            {
-                UserRightID = 5,
-                RelationshipDefinitionID = 1,
-                VisibilityLevelId = 2
-            };
-            var right6 = new UserRights
-            {
-                UserRightID = 6,
-                RelationshipDefinitionID = 1,
-                VisibilityLevelId = 3
-            };
-            var right7 = new UserRights
-            {
-                UserRightID = 7,
-                RelationshipDefinitionID = 1,
-                VisibilityLevelId = 4
+                VisibilityLevelId = 3, //Me
+                RelationshipDefinitionID = 1 //page owner 
             };
 
-            db.UserRights.AddRange(new List<UserRights> { right1, right2, right3, right4, right5, right6, right7 });
+            //------Only friends------
+            var right2 = new RightsOfVisitorOnThePage
+            {
+                VisibilityLevelId = 2, //Friends
+                RelationshipDefinitionID = 2 //friend
+            };
+            var right3 = new RightsOfVisitorOnThePage
+            {
+                VisibilityLevelId = 2, //Friends
+                RelationshipDefinitionID = 1 //page owner
+            };
+
+            //------All users------
+            var right4 = new RightsOfVisitorOnThePage
+            {
+                VisibilityLevelId = 1, //All users
+                RelationshipDefinitionID = 3 //unknown 
+            };
+            var right5 = new RightsOfVisitorOnThePage
+            {
+                VisibilityLevelId = 1, //All users
+                RelationshipDefinitionID = 2 //friend
+            };
+            var right6 = new RightsOfVisitorOnThePage
+            {
+                VisibilityLevelId = 1, //All users
+                RelationshipDefinitionID = 1 //page owner 
+            };
+
+            db.UserRights.AddRange(
+                new List<RightsOfVisitorOnThePage> { right1, right2, right3, right4, right5, right6 });
             db.SaveChanges();
             #endregion
-
-
-
-
-
 
             #region Country
             var Ukraine = new Country
@@ -204,6 +170,7 @@ namespace Core.DAL
                 }
             };
             db.Countries.Add(Ukraine);
+
             var Australia = new Country
             {
                 CountryID = 2,
@@ -219,6 +186,7 @@ namespace Core.DAL
                 }
             };
             db.Countries.Add(Australia);
+
             var Botswana = new Country
             {
                 CountryID = 3,
@@ -241,331 +209,193 @@ namespace Core.DAL
             #endregion
 
             #region Users 
-            db.Users.Add(new ApplicationUser { Id = "c339d83f-4224-4c68-a5ea-e833b6ac27b2", UserName = "ALEX", Password = "ALEXALEX", EmailConfirmed = true, Email = "ALEX@gmail.com", AgreementID = 1, PhoneNumber = "0992304224", PasswordHash = "AOs/HKN2pdOWq2uF5xgwnHjV/S0lWRTMJxmuHI4zSoJpqEX4xhjOdGso5W+pk1OUzw==", SecurityStamp = "92c880fb-44e6-4e2c-9049-abf9a62fd2d6" });
-            db.Users.Add(new ApplicationUser { Id = "c339d83f-4224-4c68-a5ea-e833b6ac27b3", UserName = "OLEG", Password = "OLEGOLEG", EmailConfirmed = true, Email = "OLEG@gmail.com", AgreementID = 1, PhoneNumber = "0992304225", PasswordHash = "AOs/HKN2pdOWq2uF5xgwnHjV/S0lWRTMJxmuHI4zSoJpqEX4xhjOdGso5W+pk1OUzw==", SecurityStamp = "92c880fb-44e6-4e2c-9049-abf9a62fd2d6" });
-            db.Users.Add(new ApplicationUser { Id = "c339d83f-4224-4c68-a5ea-e833b6ac27b4", UserName = "IGOR", Password = "IGORIGOR", EmailConfirmed = true, Email = "IGOR@gmail.com", AgreementID = 1, PhoneNumber = "0992304226", PasswordHash = "AOs/HKN2pdOWq2uF5xgwnHjV/S0lWRTMJxmuHI4zSoJpqEX4xhjOdGso5W+pk1OUzw==", SecurityStamp = "92c880fb-44e6-4e2c-9049-abf9a62fd2d6" });
-            db.Users.Add(new ApplicationUser { Id = "c339d83f-4224-4c68-a5ea-e833b6ac27b5", UserName = "FIREFOX", Password = "FIREFOX", EmailConfirmed = true, Email = "FIREFOX@gmail.com", AgreementID = 1, PhoneNumber = "0992304227", PasswordHash = "AOs/HKN2pdOWq2uF5xgwnHjV/S0lWRTMJxmuHI4zSoJpqEX4xhjOdGso5W+pk1OUzw==", SecurityStamp = "92c880fb-44e6-4e2c-9049-abf9a62fd2d6" });
-            db.SaveChanges();
-            #endregion
+            var profileService = new ProfileService(new UnitOfWork(), new CountriesRepository(db), new MappingService());
+            var settingsService = new SettingsService(new UnitOfWork());
+            var photoService = new PhotoService(new UnitOfWork());
+            string userId = null;
+            var store = new UserStore<ApplicationUser>(db);
+            var userManager = new UserManager<ApplicationUser>(store);
 
 
-            #region Profiles
-            db.Profiles.Add(new Profile { UserID = "c339d83f-4224-4c68-a5ea-e833b6ac27b2", FirstName = "Olexiy", LastName = "Kramarenko", ProfileID = 1, Country = "Ukraine", Town = "Lviv", Gender = "Man", BirthDay = 1, BirthMonth = 1, BirthYear = 1990, School = "", SchoolTown = "", SchoolCountry = "", StartSchoolYear = 1990, FinishSchoolYear = 1990, Language = "" });
-            db.Profiles.Add(new Profile { UserID = "c339d83f-4224-4c68-a5ea-e833b6ac27b3", FirstName = "Oleg", LastName = "Kramarenko", ProfileID = 2, Country = "Ukraine", Town = "Lviv", Gender = "Man", BirthDay = 1, BirthMonth = 1, BirthYear = 1980, School = "", SchoolTown = "", SchoolCountry = "", StartSchoolYear = 1980, FinishSchoolYear = 1980, Language = "" });
-            db.Profiles.Add(new Profile { UserID = "c339d83f-4224-4c68-a5ea-e833b6ac27b4", FirstName = "Igor", LastName = "Korniychuk", ProfileID = 3, Country = "Ukraine", Town = "Lviv", Gender = "Man", BirthDay = 1, BirthMonth = 1, BirthYear = 1970, School = "", SchoolTown = "", SchoolCountry = "", StartSchoolYear = 1970, FinishSchoolYear = 1970, Language = "" });
-            db.Profiles.Add(new Profile { UserID = "c339d83f-4224-4c68-a5ea-e833b6ac27b5", FirstName = "Fire", LastName = "Fox", ProfileID = 4, Country = "Ukraine", Town = "Lviv", Gender = "Man", BirthDay = 1, BirthMonth = 1, BirthYear = 1970, School = "", SchoolTown = "", SchoolCountry = "", Language = "" });
-            db.SaveChanges();
-            #endregion
-
-            #region Photo
-            var photo = new Photo
+            var profile = new Profile
             {
-                UserID = "c339d83f-4224-4c68-a5ea-e833b6ac27b2",
-                PhotoAlbumID = null,
-                PhotoUrl = "UsersFolder/default.jpg",
-                ThumbnailPhotoUrl = "UsersFolder/default.jpg"
+                Country = "Ukraine",
+                Town = "Odesa",
+                FirstName = "Гена",
+                LastName = "Василенко",
+                BirthDay = 1,
+                BirthMonth = 4,
+                BirthYear = 1980,
+                Gender = "Male",
+                MaritalStatus = "Single",
+                CreationDate = DateTime.Now,
+                Language = "English",
+                Music = "Владимирский централ"
             };
-            db.Photos.Add(photo);
-            var photo1 = new Photo
+            var user = new ApplicationUser()
             {
-                UserID = "c339d83f-4224-4c68-a5ea-e833b6ac27b3",
-                PhotoAlbumID = null,
-                PhotoUrl = "UsersFolder/default.jpg",
-                ThumbnailPhotoUrl = "UsersFolder/default.jpg"
+                UserName = "Gena",
+                Email = "gena@gmail.com",
+                PhoneNumber = "(099)23-04-227"
             };
-            db.Photos.Add(photo1);
-            var photo2 = new Photo
+            string password = "GenaGena";
+            userManager.Create(user, password);
+            userId = user.Id;
+            int profileId = profileService.AttachProfileToUser(userId, profile);
+            settingsService.AttachPrivacyToUserProfile(profileId);
+            photoService.AttachMainWallPhotoAlbumToUser(userId);
+            photoService.CreateDefaultAvatar(userId);
+
+
+            profile = new Profile
             {
-                UserID = "c339d83f-4224-4c68-a5ea-e833b6ac27b4",
-                PhotoAlbumID = null,
-                PhotoUrl = "UsersFolder/default.jpg",
-                ThumbnailPhotoUrl = "UsersFolder/default.jpg"
+                Country = "Ukraine",
+                Town = "Odesa",
+                FirstName = "Олег",
+                LastName = "Дятлов",
+                BirthDay = 1,
+                BirthMonth = 4,
+                BirthYear = 1985,
+                Gender = "Male",
+                MaritalStatus = "Single",
+                CreationDate = DateTime.Now,
+                Language = "English",
+                Music = "Beatles"
             };
-            db.Photos.Add(photo2);
-            db.SaveChanges();
-            #endregion
-
-            //#region PhotoAlbum
-            var album = new PhotoAlbum
+            user = new ApplicationUser()
             {
-                PhotoAlbumID = 1,
-                UserID = "c339d83f-4224-4c68-a5ea-e833b6ac27b2",
-                Name = "My wall photos",
-                IsWallAlbum = true
+                UserName = "Oleg",
+                Email = "oleg@gmail.com",
+                PhoneNumber = "(099)23-04-224"
             };
-            db.PhotoAlbums.Add(album);
-            db.SaveChanges();
-            //#endregion
+            password = "OlegOleg";
+            userManager.Create(user, password);
+            userId = user.Id;
+            profileId = profileService.AttachProfileToUser(userId, profile);
+            settingsService.AttachPrivacyToUserProfile(profileId);
+            photoService.AttachMainWallPhotoAlbumToUser(userId);
+            photoService.CreateDefaultAvatar(userId);
 
 
-
-            #region PrivacyFlag
-            var privacyFlag1 = new PrivacyFlag()
+            profile = new Profile
             {
-                ID = 1,
-                PrivacyFlagTypeID = 1,
-                ProfileID = 1,
-                VisibilityLevelID = 1
+                Country = "Ukraine",
+                Town = "Gorishni Plavni",
+                FirstName = "Герасим",
+                LastName = "Иванов",
+                BirthDay = 1,
+                BirthMonth = 4,
+                BirthYear = 1990,
+                Gender = "Male",
+                MaritalStatus = "Married",
+                CreationDate = DateTime.Now,
+                Language = "English",
+                Music = "Sher"
             };
-            var privacyFlag2 = new PrivacyFlag()
+            user = new ApplicationUser()
             {
-                ID = 2,
-                PrivacyFlagTypeID = 2,
-                ProfileID = 1,
-                VisibilityLevelID = 1
+                UserName = "Gerasim",
+                Email = "gerasim@gmail.com",
+                PhoneNumber = "(099)23-04-224"
             };
-            var privacyFlag3 = new PrivacyFlag()
+            password = "GerasimGerasim";
+            userManager.Create(user, password);
+            userId = user.Id;
+            profileId = profileService.AttachProfileToUser(userId, profile);
+            settingsService.AttachPrivacyToUserProfile(profileId);
+            photoService.AttachMainWallPhotoAlbumToUser(userId);
+            photoService.CreateDefaultAvatar(userId);
+
+
+            profile = new Profile
             {
-                ID = 3,
-                PrivacyFlagTypeID = 3,
-                ProfileID = 1,
-                VisibilityLevelID = 1
+                Country = "Australia",
+                Town = "Broome",
+                FirstName = "Eva",
+                LastName = "Lancer",
+                BirthDay = 1,
+                BirthMonth = 4,
+                BirthYear = 1995,
+                Gender = "Female",
+                MaritalStatus = "Single",
+                CreationDate = DateTime.Now,
+                Language = "English",
+                Music = "Beatles"
             };
-            var privacyFlag4 = new PrivacyFlag()
+            user = new ApplicationUser()
             {
-                ID = 4,
-                PrivacyFlagTypeID = 4,
-                ProfileID = 1,
-                VisibilityLevelID = 1
+                UserName = "Eva",
+                Email = "eva@gmail.com",
+                PhoneNumber = "(099)23-04-224"
             };
-            var privacyFlag5 = new PrivacyFlag()
+            password = "EvaEva";
+            userManager.Create(user, password);
+            userId = user.Id;
+            profileId = profileService.AttachProfileToUser(userId, profile);
+            settingsService.AttachPrivacyToUserProfile(profileId);
+            photoService.AttachMainWallPhotoAlbumToUser(userId);
+            photoService.CreateDefaultAvatar(userId);
+
+
+            profile = new Profile
             {
-                ID = 5,
-                PrivacyFlagTypeID = 5,
-                ProfileID = 1,
-                VisibilityLevelID = 1
+                Country = "Australia",
+                Town = "Perth",
+                FirstName = "Albina",
+                LastName = "Potapenko",
+                BirthDay = 1,
+                BirthMonth = 4,
+                BirthYear = 2000,
+                Gender = "Female",
+                MaritalStatus = "Single",
+                CreationDate = DateTime.Now,
+                Language = "English",
+                Music = "Beatles"
             };
-            var privacyFlag6 = new PrivacyFlag()
+            user = new ApplicationUser()
             {
-                ID = 6,
-                PrivacyFlagTypeID = 6,
-                ProfileID = 1,
-                VisibilityLevelID = 1
+                UserName = "Albina",
+                Email = "albina@gmail.com",
+                PhoneNumber = "(099)23-04-224"
             };
+            password = "Albina";
+            userManager.Create(user, password);
+            userId = user.Id;
+            profileId = profileService.AttachProfileToUser(userId, profile);
+            settingsService.AttachPrivacyToUserProfile(profileId);
+            photoService.AttachMainWallPhotoAlbumToUser(userId);
+            photoService.CreateDefaultAvatar(userId);
+           
 
-            var privacyFlag7 = new PrivacyFlag()
+            profile = new Profile
             {
-                ID = 7,
-                PrivacyFlagTypeID = 7,
-                ProfileID = 1,
-                VisibilityLevelID = 1
+                Country = "Botswana",
+                Town = "Gaborone",
+                FirstName = "Olga",
+                LastName = "Isaenko",
+                BirthDay = 1,
+                BirthMonth = 4,
+                BirthYear = 1975,
+                Gender = "Female",
+                MaritalStatus = "Married",
+                CreationDate = DateTime.Now,
+                Language = "English",
+                Music = "Beatles"
             };
-
-            db.PrivacyFlags.AddRange(new List<PrivacyFlag> { privacyFlag1, privacyFlag2, privacyFlag3, privacyFlag4, privacyFlag5, privacyFlag6, privacyFlag7 });
-            db.SaveChanges();
-
-
-
-            var privacyFlag11 = new PrivacyFlag()
+            user = new ApplicationUser()
             {
-                ID = 11,
-                PrivacyFlagTypeID = 1,
-                ProfileID = 2,
-                VisibilityLevelID = 1
+                UserName = "Olga",
+                Email = "olga@gmail.com",
+                PhoneNumber = "(099)23-04-224"
             };
-            var privacyFlag12 = new PrivacyFlag()
-            {
-                ID = 12,
-                PrivacyFlagTypeID = 2,
-                ProfileID = 2,
-                VisibilityLevelID = 1
-            };
-            var privacyFlag13 = new PrivacyFlag()
-            {
-                ID = 13,
-                PrivacyFlagTypeID = 3,
-                ProfileID = 2,
-                VisibilityLevelID = 1
-            };
-            var privacyFlag14 = new PrivacyFlag()
-            {
-                ID = 14,
-                PrivacyFlagTypeID = 4,
-                ProfileID = 2,
-                VisibilityLevelID = 1
-            };
-            var privacyFlag15 = new PrivacyFlag()
-            {
-                ID = 15,
-                PrivacyFlagTypeID = 5,
-                ProfileID = 2,
-                VisibilityLevelID = 1
-            };
-            var privacyFlag16 = new PrivacyFlag()
-            {
-                ID = 16,
-                PrivacyFlagTypeID = 6,
-                ProfileID = 2,
-                VisibilityLevelID = 1
-            };
-
-            var privacyFlag17 = new PrivacyFlag()
-            {
-                ID = 17,
-                PrivacyFlagTypeID = 7,
-                ProfileID = 2,
-                VisibilityLevelID = 1
-            };
-
-            db.PrivacyFlags.AddRange(new List<PrivacyFlag> { privacyFlag11, privacyFlag12, privacyFlag13, privacyFlag14, privacyFlag15, privacyFlag16, privacyFlag17 });
-            db.SaveChanges();
-
-
-
-            var privacyFlag21 = new PrivacyFlag()
-            {
-                ID = 21,
-                PrivacyFlagTypeID = 1,
-                ProfileID = 3,
-                VisibilityLevelID = 1
-            };
-            var privacyFlag22 = new PrivacyFlag()
-            {
-                ID = 22,
-                PrivacyFlagTypeID = 2,
-                ProfileID = 3,
-                VisibilityLevelID = 1
-            };
-            var privacyFlag23 = new PrivacyFlag()
-            {
-                ID = 23,
-                PrivacyFlagTypeID = 3,
-                ProfileID = 3,
-                VisibilityLevelID = 1
-            };
-            var privacyFlag24 = new PrivacyFlag()
-            {
-                ID = 24,
-                PrivacyFlagTypeID = 4,
-                ProfileID = 3,
-                VisibilityLevelID = 1
-            };
-            var privacyFlag25 = new PrivacyFlag()
-            {
-                ID = 25,
-                PrivacyFlagTypeID = 5,
-                ProfileID = 3,
-                VisibilityLevelID = 1
-            };
-            var privacyFlag26 = new PrivacyFlag()
-            {
-                ID = 26,
-                PrivacyFlagTypeID = 6,
-                ProfileID = 3,
-                VisibilityLevelID = 1
-            };
-
-            var privacyFlag27 = new PrivacyFlag()
-            {
-                ID = 27,
-                PrivacyFlagTypeID = 7,
-                ProfileID = 3,
-                VisibilityLevelID = 1
-            };
-
-            db.PrivacyFlags.AddRange(new List<PrivacyFlag> {
-                privacyFlag21,
-                privacyFlag22,
-                privacyFlag23,
-                privacyFlag24,
-                privacyFlag25,
-                privacyFlag26,
-                privacyFlag27 });
-            db.SaveChanges();
-            #endregion
-
-            /*
-
-            #region Messages
-            db.Messages.Add(new Message
-            {
-                Body = @"<tr><td class='log_author'>1111111111111</td><td class='log_body'>222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222</td><td class='log_date'>31.08.15</td></tr>
-                         <tr><td class='log_author'>1111111111111</td><td class='log_body'><p>1111111111</p><p>111111</p></td><td class='log_date'>31.08.15</td></tr>",
-
-                SendersUserID = "c339d83f-4224-4c68-a5ea-e833b6ac27b2",
-                ReceiversUserID = "c339d83f-4224-4c68-a5ea-e833b6ac27b3",
-                RequestDate = "",
-                DialogID = 1,
-                ViewedByReceiver = true
-            });
-            db.Messages.Add(new Message
-            {
-                Body = @"<tr><td class='log_author'>1111111111111</td><td class='log_body'>222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222</td><td class='log_date'>31.08.15</td></tr>
-                         <tr><td class='log_author'>1111111111111</td><td class='log_body'><p>1111111111</p><p>222222222</p></td><td class='log_date'>31.08.15</td></tr>",
-
-                SendersUserID = "c339d83f-4224-4c68-a5ea-e833b6ac27b3",
-                ReceiversUserID = "c339d83f-4224-4c68-a5ea-e833b6ac27b2",
-                DialogID = 1,
-                RequestDate = "",
-                ViewedByReceiver = true
-            });
-            db.Messages.Add(new Message
-            {
-                Body = @"<tr><td class='log_author'>1111111111111</td><td class='log_body'>222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222</td><td class='log_date'>31.08.15</td></tr>
-                         <tr><td class='log_author'>1111111111111</td><td class='log_body'><p>1111111111</p><p>33333333333</p></td><td class='log_date'>31.08.15</td></tr>",
-
-                SendersUserID = "c339d83f-4224-4c68-a5ea-e833b6ac27b2",
-                ReceiversUserID = "c339d83f-4224-4c68-a5ea-e833b6ac27b4",
-                RequestDate = "",
-                DialogID = 2,
-                ViewedByReceiver = true
-            });
-            db.Messages.Add(new Message
-            {
-                Body = @"<tr><td class='log_author'>1111111111111</td><td class='log_body'>222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222</td><td class='log_date'>31.08.15</td></tr>
-                         <tr><td class='log_author'>1111111111111</td><td class='log_body'><p>1111111111</p><p>4444444444</p></td><td class='log_date'>31.08.15</td></tr>",
-
-                SendersUserID = "c339d83f-4224-4c68-a5ea-e833b6ac27b4",
-                ReceiversUserID = "c339d83f-4224-4c68-a5ea-e833b6ac27b2",
-                DialogID = 2,
-                RequestDate = "",
-                ViewedByReceiver = true
-            });
-            db.SaveChanges();
-            #endregion
-
-
-            #region Relationships 
-            db.Relationships.Add(new Relationship { SenderAccountID = "c339d83f-4224-4c68-a5ea-e833b6ac27b2", ReceiverAccountID = "c339d83f-4224-4c68-a5ea-e833b6ac27b3", RelationshipDefinitionID = 1 });
-            db.Relationships.Add(new Relationship { SenderAccountID = "c339d83f-4224-4c68-a5ea-e833b6ac27b2", ReceiverAccountID = "c339d83f-4224-4c68-a5ea-e833b6ac27b4", RelationshipDefinitionID = 1 });
-            db.SaveChanges();
-            #endregion
-
-
-
-            #region Status
-            var status = new Status
-            {
-                //ID = 1,
-                CreateDate = DateTime.Now,
-                Post = "AAAAAAAAAAAAAA",
-                PostByUserID = "c339d83f-4224-4c68-a5ea-e833b6ac27b2"
-            };
-            db.Statuses.Add(status);
-            db.SaveChanges();
-            #endregion
-
-            #region Comment
-            var comment1 = new Comment
-            {
-                CommentText = "LaLaLa",
-                CreateDate = DateTime.Now,
-                StatusID = 1,
-                UserID = "c339d83f-4224-4c68-a5ea-e833b6ac27b2",
-            };
-            var comment2 = new Comment
-            {
-                CommentText = "DaDaDa",
-                CreateDate = DateTime.Now,
-                StatusID = 1,
-                UserID = "c339d83f-4224-4c68-a5ea-e833b6ac27b2",
-            };
-            db.Comments.Add(comment1);
-            db.Comments.Add(comment2);
-            db.SaveChanges();
-            #endregion
-            */
-
+            password = "OlgaOlga";
+            userManager.Create(user, password);
+            userId = user.Id;
+            profileId = profileService.AttachProfileToUser(userId, profile);
+            settingsService.AttachPrivacyToUserProfile(profileId);
+            photoService.AttachMainWallPhotoAlbumToUser(userId);
+            photoService.CreateDefaultAvatar(userId);
+            #endregion Users
 
         }
     }

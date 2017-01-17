@@ -1,6 +1,8 @@
 ﻿using Core.BLL.Interfaces;
+using Core.POCO;
 using MvcApp.Services;
 using MvcApp.ViewModel;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,16 +12,18 @@ using System.Web.Mvc;
 namespace MvcApp.Controllers
 {
     [Authorize]
-    public class SettingsController :  Controller
+    public class SettingsController : Controller
     {
         IUserService userService;
         IProfileService profileService;
         ISessionService sessionService;
-        public SettingsController(IUserService userService, IProfileService profileService, ISessionService sessionService)
+        ISettingsService settingsService;
+        public SettingsController(IUserService userService, IProfileService profileService, ISessionService sessionService, ISettingsService settingsService)
         {
             this.userService = userService;
             this.profileService = profileService;
             this.sessionService = sessionService;
+            this.settingsService = settingsService;
         }
         public string CurrentUserId
         {
@@ -27,6 +31,26 @@ namespace MvcApp.Controllers
             {
                 return sessionService.CurrentUserId;
             }
+        }
+
+        [HttpGet]
+        public ActionResult UpdatePrivacyFlag(int PrivacyFlagTypeID, int ProfileID, int VisibilityLevelID)
+        {
+            try
+            {
+                var pf = new PrivacyFlag
+                {
+                    PrivacyFlagTypeID = PrivacyFlagTypeID,
+                    ProfileID = ProfileID,
+                    VisibilityLevelID = VisibilityLevelID
+                };
+                settingsService.UpdatePrivacyFlagForChoosenSection(pf);
+            }
+            catch
+            {
+                Response.StatusCode = 400;
+            }
+            return new EmptyResult();
         }
         [HttpGet]
         public ActionResult SettingsPage()
@@ -74,35 +98,35 @@ namespace MvcApp.Controllers
 
 
         [HttpGet]
-        public ActionResult EmailInfo()
+        public ActionResult GetEmailInfo()
         {
             string oldEmail = profileService.GetEmail(CurrentUserId);
 
             var email = new EmailViewModel { OldEmail = oldEmail };
 
-            return PartialView(email);
+            return PartialView("EmailInfo", email);
         }
 
         [HttpPost]
-        public ActionResult EmailInfo(EmailViewModel emailVM)
+        public ActionResult EmailInfo(EmailViewModel model)
         {
-            if (ModelState.IsValid && emailVM.OldEmail != emailVM.NewEmail && !string.IsNullOrEmpty(emailVM.NewEmail))
+            if (ModelState.IsValid && model.OldEmail != model.NewEmail && !string.IsNullOrEmpty(model.NewEmail))
             {
-                profileService.UpdateEmail(CurrentUserId, emailVM.NewEmail);
+                profileService.UpdateEmail(CurrentUserId, model.NewEmail);
 
                 var refreshedEmailViewModel = new EmailViewModel();
 
-                refreshedEmailViewModel.OldEmail = emailVM.NewEmail;
+                refreshedEmailViewModel.OldEmail = model.NewEmail;
 
                 ModelState.Clear();
 
-                return PartialView(refreshedEmailViewModel);
+                return PartialView("EmailInfo", refreshedEmailViewModel);
             }
             else
             {
                 Response.StatusCode = 400; //avoid calling onSuccess js method
 
-                return PartialView(emailVM);
+                return PartialView("EmailInfo", model);
             }
         }
 

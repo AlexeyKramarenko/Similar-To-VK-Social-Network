@@ -22,11 +22,7 @@ namespace Core.DAL
         private string minBirthDay;
         private string minBirthMonth;
         private string defaultUrl;
-
-        private Dictionary<string, string> genderDict;
-        private Dictionary<string, string> marriedDict;
-        private Dictionary<string, string> allLanguages;
-
+         
 
         private int minAge;
         private int maxAge;
@@ -61,23 +57,7 @@ namespace Core.DAL
             minimalBirthYear = Convert.ToInt32(ConfigurationManager.AppSettings["minimalBirthYear"]);
 
             userRepository = _userRepository;
-
-            genderDict = new Dictionary<string, string>
-            {
-                    { "Мужской", "man" },
-                    { "Женский", "woman" }
-            };
-            marriedDict = new Dictionary<string, string>
-            {
-                    { "в браке", "true" },
-                    { "не в браке", "false" }
-            };
-            allLanguages = new Dictionary<string, string>
-            {
-                    { "Украинский", "ukrainian" },
-                    { "Английский", "english" },
-                    { "Русский", "russian" },
-            };
+             
         }
         public string GetEmail(string userid)
         {
@@ -121,101 +101,7 @@ namespace Core.DAL
                 }
             }
             return _statuses;
-        }
-        private List<SelectListItem> SelectList(string defaultValue, Dictionary<string, string> dictionary)
-        {
-            var list = new List<SelectListItem>();
-
-            //fill SelectList by dictionary data
-            foreach (var pair in dictionary)
-            {
-                list.Add(new SelectListItem { Text = pair.Key, Value = pair.Value });
-            }
-
-            //choose  value selected by user before
-            for (int i = 0; i < list.Count; i++)
-            {
-                if (list[i].Value == defaultValue)
-                {
-                    list[i].Selected = true;
-                    var replacedElem = list[0];
-                    int index = list.IndexOf(list[i]);
-                    list[0] = list[i];
-                    list[index] = replacedElem;
-                }
-            }
-
-            return list;
-        }
-        private List<SelectListItem> SelectList(Profile profile, string profileProperty, string start)
-        {
-            var list = new List<SelectListItem>();
-
-            list.Add
-            (
-                new SelectListItem()
-                {
-                    Text = (profile != null && profileProperty == null) ? start : profileProperty,
-                    Value = (profile != null && profileProperty == null) ? start : profileProperty
-                }
-            );
-
-            return list;
-        }
-
-
-
-        public List<SelectListItem> GetLanguages(string userId)
-        {
-            var profile = GetProfile(userId);
-            return SelectList(profile.Language, allLanguages);
-        }
-        public List<SelectListItem> GetMaritalStatus(string userId)
-        {
-            var profile = GetProfile(userId);
-            return SelectList(profile.MaritalStatus.ToString().ToLower(), marriedDict);
-        }
-        public List<SelectListItem> GetGender(string userId)
-        {
-            var profile = GetProfile(userId);
-            return SelectList(profile.Gender, genderDict);
-        }
-        public List<SelectListItem> GetBirthDay(string userId)
-        {
-            var profile = GetProfile(userId);
-            return SelectList(profile, profile.BirthDay.ToString(), minBirthDay);
-        }
-        public List<SelectListItem> GetBirthMonth(string userId)
-        {
-            var profile = GetProfile(userId);
-            return SelectList(profile, profile.BirthMonth.ToString(), minBirthMonth);
-        }
-        public List<SelectListItem> GetBirthYear(string userId)
-        {
-            var profile = GetProfile(userId);
-            return SelectList(profile, profile.BirthYear.ToString(), minBirthYear);
-        }
-        public List<SelectListItem> GetSchoolTown(string userId)
-        {
-            var profile = GetProfile(userId);
-            return SelectList(profile, profile.SchoolTown, schoolTown);
-        }
-        public List<SelectListItem> GetSchoolStartYear(string userId)
-        {
-            var profile = GetProfile(userId);
-            return SelectList(profile, profile.StartSchoolYear.ToString(), minStartScoolYear);
-        }
-        public List<SelectListItem> GetSchoolFinishYear(string userId)
-        {
-            var profile = GetProfile(userId);
-            return SelectList(profile, profile.FinishSchoolYear.ToString(), minSchoolFinishYear);
-        }
-        public List<SelectListItem> GetSchoolCountry(string userId)
-        {
-            var profile = GetProfile(userId);
-            return SelectList(profile, profile.SchoolCountry, schoolCountry);
-        }
-
+        } 
         public Profile GetMainInfo(string userId)
         {
             var _profile = db.Profiles
@@ -346,7 +232,7 @@ namespace Core.DAL
             {
                 education = new Education
                 {
-                    FinishScoolYear = profile.FinishSchoolYear,                    
+                    FinishScoolYear = profile.FinishSchoolYear,
                     StartScoolYear = profile.StartSchoolYear,
                     School = profile.School,
                     SchoolCountry = profile.SchoolCountry,
@@ -421,9 +307,9 @@ namespace Core.DAL
         {
             int value = Convert.ToInt32(defaultValue);
 
-            var list = new string[number + 1];
+            var list = new string[number];
 
-            for (int i = 1; i < number + 1; i++)
+            for (int i = 0; i < number; i++)
             {
                 list[i] = (i + startValue).ToString();
 
@@ -471,7 +357,7 @@ namespace Core.DAL
 
             Profile profile = db.Profiles.FirstOrDefault(p => p.UserID == userId);
 
-            if (profile.FinishSchoolYear !=0)
+            if (profile.FinishSchoolYear != 0)
                 finishScoolYear = profile.FinishSchoolYear.ToString();
 
 
@@ -720,13 +606,18 @@ namespace Core.DAL
 
 
             return filteredProfiles;
-
-
-
-
-
-
+            
         }
+        public string GetProfileSchoolTown(string currentUserId)
+        {
+            var profile = db.Profiles.FirstOrDefault(a => a.UserID == currentUserId);
 
+            if (profile != null)
+            {
+                return profile.SchoolTown;
+            }
+
+            return null;
+        }
     }
 }

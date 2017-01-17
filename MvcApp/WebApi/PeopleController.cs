@@ -28,7 +28,6 @@ namespace MvcApp.WebAPI
         IChatHub chathub;
 
         string currentUserId;
-        string baseUrl = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath;
 
         public PeopleController(IChatHub _chathub, IRelationshipsService _relationshipsService, ICountriesService _countriesService, IProfileService _profileService, IPhotoService _photoService, IUserService _userService, IMappingService _mappingService, ILuceneService _luceneService)
         {
@@ -47,7 +46,7 @@ namespace MvcApp.WebAPI
         [ActionName("RemoveFromFriends")]
         public HttpResponseMessage RemoveFromFriends(string id)
         {
-            IQueryable<Relationship> relationship = relationshipsService.GetRelationship(currentUserId, id);
+            Relationship relationship = relationshipsService.GetRelationship(currentUserId, id);
 
             if (relationship == null)
             {
@@ -67,11 +66,11 @@ namespace MvcApp.WebAPI
             HttpResponseMessage response = Request.CreateResponse();
 
             List<Country> countries = countriesService.GetAllCountries();
-
+            string[] _countries = countries.Select(a => a.CountryName).ToArray();
             if (countries != null)
             {
                 response.StatusCode = HttpStatusCode.OK;
-                response.Content = new ObjectContent<List<Country>>(countries, new JsonMediaTypeFormatter());
+                response.Content = new ObjectContent<string[]>(_countries, new JsonMediaTypeFormatter());
             }
             else
             {
@@ -91,7 +90,10 @@ namespace MvcApp.WebAPI
             HttpResponseMessage response = null;
 
             if (towns != null)
-                response = Request.CreateResponse(HttpStatusCode.OK, towns);
+            {
+                response = Request.CreateResponse(HttpStatusCode.OK);
+                response.Content = new ObjectContent<Town[]>(towns, new JsonMediaTypeFormatter());
+            }
 
             else
                 response = Request.CreateResponse(HttpStatusCode.NotFound, "NotFound");
@@ -105,10 +107,15 @@ namespace MvcApp.WebAPI
         {
             Town[] towns = countriesService.GetTownsByCountryName(id);
 
+            string[] townNames = null;
+
+            if (towns != null && towns.Length > 0)
+                townNames = towns.Select(a => a.TownName).ToArray();
+
             HttpResponseMessage response = null;
 
-            if (towns != null)
-                response = Request.CreateResponse(HttpStatusCode.OK, towns);
+            if (townNames != null)
+                response = Request.CreateResponse(HttpStatusCode.OK, townNames);
 
             else
                 response = Request.CreateResponse(HttpStatusCode.NotFound, "NotFound");
@@ -119,9 +126,9 @@ namespace MvcApp.WebAPI
 
         [HttpGet]
         [ActionName("GetUsersList")]
-        public HttpResponseMessage GetUsersList(int from, int to, int country, int? town, string UserID, string gender, bool online = false)
+        public HttpResponseMessage GetUsersList(int from, int to, int countryId, int? townId, string UserID, string gender, bool online = false)
         {
-            List<UserViewModel> users = GetUsersList(from, to, country, town, UserID, gender, null, online);
+            List<UserViewModel> users = GetUsersList(from, to, countryId, townId, UserID, gender, null, online);
 
             HttpResponseMessage response = null;
 
@@ -142,7 +149,7 @@ namespace MvcApp.WebAPI
 
         [HttpGet]
         [ActionName("GetUsersList")]
-        public List<UserViewModel> GetUsersList(int from, int to, int country, int? town, string UserID, string gender, string name, bool online = false)
+        public List<UserViewModel> GetUsersList(int from, int to, int countryId, int? townId, string UserID, string gender, string name, bool online = false)
         {
             List<UserViewModel> users = null;
             List<Profile> filteredProfiles = null;
@@ -154,7 +161,7 @@ namespace MvcApp.WebAPI
 
                 if (online == true)
                 {
-                    List<UserDetail> onlineFriends = chathub.GetOnlineFriends(UserID);
+                    List<UserInfo> onlineFriends = chathub.GetOnlineFriends(UserID);
                     userIds = onlineFriends.Select(a => a.UserID).ToList();
                 }
                 else
@@ -162,7 +169,7 @@ namespace MvcApp.WebAPI
                     userIds = relationshipsService.GetFriendsIDsOfUser(UserID);
                 }
 
-                filteredProfiles = profileService.GetFriendsByUserID(from, to, country, town, UserID, gender, userIds);
+                filteredProfiles = profileService.GetFriendsByUserID(from, to, countryId, townId, UserID, gender, userIds);
             }
 
 
@@ -170,7 +177,7 @@ namespace MvcApp.WebAPI
             else
             {
                 IQueryable<Profile> profiles = profileService.GetAllProfiles();
-                filteredProfiles = profileService.GetUsers(from, to, country, town, gender, profiles);
+                filteredProfiles = profileService.GetUsers(from, to, countryId, townId, gender, profiles);
             }
 
             //Mapping
@@ -186,7 +193,7 @@ namespace MvcApp.WebAPI
                 .ToList();
 
             //Lucene search
-            if (users != null && users.Count > 1)
+            if (users != null && users.Count > 0)
             {
                 users = ExcludeFromResultCurrentUser(users, currentUserId);
 
@@ -199,15 +206,11 @@ namespace MvcApp.WebAPI
                     users = _users.Select(a => mappingService.Map<UserDTO, UserViewModel>(a)).ToList();
                 }
             }
-            for (int i = 0; i < users.Count; i++)
-            {
-                users[i].ImageUrl = baseUrl + users[i].ImageUrl;
-            }
 
             return users;
         }
 
-        public List<UserViewModel> ExcludeFromResultCurrentUser(List<UserViewModel> users, string userId)
+        private List<UserViewModel> ExcludeFromResultCurrentUser(List<UserViewModel> users, string userId)
         {
             var currentUser = users.FirstOrDefault(a => a.UserID == userId);
 

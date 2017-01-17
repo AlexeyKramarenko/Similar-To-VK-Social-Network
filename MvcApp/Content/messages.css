@@ -126,6 +126,7 @@ tbody {
     left: 50px;
     right: 0;
     width: 355px;
+    overflow:hidden;
 }
 
 .linkToDialog {
@@ -195,6 +196,7 @@ table#write_form > tbody > tr > td > img.avatar {
     width: 400px;
     display: block;
     word-wrap: break-word;
+    background-color:rgb(233,233,233);
 }
 
 .log_date {
@@ -253,4 +255,9 @@ table#write_form > tbody > tr > td > img.avatar {
 
 #conversation > tr > td:nth-child(3) {
     vertical-align: top;
+}
+
+.UserName{
+    background-color:yellow;
+    color:red;
 }

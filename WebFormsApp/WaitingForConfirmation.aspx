@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/SiteMaster.Master" AutoEventWireup="true" CodeBehind="WaitingForConfirmation.aspx.cs" Inherits="WebFormsApp.WaitingForConfirmation" %>
+﻿<%@ Page EnableViewState="false"  Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="WaitingForConfirmation.aspx.cs" Inherits="WebFormsApp.WaitingForConfirmation" %>
 
 <asp:Content ContentPlaceHolderID="_Styles" runat="server">
     <style>
@@ -20,4 +20,3 @@
     <span>Зайдите на свой email и подтвердите регистрацию.</span>
 
 </asp:Content>
-

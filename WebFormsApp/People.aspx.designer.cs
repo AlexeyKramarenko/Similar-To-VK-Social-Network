@@ -31,14 +31,23 @@ namespace WebFormsApp {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl Towns;
         
         /// <summary>
+        /// Chat control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::WebFormsApp.CustomControls.Chat Chat;
+        
+        /// <summary>
         /// Master property.
         /// </summary>
         /// <remarks>
         /// Auto-generated property.
         /// </remarks>
-        public new WebFormsApp.NestedSiteMaster Master {
+        public new WebFormsApp.NestedMasterPage Master {
             get {
-                return ((WebFormsApp.NestedSiteMaster)(base.Master));
+                return ((WebFormsApp.NestedMasterPage)(base.Master));
             }
         }
     }

@@ -23,7 +23,7 @@
         {
             <ul>
                 <li>
-                    Username
+                    Username ( olexiy )
                 </li>
 
                 <li>
@@ -31,7 +31,7 @@
                     @Html.ValidationMessageFor(a => a.UserName)
                 </li>
 
-                <li>Password</li>
+                <li>Password ( olexiyolexiy )</li>
 
                 <li>
                     @Html.PasswordFor(a => a.Password, new { @class = "loginInput" })
@@ -41,7 +41,6 @@
                 <li>
                     <input type="submit" class="loginInput" value="Login" />
                 </li>
-
 
                 <li>
                     @Html.ActionLink("Forgot password?", "RecoverPassword", "Account")
@@ -56,9 +55,7 @@
 </div>
 
 
-@*<script>
-    var ROOT = '@Url.Content("~/")';
-</script>*@
+
 
 
 

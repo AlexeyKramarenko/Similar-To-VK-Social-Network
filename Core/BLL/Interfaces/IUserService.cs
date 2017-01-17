@@ -16,7 +16,7 @@ namespace  Core.BLL.Interfaces
         ApplicationUser GetUserByName(string username);
         void UpdateUser(ApplicationUser user);
         void UpdatePhoneNumber(string currentUserId, string phoneNumber);
-        string GetPhoneNumber(string v);
+        string GetPhoneNumber(string currentUserId);
         ApplicationUser GetAccount(string currentUserId);
         ApplicationUser GetUserByEmail(string email);
         string GetPasswordByUserId(string currentUserId);

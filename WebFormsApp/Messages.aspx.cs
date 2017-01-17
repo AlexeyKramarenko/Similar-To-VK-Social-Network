@@ -1,15 +1,15 @@
 ﻿using Core.BLL.DTO;
-using Microsoft.AspNet.Identity;
-using Ninject; 
-using WebFormsApp.ViewModel;
-using System.Linq;
-using System.Collections.Generic;
-using System.Configuration;
 using Core.BLL.Interfaces;
+using Ninject;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.UI.WebControls;
+using WebFormsApp.Services;
+using WebFormsApp.ViewModel;
 
 namespace WebFormsApp
 {
-    public partial class Messages : BasePage
+    public partial class Messages : System.Web.UI.Page
     {
         [Inject]
         public IMessagesService MessagesService { get; set; }
@@ -17,18 +17,28 @@ namespace WebFormsApp
         [Inject]
         public IMappingService MappingService { get; set; }
 
+        [Inject]
+        public ISessionService SessionService { get; set; }
 
 
-        public List<MessagesViewModel> GetDialogsList()
+        public List<MessageViewModel> GetDialogsList()
         {
-            string currentUserID = User.Identity.GetUserId();
+
             string userName = User.Identity.Name;
 
-            List<MessageDTO> dialogsDto = MessagesService.GetDialogsList(currentUserID, userName);
-            List<MessagesViewModel> dialogsVM = dialogsDto.Select(a => MappingService.Map<MessageDTO, MessagesViewModel>(a)).ToList();
+            List<MessageDTO> dialogsDto = MessagesService.GetDialogsList(SessionService.CurrentUserId, userName);
+            List<MessageViewModel> dialogsVM = dialogsDto.Select(a => MappingService.Map<MessageDTO, MessageViewModel>(a)).ToList();
+            var lastMessage = dialogsVM.LastOrDefault();
+            if (lastMessage != null)
+            {
+                if (lastMessage.MessageText.Length > 33)
+                {
+                    if (lastMessage.MessageText.Length > 33)
+                        lastMessage.MessageText = lastMessage.MessageText.Substring(0, 33) + "...";
+                }
+            }
             return dialogsVM;
         }
-
-
+        
     }
 }

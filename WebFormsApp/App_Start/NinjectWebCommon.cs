@@ -22,6 +22,7 @@ namespace WebFormsApp.App_Start
     using Core.DAL.Interfaces;
     using Core.DAL;
     using Core.BLL.Interfaces;
+    using Services;
 
     public static class NinjectWebCommon
     {
@@ -174,7 +175,8 @@ namespace WebFormsApp.App_Start
             kernel.Bind<IWallStatusService>().To<WallStatusService>().InRequestScope();
             kernel.Bind<IMessagesService>().To<MessagesService>().InRequestScope();
             kernel.Bind<IChatHub>().To<ChatHub>().InRequestScope();
-
+            kernel.Bind<ISessionService>().To<SessionService>().InRequestScope();
+            kernel.Bind<IRedirectService>().To<RedirectService>().InRequestScope();
         }
     }
 }

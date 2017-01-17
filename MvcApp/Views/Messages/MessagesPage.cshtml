@@ -6,10 +6,33 @@
 }
 
 @section styles{
-    <link href="~/Content/bootstrap_settings_page.css" rel="stylesheet" />
-    <link href="~/Content/settings_profile.css" rel="stylesheet" />
-    <link href="~/Content/messages.css" rel="stylesheet" />
+    <link href='@Url.Content("~/Content/bootstrap_settings_page.css")' rel="stylesheet" />
+    <link href='@Url.Content("~/Content/settings_profile.css")' rel="stylesheet" />
+    <link href='@Url.Content("~/Content/messages.css")' rel="stylesheet" />
 }
+
+
+<script>
+    var ROOT = '@Url.Content("~/")';
+</script>
+<script src="@Url.Content("~/Scripts/jquery-2.1.4.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bootstrap.min.js")"></script>
+<script src="@Url.Content("~/Scripts/sweetalert.min.js")"></script>
+<script src="@Url.Content("~/Scripts/jquery.signalR-2.2.0.min.js")"></script>
+<script src="@Url.Content("~/signalr/hubs")"></script>
+@Scripts.Render("~/bundles/signalr.messages")
+<script>
+    var hub = $.connection.hub,
+        client = $.connection.chatHub.client,
+        server = $.connection.chatHub.server,
+        view = new MessagesSignalrView();
+
+    var signalr = new MessagesSignalrController(hub, client, server, view);
+</script>
+@Scripts.Render("~/bundles/messages")
+<script>
+    var vm = new MessagesController(new MessagesView(), new MessagesService());
+</script>
 
 
 <div class="container">
@@ -31,7 +54,7 @@
             <input type="hidden" id="hdnActiveDialogID" />
             <input type="hidden" id="hdnMyCurrentInterlocutor" />
 
-            @if(Model != null)
+            @if (Model != null)
             {
                 foreach (var item in Model)
                 {
@@ -39,15 +62,16 @@
                        data-dialogid='@item.DialogID'
                        data-interlocutoruserid='@item.InterlocutorUserID '
                        href="#menu1"
-                       onclick="goToDialog(this); getUsersInfoForDialogForm(this);"
-                       class="linkToDialog">
-
+                       class="linkToDialog"
+                       onclick="signalr.setWhoIsMyCurrentInterlocutor(this);
+                                     signalr.goToDialog(this);
+                                     vm.getUsersInfoForDialogForm(this);
+                                     vm.goToDialog(this)">
                         <table class="dialogs_row_t">
-
                             <tbody>
                                 <tr>
                                     <td class="dialogs_photo">
-                                        <img src='@item.InterlocutorAvatar' width="50" height="50">
+                                        <img src="@Url.Content("~/"+ item.InterlocutorAvatar)" width="50" height="50">
                                     </td>
                                     <td class="dialogs_info">
                                         <div class="dialogs_user wrapped" data-interlocutoruserid='@item.InterlocutorUserID'>@item.InterlocutorUserName</div>
@@ -56,8 +80,8 @@
                                     </td>
                                     <td class="dialogs_msg_contents">
                                         <div class="dialogs_msg_body  clear_fix" style="opacity: 1;">
-                                            <img src='@item.CurrentUserAvatar' width="32" height="32">
-                                            <div class="dialogs_comment">@item.MessageText</div>
+
+                                            <div class="dialogs_comment">@Html.Raw(item.MessageText)</div>
                                         </div>
                                     </td>
                                     <td class="dialogs_unread_td">
@@ -83,11 +107,9 @@
 </div>
 
 @section scripts{
-    <script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"></script>
-
-    @Scripts.Render("~/bundles/bootstrap")
-
-    <script src="@Url.Content("~/Scripts/sweetalert.min.js")"></script>
-    <script src="@Url.Content("~/Scripts/signalRmessagesPage.js")"></script>
-    <script src="@Url.Content("~/Scripts/messages.js")"></script>
 }
+
+
+
+
+

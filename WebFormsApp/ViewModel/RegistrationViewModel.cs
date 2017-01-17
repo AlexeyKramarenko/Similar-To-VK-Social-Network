@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace WebFormsApp.ViewModel
 {
-    public class RegistrationViewModel
+    public class CreateUserViewModel
     {
         [Required(ErrorMessage = "Поле \"Имя\" должно быть заполнено")]
         public string FirstName { get; set; }
@@ -40,7 +40,7 @@ namespace WebFormsApp.ViewModel
 
         public string Town { get; set; }
 
-        public bool Married { get; set; }
+        public string MaritalStatus { get; set; }
 
         public string Gender { get; set; }
 

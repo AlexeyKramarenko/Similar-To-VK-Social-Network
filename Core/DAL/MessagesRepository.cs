@@ -1,30 +1,25 @@
 ﻿
 
-using  Core.DAL.Interfaces;
-using  Core.POCO;
-
+using Core.DAL.Interfaces;
+using Core.POCO;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Text;
-using Microsoft.AspNet.Identity.EntityFramework;
+using System.Web;
 
-namespace  Core.DAL
+namespace Core.DAL
 {
     public class MessagesRepository : IMessagesRepository
     {
         PhotoRepository photoRepository;
         private DBContext db;
-
-
+        
         public MessagesRepository(DBContext db)
         {
             this.db = db;
-            photoRepository = new PhotoRepository(db);           
+            photoRepository = new PhotoRepository(db);
         }
-
-
         public int GetLastDialogID()
         {
             var message = db.Messages.OrderByDescending(a => a.DialogID).FirstOrDefault();
@@ -34,17 +29,10 @@ namespace  Core.DAL
 
             return 0;
         }
-        public string CreateNewDialog(Message message, string userId)
+        public string CreateNewDialog(Message message, string userId)//, string baseUrl = null)
         {
             string date = string.Format("{0}.{1}.{2}  {3}:{4}", DateTime.Today.Day, DateTime.Today.Month, DateTime.Today.Year, DateTime.Now.Hour, DateTime.Now.Minute);
-
-            string imgPath = photoRepository.GetThumbAvatarImg(userId);
-
-            string body = "<tr><td class='log_author'><img src='" + imgPath + "' />" +
-                                 "</td><td class='log_body'><p>" + message.Body +
-                                 "</p></td><td class='log_date'>" + date +
-                             "</td></tr>";
-
+            
             var messageFromDb = db.Messages.FirstOrDefault(a =>
                                         (a.SendersUserID == userId && a.ReceiversUserID == message.ReceiversUserID)
                                         ||
@@ -57,10 +45,10 @@ namespace  Core.DAL
             {
                 var message_ = new Message
                 {
-                    Body = body,
+                    Body = message.Body,
                     SendersUserID = userId,
                     DialogID = messageFromDb.DialogID,
-                    RequestDate = date,
+                    RequestDate = DateTime.Now,
                     ViewedByReceiver = false,
                     ReceiversUserID = message.ReceiversUserID
                 };
@@ -73,14 +61,14 @@ namespace  Core.DAL
             //Cоздание нового диалога
             else
             {
-                message.Body = body;
+                message.Body = message.Body;
                 message.SendersUserID = userId;
                 message.DialogID = GetLastDialogID() + 1;
-                message.RequestDate = date;
+                message.RequestDate = DateTime.Now;
                 message.ViewedByReceiver = false;
 
                 InsertMessage(message);
-                
+
                 return "Cоздан новый диалог и отправлено первое сообщение";
             }
 
@@ -112,18 +100,9 @@ namespace  Core.DAL
             return messages;
         }
 
-        public string GetLastParagraph(string text)
-        {
-            var index = text.LastIndexOf("<p>");
+        
 
-            if (index > -1)
-                return text.Substring(index);
-
-            return text;
-            
-        }
-
-        public List<Message> ExcludeInvitationMessagesSentedByCurrentUser(List<Message> messages, string currentUserId)
+        private List<Message> ExcludeInvitationMessagesWhichWereSentByCurrentUser(List<Message> messages, string currentUserId)
         {
             var msgs = messages.Where(a => a.SendersUserID == currentUserId && a.Invitation == true).ToList();
 
@@ -133,23 +112,23 @@ namespace  Core.DAL
 
             return messages;
         }
-        public string GetDialogByID(int dialogID, string currentUserId)
+        public List<string> GetDialogByID(int dialogID, string currentUserId)
         {
-            var dialog = new StringBuilder();
+            var dialog = new List<string>();
 
             List<Message> messages = db.Messages.Where(a => a.DialogID == dialogID).ToList();
 
             if (messages != null)
             {
-
-                messages = ExcludeInvitationMessagesSentedByCurrentUser(messages, currentUserId);
+                messages = ExcludeInvitationMessagesWhichWereSentByCurrentUser(messages, currentUserId);
 
                 foreach (var m in messages)
                 {
-                    dialog.Append(m.Body);
+                    dialog.Add(m.Body);
                 }
             }
-            return dialog.ToString();
+
+            return dialog;
 
         }
 
@@ -179,7 +158,12 @@ namespace  Core.DAL
             return lastMessages;
         }
 
-
+        public List<Message> GetMessagesByDialogId(int dialogId, string currentUserId)
+        {
+            List<Message> messages = db.Messages.Where(a => a.DialogID == dialogId).ToList();
+            List<Message> filteredMessages = this.ExcludeInvitationMessagesWhichWereSentByCurrentUser(messages, currentUserId);
+            return filteredMessages;
+        }
 
 
     }

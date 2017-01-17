@@ -1,18 +1,24 @@
-﻿using Ninject;
-using Core.BLL.Interfaces;
+﻿using Core.BLL.Interfaces;
+using Ninject;
 using System;
-using System.Web.ModelBinding;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 
 namespace WebFormsApp
 {
-    public partial class EmailVerification : BasePage
+    public partial class EmailVerification : WebFormsApp.Helpers.BasePage
     {
         [Inject]
         public IUserService UserService { get; set; }
 
         public void Page_InitComplete(object sender, EventArgs e)
         {
-            lblMessage.Text = VerificationResult(Request.RequestContext.RouteData.Values["username"] as string);
+            string userName = Request.RequestContext.RouteData.Values["username"] as string;
+
+            lblMessage.Text = VerificationResult(userName);
         }
 
         public string VerificationResult(string username = null)

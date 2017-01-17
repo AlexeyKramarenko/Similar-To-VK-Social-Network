@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Net;
 using System.Web.Http.Results;
+using WebFormsApp.Services;
 
 namespace Tests
 {
@@ -20,27 +21,28 @@ namespace Tests
         Mock<IWallStatusService> wallStatusService;
         Mock<IRelationshipsService> relationshipService;
         Mock<IPhotoService> photoService;
-
-
+        Mock<ISessionService> sessionService;
+        Mock<IUserService> userService;
         [TestInitialize]
         public void TestInit()
         {
             wallStatusService = new Mock<IWallStatusService>();
             relationshipService = new Mock<IRelationshipsService>();
+            sessionService = new Mock<ISessionService>();
             photoService = new Mock<IPhotoService>();
-
-            mainController = new MainController(wallStatusService.Object, relationshipService.Object);
+            userService = new Mock<IUserService>();
+            mainController = new MainController(wallStatusService.Object, relationshipService.Object,sessionService.Object, photoService.Object,userService.Object);
             mainController.Request = new HttpRequestMessage();
             mainController.Configuration = new HttpConfiguration();
 
-            photosController = new PhotosController(photoService.Object);
+            photosController = new PhotosController(photoService.Object,sessionService.Object);
         }
 
 
         [TestMethod]
         public void InsertComment_Should_Return_201()
         {
-            wallStatusService.Setup(a => a.InsertComment(It.IsAny<Comment>())).Returns(typeof(object));
+            wallStatusService.Setup(a => a.InsertComment(It.IsAny<Comment>()));//.Returns(typeof(object));
 
             HttpResponseMessage result = mainController.InsertComment(new Comment());
 

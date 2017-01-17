@@ -4,7 +4,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace WebFormsApp
+namespace WebFormsApp.Helpers
 {
     public class BasePage : Page
     {

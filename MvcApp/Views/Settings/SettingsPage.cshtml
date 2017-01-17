@@ -1,14 +1,15 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "SettingsPage";
     Layout = "~/Views/Shared/_NestedLayout.cshtml";
 }
 
 @section styles{
-    <link href="@Url.Content("~/Content/bootstrap_settings_page.css")" rel="stylesheet" />
-    <link href="@Url.Content("~/Content/settings_profile.css")" rel="stylesheet" />
+<link href="@Url.Content("~/Content/bootstrap_settings_page.css")" rel="stylesheet" />
+<link href="@Url.Content("~/Content/settings_profile.css")" rel="stylesheet" />
 }
 
+<script src="@Url.Content("~/Scripts/jquery-2.1.4.min.js")"></script>
+<script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.min.js")"></script>
 
 <div class="container">
     <ul class="nav nav-tabs">
@@ -25,7 +26,7 @@
 
             <div id="PasswordInfo">
                 @{
-                    Html.RenderAction("PasswordInfo");
+                Html.RenderAction("PasswordInfo");
                 }
             </div>
 
@@ -36,7 +37,7 @@
 
             <div id="EmailInfo">
                 @{
-                    Html.RenderAction("EmailInfo");
+                Html.RenderAction("GetEmailInfo");
                 }
             </div>
 
@@ -47,7 +48,7 @@
 
             <div id="PhoneNumberInfo">
                 @{
-                    Html.RenderAction("PhoneNumberInfo");
+                Html.RenderAction("PhoneNumberInfo");
                 }
             </div>
 
@@ -77,7 +78,7 @@
 
             <table>
                 <tr>
-                    <td class="settings_privacy_row2">Кто видит чужие записи на моей странице</td>
+                    <td class="settings_privacy_row2">Кто видит записи на моей странице</td>
                     <td>
                         <a class="privacy" id="privacy_2"></a>
                     </td>
@@ -110,41 +111,24 @@
 
 @section scripts{
 
-    <script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"></script>
 
-    <script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.min.js")"></script>
+<script>
+    var ROOT = "@Url.Content("~/")";
+</script>
 
-    @Scripts.Render("~/bundles/bootstrap")
+<script src="@Url.Content("~/Scripts/bootstrap.min.js")"></script>
+    @Scripts.Render("~/bundles/settings")
+<script>
+    var view = new SettingsView(),
+        service = new SettingsService(),
+        vm = new SettingsController(view, service);
 
-    <script src="@Url.Content("~/Scripts/settings.js")"></script>
+    $('.privacy').click(function () {
+        vm.getPrivacy(this);
+    });
+</script>
+}
 
-    <script>
-        function onSuccess() {
-            alert("Profile updated successfully");
-        }
-        function onPasswordFailure(data) {
-
-            alert("An error occured");
-
-            $('#PasswordInfo').html('');
-            $('#PasswordInfo').html(data.responseText);
-        }
-
-        function onEmailFailure(data) {
-
-            alert("An error occured");
-
-            $('#EmailInfo').html('');
-            $('#EmailInfo').html(data.responseText);
-        }
-
-        function onPhoneNumberFailure(data) {
-
-            alert("An error occured");
-
-            $('#PhoneNumberInfo').html('');
-            $('#PhoneNumberInfo').html(data.responseText);
-        }
-
-    </script>
+@{
+    Html.RenderAction("Chat", "Messages" );
 }

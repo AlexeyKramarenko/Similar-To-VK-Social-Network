@@ -1,13 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Web;
 using System.Web.Routing;
+using Microsoft.AspNet.FriendlyUrls;
 
-namespace WebFormsApp.App_Start
+namespace WebFormsApp
 {
-    public class RouteConfig
+    public static class RouteConfig
     {
         public static void RegisterRoutes(RouteCollection routes)
         {
@@ -15,7 +14,7 @@ namespace WebFormsApp.App_Start
 
             routes.MapPageRoute(null, routeUrl: "EmailVerification/{username}", physicalFile: "~/EmailVerification.aspx");
 
-            routes.MapPageRoute(null, routeUrl: "people/peoplepage/UserID={UserID}/Online={Online}", physicalFile: "~/People.aspx");
+            routes.MapPageRoute(null, routeUrl: "people/UserID={UserID}/Online={Online}", physicalFile: "~/People.aspx"); 
         }
     }
 }

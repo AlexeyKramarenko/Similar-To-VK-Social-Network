@@ -12,8 +12,8 @@ namespace  Core.DAL.Interfaces
         void CreateDefaultAvatar(string UserID);
         int CreatePhotoAlbum(PhotoAlbum album, string userId);
         void DeleteAlbum(int albumID);
+        void DeletePhotoFromAlbum(string photoUrl, string userId);
         void DeletePhotoFromAlbum(Photo photo, string userId);
-       
 
         int GetAlbumsCountByUserID(string userId);
         Photo[] GetAllPhotosByUserID(string userID);
@@ -29,5 +29,6 @@ namespace  Core.DAL.Interfaces
         void UpdateAvatar(Photo photo, string userId);
         void UpdatePhotoDescription(Photo[] photos);
         string GetAvatar(string userId);
+        void DeletePhotoFromFolder(string physicalPath);
     }
 }

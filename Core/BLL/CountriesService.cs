@@ -47,17 +47,8 @@ namespace  Core.BLL
 
         public Town[] GetTownsByCountryName(string id)
         {
-            string key = "Countries_Towns_" + id;
-
-            Town[] towns = null;
-
-            if (Cache[key] != null)
-                towns = (Town[])Cache[key];
-            else
-            {
-                towns = Database.Countries.GetTownsByCountryName(id);
-                Cache[key] = towns;
-            }
+            Town[] towns = Database.Countries.GetTownsByCountryName(id);
+              
             return towns;
         }
     }

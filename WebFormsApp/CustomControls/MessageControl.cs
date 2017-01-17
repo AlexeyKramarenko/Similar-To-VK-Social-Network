@@ -7,81 +7,60 @@ using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 
-namespace WebFormsApp
+namespace WebFormsApp.CustomControls
 {
+    [DefaultProperty("RelationshipDefinitionID")]
     [ToolboxData("<{0}:MessageComponent runat='server'></{0}:MessageComponent>")]
-    public class MessageControl : CompositeControl
+    public class MessageComponent : CompositeControl
     {
+        private int _RelationshipDefinitionID;
 
-        [DefaultValue(0)]
+        [Bindable(true)]
+        [Category("Appearance")]
         public int RelationshipDefinitionID
         {
             get
             {
-                return (int)ViewState["RelationshipDefinitionID"];
+                EnsureChildControls();
+                return _RelationshipDefinitionID;
             }
             set
             {
-                ViewState["RelationshipDefinitionID"] = value;
+                EnsureChildControls();
+                _RelationshipDefinitionID = value;
             }
         }
 
-        //0
-        private PlaceHolder send_message_placeHolder_0;
-        PlaceHolder Send_message_panel_0
+        private PlaceHolder send_message_placeHolder_1;
+        private PlaceHolder Send_message_panel_1
         {
             get
             {
 
                 var input_container = new Panel { ClientIDMode = ClientIDMode.Static, CssClass = "input_container" };
                 var fileUpload = new FileUpload { ClientIDMode = ClientIDMode.Static, ID = "inputfile" };
-                fileUpload.Attributes.Add("onchange", "sendAvatar();return false;");
+                fileUpload.Attributes.Add("onchange", "return vm.sendAvatar()");
                 input_container.Controls.Add(fileUpload);
 
 
 
                 var newPhotos = new Panel { ClientIDMode = ClientIDMode.Static, ID = "addNewPhotos" };
-                newPhotos.CssClass= "addNewPhotos";
-                newPhotos.Attributes.Add("onclick", "upload()");
-                newPhotos.Attributes.Add("onmouseover", "changeColor(this)");
-                newPhotos.Attributes.Add("onmouseout", "changeColor(this)");
+                newPhotos.CssClass = "addNewPhotos";
+                newPhotos.Attributes.Add("onclick", "vm.upload()");
+                newPhotos.Attributes.Add("onmouseover", "vm.changeColor(this)");
+                newPhotos.Attributes.Add("onmouseout", "vm.changeColor(this)");
                 newPhotos.Controls.Add(new Literal { Text = "Upload avatar" });
 
-                send_message_placeHolder_0 = new PlaceHolder();
-                send_message_placeHolder_0.Controls.Add(input_container);
-                send_message_placeHolder_0.Controls.Add(newPhotos);
+                send_message_placeHolder_1 = new PlaceHolder();
+                send_message_placeHolder_1.Controls.Add(input_container);
+                send_message_placeHolder_1.Controls.Add(newPhotos);
 
-                return send_message_placeHolder_0;
+                return send_message_placeHolder_1;
             }
         }
 
-        //1
-        private Panel send_message_panel_1;
-        Panel Send_message_panel_1
-        {
-            get
-            {
-                send_message_panel_1 = new Panel { ClientIDMode = ClientIDMode.Static, ID = "send_message" };
-
-                var label = new HtmlGenericControl("label");
-                label.Attributes.Add("for", "modal-1");
-                label.Attributes.Add("class", "send_message_btn");
-                label.InnerText = "Send message";
-                label.EnableViewState = false;
-
-                var div = new Panel();
-                div.Controls.Add(new Literal { Text = "You are friend" });
-
-                send_message_panel_1.Controls.Add(label);
-                send_message_panel_1.Controls.Add(div);
-
-                return send_message_panel_1;
-            }
-        }
-
-        //2
         private Panel send_message_panel_2;
-        Panel Send_message_panel_2
+        private Panel Send_message_panel_2
         {
             get
             {
@@ -92,9 +71,9 @@ namespace WebFormsApp
                 label.Attributes.Add("class", "send_message_btn");
                 label.InnerText = "Send message";
                 label.EnableViewState = false;
-
+              
                 var div = new Panel();
-                div.Controls.Add(new Literal { Text = "You are subscriber" });
+                div.Controls.Add(new Literal { Text = "You are friend" });
 
                 send_message_panel_2.Controls.Add(label);
                 send_message_panel_2.Controls.Add(div);
@@ -103,9 +82,8 @@ namespace WebFormsApp
             }
         }
 
-        //3
         private Panel send_message_panel_3;
-        Panel Send_message_panel_3
+        private Panel Send_message_panel_3
         {
             get
             {
@@ -116,13 +94,13 @@ namespace WebFormsApp
                 label.Attributes.Add("class", "send_message_btn");
                 label.InnerText = "Send message";
                 label.EnableViewState = false;
-
+           
                 var btn = new Button();
                 btn.ClientIDMode = ClientIDMode.Static;
                 btn.ID = "AddToFriends";
                 btn.CssClass = "send_message_btn";
                 btn.Text = "Add to friends";
-                btn.OnClientClick = "addToFriends();return false;";
+                btn.OnClientClick = "return vm.addToFriends()";
 
                 send_message_panel_3.Controls.Add(label);
                 send_message_panel_3.Controls.Add(btn);
@@ -148,26 +126,22 @@ namespace WebFormsApp
         {
             switch (id)
             {
-                case 0: //Посетитель - владелец этой страницы
-                    Send_message_panel_0.RenderControl(writer);
-                    break;
-
-                case 1: //Посетитель - друг владельца этой страницы
+                case 1: //Visitor is owner of current page
                     Send_message_panel_1.RenderControl(writer);
                     break;
 
-                case 2: //Посетитель - подписчик владельца этой страницы
+                case 2: //Visitor is friend of owner of page
                     Send_message_panel_2.RenderControl(writer);
                     break;
 
-                default: //Посетитель - неизвестный владельцу этой страницы
+                default: //Unknown visitor
                     Send_message_panel_3.RenderControl(writer);
                     break;
             }
         }
 
 
-        /* Генерируемая разметка:
+        /* html markup:
         
             string div0 = @"
                         <div class='input_container'>

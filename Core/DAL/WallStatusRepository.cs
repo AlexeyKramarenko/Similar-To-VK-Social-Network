@@ -46,21 +46,14 @@ namespace Core.DAL
             db.SaveChanges();
 
             string Avatar = photoRepository.GetThumbAvatarImg(status.PostByUserID);
-
-            return new InsertStatusResult { ID = status.ID, UserName = status.UserName, Avatar = Avatar };
+            return new InsertStatusResult { ID = status.ID, Message = status.Post, UserName = status.UserName, Avatar = Avatar };
         }
 
-        public object InsertComment(Comment com)
+        public void InsertComment(Comment com)
         {
             com.CreateDate = DateTime.Now;
 
             db.Entry(com).State = System.Data.Entity.EntityState.Added;
-
-            string avatar = photoRepository.GetAvatar(com.UserID);
-
-            db.SaveChanges();
-
-            return new { id = com.ID, commentatorsUserName = com.UserName, avatar };
         }
         public Status GetStatusById(int id)
         {

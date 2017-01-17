@@ -1,0 +1,142 @@
+﻿#chat {
+    position: fixed;
+    right: 0;
+    bottom: 20px;
+    padding: 5px;
+    /*border: 3px solid blue;*/
+    width: 455px;
+    height: 360px;  
+}
+
+.chatInvisible {
+    display: none;
+}
+
+#chatContent {
+    position: relative;
+    /*border: 2px solid #ff6a00;*/
+    width: 455px;
+    height: 364px;
+}
+
+#close {
+    background-color: #ffffff;
+    border: 2px solid #000000;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 295px;
+    height: 20px;
+    text-align: right;
+    padding-right: 5px;
+}
+
+#messages {
+    border: 2px solid #000000;
+    position: absolute;
+    height: 300px;
+    width: 300px;
+    left: 0px;
+    top: 22px;
+    overflow-y: scroll;
+    background-color:aliceblue;
+}
+
+#messageForm {
+    border: 2px solid #000000;
+    background-color: gray;
+    position: absolute;
+    width: 290px;
+    height: 26px;
+    top: 324px;
+    padding: 5px;
+    left:0;
+}
+
+#chatUsers {
+    border: 1px solid black;
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+    width: 149px;
+    /*height: 500px;*/
+    vertical-align: bottom;
+}
+
+#friendsHeader {
+    border-bottom: 1px solid black;
+    display: block;
+    background-color: #dbd5d5;
+    padding-left: 15px;
+}
+
+.msg {
+    border: 1px solid black;
+    /*background-color: aquamarine;*/
+    width: 270px;
+    display: block;
+    word-wrap: break-word;
+    margin-left: 5px;
+}
+
+#messageForm input {
+    width: 225px;
+}
+
+.user {
+    width: 270px;
+    /*background-color: wheat;*/
+    float: left;
+    height: 35px;
+}
+
+.text {
+    width: 270px;
+    font-size: 14px;
+    /*background-color: #cde4f5;*/
+    word-wrap: break-word;
+}
+
+.name {
+    /*vertical-align: text-top;
+    font-family: 'Adobe Arabic';
+    font-size: 17px;
+    text-decoration: underline;*/
+    /*font-size: 10px;
+    text-align: right;*/
+}
+
+.date {
+    font-size: 10px;
+    text-align: right;
+}
+
+.currentUsersMsg {
+    background-color: #e3e6d9;
+}
+
+.linkToDialog {
+    background-color: aliceblue;
+    border-bottom: 1px solid black;
+}
+
+    .linkToDialog span {
+        vertical-align: text-top;
+        font-family: 'Adobe Arabic';
+        font-size: 17px;
+    }
+
+    .linkToDialog:hover {
+        background-color: #16c413;
+        border-bottom: 1px solid black;
+        cursor: pointer;
+    }
+
+.circle {
+    display: inline-block;
+    background: #4ccb17;
+    width: 8px;
+    height: 8px;
+    border-radius: 4px;
+    margin-left: 3px;
+}

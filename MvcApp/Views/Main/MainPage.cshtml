@@ -1,5 +1,4 @@
-﻿@*@model Core.BLL.DTO.PrivacyRestrictions*@
-
+﻿
 @{
     ViewBag.Title = "Main page";
     Layout = "~/Views/Shared/_NestedLayout.cshtml";
@@ -7,13 +6,13 @@
 
 @section styles{
 
-    <link href="@Url.Content("~/Content/main.css")" rel="stylesheet" />
+    <link href='@Url.Content("~/Content/main.css")' rel="stylesheet" />
 
-    <link href="@Url.Content("~/Content/sweetalert.css")" rel="stylesheet" />
-    <link href="@Url.Content("~/Content/photos.css")" rel="stylesheet" />
+    <link href='@Url.Content("~/Content/sweetalert.css")' rel="stylesheet" />
+    <link href='@Url.Content("~/Content/photos.css")' rel="stylesheet" />
 
-    <link href="@Url.Content("~/Content/modalPopLite.css")" rel="stylesheet" />
-    <link href="@Url.Content("~/Content/main_popup_window.css")" rel="stylesheet" />
+    <link href='@Url.Content("~/Content/modalPopLite.css")' rel="stylesheet" />
+    <link href='@Url.Content("~/Content/main_popup_window.css")' rel="stylesheet" />
 
 
     <style>
@@ -52,7 +51,9 @@
     <div id="leftColumn">
         <ul>
             <li>
-                <img id="imgAvatar" src="" onclick="GetLargeAvatarImg();return false;" />
+                <img id="imgAvatar"
+                     src=""
+                     onclick="vm.getLargeAvatarImg()" />
             </li>
             <li>
                 @Html.Action("MessageControl", "Main")
@@ -136,21 +137,31 @@
         <div>
             <span>Message</span>
             <textarea id="messageBody"></textarea>
-            <input type="button" id="sendBtn" value="Send" />
+            <input type="button"
+                   id="sendBtn"
+                   value="Send"
+                   onclick="vm.setRecipientUserID($('#hdnPageOfUserID').val());
+                            vm.createNewDialog();" />
         </div>
     </div>
 </div>
 
-
-
+@{
+    Html.RenderAction("Chat", "Messages");
+}
 
 @section scripts{
 
+    <script>
+        var ROOT = '@Url.Content("~/")';
+    </script>
+    <script src='@Url.Content("~/Scripts/sweetalert.min.js")'></script>
     @Scripts.Render("~/bundles/modalPopLite")
+    @Scripts.Render("~/bundles/main")
+    <script>
+        var vm = new MainController(new MainView(), new MainService());
+    </script>
 
-    <script src="@Url.Content("~/Scripts/sweetalert.min.js")"></script>
-    <script src="@Url.Content("~/Scripts/main.js")"></script>
-    <script src="@Url.Content("~/Scripts/signalRmainPage.js")"></script>
 }
 
 

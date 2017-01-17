@@ -1,17 +1,25 @@
 ﻿using System.Web.Http;
 using Core.BLL.Interfaces;
+using MvcApp.Services;
 
 namespace MvcApp.WebAPI
 {
     public class SharedController : ApiController
-    { 
+    {
         IProfileService profileService;
-
-        public SharedController(IProfileService _profileService)
+        ISessionService sessionService;
+        public string CurrentUserId
         {
-            profileService = _profileService;
+            get
+            {
+                return sessionService.CurrentUserId;
+            }
         }
-
+        public SharedController(IProfileService profileService, ISessionService sessionService)
+        {
+            this.profileService = profileService;
+            this.sessionService = sessionService;
+        }
         [HttpGet]
         [ActionName("GetAgeYears")]
         public IHttpActionResult GetAgeYears()
@@ -46,6 +54,19 @@ namespace MvcApp.WebAPI
 
             if (towns != null)
                 return Ok(towns);
+
+            else
+                return NotFound();
+        }
+
+        [HttpGet]
+        [ActionName("GetProfileSchoolTown")]
+        public IHttpActionResult GetProfileSchoolTown()
+        {
+            var town = profileService.GetProfileSchoolTown(CurrentUserId);
+
+            if (town != null)
+                return Ok(town);
 
             else
                 return NotFound();

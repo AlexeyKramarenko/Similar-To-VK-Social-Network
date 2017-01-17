@@ -4,19 +4,26 @@ using Core.POCO;
 using System.Collections.Generic;
 using System.Web.Http;
 using Ninject;
+using MvcApp.Services;
 
 namespace MvcApp.WebAPI
 {
     public class ProfileController : ApiController
     {
-        string currentUserId;
+        IProfileService profileService;
+        ISessionService sessionService;
 
-        public IProfileService profileService { get; set; }
-
-        public ProfileController(IProfileService _profileService)
+        public string CurrentUserId
         {
-            currentUserId = User.Identity.GetUserId();
-            profileService = _profileService;
+            get
+            {
+                return sessionService.CurrentUserId;
+            }
+        }
+        public ProfileController(IProfileService profileService, ISessionService sessionService)
+        {
+            this.profileService = profileService;
+            this.sessionService = sessionService;
         }
 
         [HttpGet]
@@ -36,7 +43,7 @@ namespace MvcApp.WebAPI
         [ActionName("GetProfileSchoolStartYears")]
         public string[] GetProfileSchoolStartYears()
         {
-            return profileService.GetSchoolStartYears(currentUserId);
+            return profileService.GetSchoolStartYears(CurrentUserId);
         }
 
 
@@ -44,21 +51,21 @@ namespace MvcApp.WebAPI
         [ActionName("GetProfileSchoolFinishYears")]
         public string[] GetProfileSchoolFinishYears()
         {
-            return profileService.GetSchoolFinishYears(currentUserId);
+            return profileService.GetSchoolFinishYears(CurrentUserId);
         }
 
         [HttpGet]
         [ActionName("GetProfileBirthYears")]
         public string[] GetProfileBirthYears()
         {
-            return profileService.GetBirthYears(currentUserId);
+            return profileService.GetBirthYears(CurrentUserId);
         }
 
         [HttpGet]
         [ActionName("GetEducationInfo")]
         public List<string> GetEducationInfo()
         {
-            return profileService.GetEducationInfo(currentUserId);
+            return profileService.GetEducationInfo(CurrentUserId);
         }
         [HttpPut]
         [ActionName("UpdateUserBirthDay")]
@@ -78,27 +85,14 @@ namespace MvcApp.WebAPI
         {
             profileService.UpdateBirthYear(profile);
         }
-        ////[HttpPost]
-        ////[ActionName("UpdateProfileEducationData")]
-        ////public void UpdateProfileEducationData([FromBody]Profile profile)
-        ////{
-        ////    profileService.SaveEducation(profile, currentUserId);
-        ////}
-        //[HttpPost]
-        //[ActionName("UpdateProfileEducationData")]
-        //public void UpdateProfileEducationData([FromBody]profile profile)
-        //{
-        //    //profileService.SaveEducation(profile, currentUserId);
-        //}
+        [HttpGet]
+        [ActionName("GetFinishYears")]
+        public string[] GetFinishYears(int selectedStartYear)
+        {
+            string[] finishYears = profileService.GetFinishYears(selectedStartYear, CurrentUserId);
 
-        //public class profile
-        //{
-        //    public int ProfileID { get; set; }
-        //    public string SchoolCountry { get; set; }
-        //    public string SchoolTown { get; set; }
-        //    public string School { get; set; }
-        //    public int StartScoolYear { get; set; }
-        //    public int FinishScoolYear { get; set; }
-        //}
+            return finishYears;
+        }
+
     }
 }

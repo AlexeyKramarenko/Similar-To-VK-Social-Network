@@ -10,7 +10,7 @@ namespace Core.BLL.Interfaces
         void DeleteComment(Comment comment);
         Status GetStatusById(int id);
         void DeleteStatus(Status status);
-        object InsertComment(Comment com);
+        void InsertComment(Comment com);
         InsertStatusResult InsertStatus(Status status);
     }
 }

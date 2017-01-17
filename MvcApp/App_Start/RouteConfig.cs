@@ -14,6 +14,8 @@ namespace MvcApp
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            routes.IgnoreRoute("{*allasmx}", new { allasmx = @".*\.asmx(/.*)?" });
+             
             routes.MapRoute(
                name: "People",
                url: "people/UserID={UserID}/Online={Online}",

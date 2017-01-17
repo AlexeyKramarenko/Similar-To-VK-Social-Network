@@ -19,7 +19,7 @@ namespace  Core.POCO
         public virtual ApplicationUser ApplicationUser { get; set; }
 
         //Главная страница
-        public DateTime? CreateDate { get; set; }
+        public DateTime? CreationDate { get; set; }
         public DateTime? LastUpdateDate { get; set; }
          
 
@@ -32,7 +32,7 @@ namespace  Core.POCO
         public string LastName { get; set; }
 
         public string Gender { get; set; }
-        public bool MaritalStatus { get; set; }
+        public string MaritalStatus { get; set; }
         public int BirthDay { get; set; }
         public int BirthMonth { get; set; }
         public int BirthYear { get; set; }

@@ -52,16 +52,15 @@ namespace MvcApp.Controllers
 
             var mainInfoVM = mappingService.Map<Profile, MainViewModel>(profile);
 
-            mainInfoVM.Languages = profileService.GetLanguages(CurrentUserId).Select(a => mappingService.Map<POCO.SelectListItem, System.Web.Mvc.SelectListItem>(a)).ToList();
-            mainInfoVM.GenderList = profileService.GetGender(CurrentUserId).Select(a => mappingService.Map<POCO.SelectListItem, System.Web.Mvc.SelectListItem>(a)).ToList();
-            mainInfoVM.MaritalStatuses = profileService.GetMaritalStatus(CurrentUserId).Select(a => mappingService.Map<POCO.SelectListItem, System.Web.Mvc.SelectListItem>(a)).ToList();
-            mainInfoVM.BirthDays = profileService.GetBirthDays().Select(a => mappingService.Map<string, System.Web.Mvc.SelectListItem>(a)).ToList();
-            mainInfoVM.BirthMonths = profileService.GetBirthMonths().Select(a => mappingService.Map<string, System.Web.Mvc.SelectListItem>(a)).ToList();
-            mainInfoVM.BirthYears = profileService.GetBirthYears(CurrentUserId).Select(a => mappingService.Map<string, System.Web.Mvc.SelectListItem>(a)).ToList();
+            mainInfoVM.MaritalStatuses = new List<SelectListItem> { new SelectListItem { Text = "Single", Value = "Single" }, new SelectListItem { Text = "Married", Value = "Married" } };
+            mainInfoVM.Languages = new List<SelectListItem> { new SelectListItem { Text = "Ukrainian", Value = "Ukrainian" }, new SelectListItem { Text = "English", Value = "English" } };
+            mainInfoVM.GenderList = new List<SelectListItem> { new SelectListItem { Text = "Male", Value = "Male" }, new SelectListItem { Text = "Female", Value = "Female" } };
+            mainInfoVM.BirthDays = profileService.GetBirthDays().Select(a => mappingService.Map<string, SelectListItem>(a)).ToList();
+            mainInfoVM.BirthMonths = profileService.GetBirthMonths().Select(a => mappingService.Map<string, SelectListItem>(a)).ToList();
+            mainInfoVM.BirthYears = profileService.GetBirthYears(CurrentUserId).Select(a => mappingService.Map<string, SelectListItem>(a)).ToList();
 
             return PartialView("MainInfo", mainInfoVM);
         }
-
         [HttpPost]
         public ActionResult MainInfo(MainViewModel vm)
         {
@@ -80,7 +79,6 @@ namespace MvcApp.Controllers
 
             return PartialView("ContactInfo", contactsVM);
         }
-
         [HttpPost]
         public ActionResult ContactInfo(ContactsViewModel contactsVM)
         {
@@ -111,13 +109,11 @@ namespace MvcApp.Controllers
                     foreach (var msg in col)
                         message += msg.ErrorMessage;
                 }
-               
+
                 return Json(message, JsonRequestBehavior.AllowGet);
             }
 
         }
-
-
         [HttpGet]
         public ActionResult InterestsInfo()
         {
@@ -127,7 +123,6 @@ namespace MvcApp.Controllers
 
             return PartialView("InterestsInfo", interestsVM);
         }
-
         [HttpPost]
         public ActionResult InterestsInfo(InterestsViewModel interestsVM)
         {
@@ -137,17 +132,17 @@ namespace MvcApp.Controllers
             return new EmptyResult();
         }
 
+        private static int graduationYear = 0;
+
         [HttpGet]
         public ActionResult EducationInfo()
         {
             EducationDTO dto = profileService.GetEducationInfoOfUser(CurrentUserId);
-            EducationViewModel model = mappingService.Map<EducationDTO, EducationViewModel>(dto);
-
-            model.SchoolCountries = dto.CountriesList.Select(a => mappingService.Map<POCO.SelectListItem, System.Web.Mvc.SelectListItem>(a)).ToList();
-            model.SchoolTowns = dto.Towns.Select(a => mappingService.Map<string, System.Web.Mvc.SelectListItem>(a.TownName)).ToList();
-            model.StartYears = dto.StartYears.Select(a => mappingService.Map<string, System.Web.Mvc.SelectListItem>(a)).ToList();
-            model.FinishYears = dto.FinishYears.Select(a => mappingService.Map<string, System.Web.Mvc.SelectListItem>(a)).ToList();
-
+            EducationViewModel model = mappingService.Map<EducationDTO, EducationViewModel>(dto); 
+            model.SchoolCountries = ListItemsFromStringArray(dto.CountriesList);
+            model.SchoolTowns = ListItemsFromStringArray(dto.Towns.Select(a => a.TownName));
+            model.StartYears = ListItemsFromStringArray(dto.StartYears);
+            model.FinishYears = ListItemsFromStringArray(dto.FinishYears); 
             return PartialView("EducationInfo", model);
         }
 
@@ -155,11 +150,9 @@ namespace MvcApp.Controllers
         public ActionResult EducationInfo(EducationViewModel model)
         {
             var profile = mappingService.Map<EducationViewModel, Profile>(model);
-            profileService.SaveEducation(profile, CurrentUserId);
-
-            return new EmptyResult();
+            profileService.SaveEducation(profile, CurrentUserId); 
+            return Json(profile.FinishSchoolYear);
         }
-
         [HttpGet]
         public JsonResult GetFinishYears(int selectedStartYear)
         {
@@ -170,5 +163,16 @@ namespace MvcApp.Controllers
 
 
 
+        private SelectListItem[] ListItemsFromStringArray(IEnumerable<string> str)
+        {
+            var items = new SelectListItem[str.Count()];
+
+            for (int i = 0; i < str.Count(); i++)
+            {
+                items[i] = new SelectListItem { Text = str.ElementAt(i), Value = str.ElementAt(i) };
+            }
+
+            return items;
+        }
     }
 }

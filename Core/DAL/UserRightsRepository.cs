@@ -15,7 +15,7 @@ namespace Core.DAL
         {
             this.db = db;
         }
-        public List<UserRights> GetUserRights()
+        public List<RightsOfVisitorOnThePage> GetUserRights()
         {
           return  db.UserRights.ToList();
         }

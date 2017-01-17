@@ -1,11 +1,9 @@
-﻿using Core.POCO; 
+﻿using Core.POCO;
 
 namespace WebFormsApp.ViewModel
 {
-   public class ProfileViewModel:Profile
+    public class ProfileViewModel : Core.POCO.Profile
     {
-         public string PhoneNumber { get; set; }
-        
-
+        public string PhoneNumber { get; set; } 
     }
 }

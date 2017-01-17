@@ -12,6 +12,7 @@ namespace  Core.BLL.Interfaces
         void DeleteAlbum(int albumID, string userId);
         void DeletePhotoFromAlbum(Photo photo, string userId);
         void DeletePhotoFromFolder(Photo photo);
+        void DeletePhotoFromFolder(string path);
         int GetAlbumsCountByUserID(string userId);
         Photo[] GetAllPhotosByUserID(string userId);
         string[] GetImageNamesFromAlbum(int? albumId);

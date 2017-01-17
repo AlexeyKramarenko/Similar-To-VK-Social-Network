@@ -10,7 +10,7 @@ using System.Web.UI.WebControls;
 
 namespace WebFormsApp.CustomControls
 {
-    [ToolboxData("<{0}:AuthorizationControl runat='server'></{0}:MessageComponent>")]
+    [ToolboxData("<{0}:AuthorizationControl runat='server'></{0}:AuthorizationControl>")]
     public class AuthorizationControl : Control
     {
 
@@ -54,7 +54,7 @@ namespace WebFormsApp.CustomControls
         { 
             switch (CurrentPage.ToLower())
             {
-                case "registration.aspx":
+                case "createuserpage.aspx":
 
                     writer.AddAttribute(HtmlTextWriterAttribute.Href, LoginPage);
                     writer.RenderBeginTag(HtmlTextWriterTag.A);
@@ -64,7 +64,7 @@ namespace WebFormsApp.CustomControls
                     break;
 
 
-                case "login.aspx":
+                case "loginpage.aspx":
 
                     writer.AddAttribute(HtmlTextWriterAttribute.Href, RegistrationPage);
                     writer.RenderBeginTag(HtmlTextWriterTag.A);

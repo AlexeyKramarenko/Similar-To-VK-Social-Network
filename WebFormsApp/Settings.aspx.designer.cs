@@ -13,6 +13,15 @@ namespace WebFormsApp {
     public partial class Settings {
         
         /// <summary>
+        /// ScriptManager1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.ScriptManager ScriptManager1;
+        
+        /// <summary>
         /// UpdatePanel3 control.
         /// </summary>
         /// <remarks>
@@ -20,15 +29,6 @@ namespace WebFormsApp {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.UpdatePanel UpdatePanel3;
-        
-        /// <summary>
-        /// ScriptManagerProxy1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.ScriptManagerProxy ScriptManagerProxy1;
         
         /// <summary>
         /// FormView1 control.
@@ -49,15 +49,6 @@ namespace WebFormsApp {
         protected global::System.Web.UI.UpdatePanel UpdatePanel2;
         
         /// <summary>
-        /// ScriptManagerProxy2 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.ScriptManagerProxy ScriptManagerProxy2;
-        
-        /// <summary>
         /// FormView2 control.
         /// </summary>
         /// <remarks>
@@ -76,15 +67,6 @@ namespace WebFormsApp {
         protected global::System.Web.UI.UpdatePanel UpdatePanel1;
         
         /// <summary>
-        /// ScriptManagerProxy3 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.ScriptManagerProxy ScriptManagerProxy3;
-        
-        /// <summary>
         /// FormView3 control.
         /// </summary>
         /// <remarks>
@@ -101,5 +83,14 @@ namespace WebFormsApp {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HiddenField hdnProfileID;
+        
+        /// <summary>
+        /// Chat control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::WebFormsApp.CustomControls.Chat Chat;
     }
 }

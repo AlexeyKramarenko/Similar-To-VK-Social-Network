@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Web;
 using System.Web.ModelBinding;
+using WebFormsApp.Services;
+using WebFormsApp.CustomControls;
 
 namespace Tests
 {
@@ -24,6 +26,8 @@ namespace Tests
         Mock<IProfileService> profileService;
         Mock<IPhotoService> photoService;
         Mock<IEmailService> emailService;
+        Mock<IRedirectService> redirectService;
+        Mock<ISessionService> sessionService;
 
         [TestInitialize]
         public void TestInit()
@@ -36,71 +40,28 @@ namespace Tests
             profileService = new Mock<IProfileService>();
             photoService = new Mock<IPhotoService>();
             emailService = new Mock<IEmailService>();
-
+            redirectService = new Mock<IRedirectService>();
+            sessionService = new Mock<ISessionService>();
         }
-
-        [TestMethod]
-        public void GoToPeoplePage_Should_Redirect_To_TargetPage()
-        {
-            var masterPage = new NestedSiteMaster();
-
-            masterPage.targetPageOnSearchClick = "TargetPage.aspx";
-            httpRequestBase.Setup(a => a.FilePath).Returns("TargetPage.aspx");
-
-            masterPage.Request = httpRequestBase.Object;
-            masterPage.GoToPeoplePage();
-
-            //Assert
-            ActionResult actionResult = ActionResultInvoker.LastExecutedResult;
-            if (actionResult != null)
-                Assert.Fail("Unexpected action was taken by NestedSiteMaster: " + actionResult.GetType().FullName);
-
-        }
-        [TestMethod]
-        public void GetRelationshipDefinitionIDOfCurrentVisitor_Should_Return_Expected_Count_Definitions()
-        {
-            //Arrange 
-            var masterPage = new NestedSiteMaster();
-
-            var queryString = new NameValueCollection();
-            queryString.Add("UserID", "2");
-
-            httpRequestBase.Setup(a => a.QueryString).Returns(queryString);
-            masterPage.Request = httpRequestBase.Object;
-
-            //Act
-            relationshipsService.Setup(a => a.GetRelationshipDefinitionIdOfPageVisitor(It.IsAny<string>(), It.IsAny<string>())).Returns(10);
-            masterPage.RelationshipsService = relationshipsService.Object;
-
-            masterPage.CurrentUserId = "1";
-            int result = masterPage.GetRelationshipDefinitionIDOfCurrentVisitor();
-
-            //Assert
-            Assert.AreEqual(10, result);
-
-        }
-
+        
         [TestMethod]
         public void LoginUser_Should_Redirect_To_MainPage()
         {
             //Arrange 
-            var loginPage = new Login();
+            var loginPage = new LoginPage();
             userService.Setup(a => a.LoginUser(It.IsAny<LoginDTO>(), It.IsAny<Func<string>>())).Returns(new OperationResult { Succedeed = true });
+         
             loginPage.UserService = userService.Object;
-
-            var values = new Dictionary<string, string>() { { "UserName", "    " }, { "Password", "   " } };
+            loginPage.Redirect = redirectService.Object;
+            loginPage.SessionService = sessionService.Object;
+            
             var lvm = new LoginViewModel();
-
-            ArrangePageForPostback(loginPage.ModelState, values, lvm);
-
+            
             //Act
             loginPage.LoginUser(lvm);
 
-            //Assert
-            ActionResult actionResult = ActionResultInvoker.LastExecutedResult;
-            if (actionResult != null)
-                Assert.Fail("Unexpected action was taken by Login.aspx: " + actionResult.GetType().FullName);
-            
+            //Assert            
+            redirectService.Verify(a => a.GoToMainPage());
         }
 
         [TestMethod]
@@ -130,7 +91,7 @@ namespace Tests
         public void GetFriendsRefs_Should_Return_NotNull_Result()
         {
             //Arrange 
-            var mainPage = new Main();
+            var mainPage = new MyPage();
 
             var dto = new List<FriendsDTO>() { new FriendsDTO() };
             var vm = new FriendsViewModel();
@@ -154,8 +115,8 @@ namespace Tests
         public void GetAlbums_Should_Return_NotNull_Result()
         {
             //Arrange 
-            var mainPage = new Main();
-            var albumsDto = new AlbumDTO[] {  new AlbumDTO()};
+            var mainPage = new MyPage();
+            var albumsDto = new AlbumDTO[] { new AlbumDTO() };
             var albumsVM = new WebFormsApp.ViewModel.AlbumViewModel[] { new AlbumViewModel() };
 
             profileService.Setup(a => a.GetAlbums(It.IsAny<string>())).Returns(albumsDto);
@@ -176,12 +137,12 @@ namespace Tests
         public void GetProfile_Should_Return_NotNull_Result()
         {
             //Arrange 
-            var mainPage = new Main();
-            var profile = new Profile();
+            var mainPage = new MyPage();
+            var profile = new Core.POCO.Profile();
             var profileVM = new WebFormsApp.ViewModel.ProfileViewModel { BirthYear = 2000 };
 
             profileService.Setup(a => a.GetProfile(It.IsAny<string>())).Returns(profile);
-            mappingService.Setup(a => a.Map<Profile, WebFormsApp.ViewModel.ProfileViewModel>(profile)).Returns(profileVM);
+            mappingService.Setup(a => a.Map<Core.POCO.Profile, WebFormsApp.ViewModel.ProfileViewModel>(profile)).Returns(profileVM);
             userService.Setup(a => a.GetPhoneNumber(It.IsAny<string>())).Returns("123");
 
             mainPage.ProfileService = profileService.Object;
@@ -200,8 +161,8 @@ namespace Tests
         public void GetStatuses_Should_Return_NotNull_Result()
         {
             //Arrange 
-            var mainPage = new Main();
-            var statuses = new List<Status>() { new Status()};
+            var mainPage = new Statuses();
+            var statuses = new List<Status>() { new Status() };
 
             profileService.Setup(a => a.GetStatuses(It.IsAny<string>())).Returns(statuses);
             photoService.Setup(a => a.GetAvatar(It.IsAny<string>())).Returns(string.Empty);
@@ -221,7 +182,7 @@ namespace Tests
         public void RecoverPassword_Should_Return_Message_About_Successful_Operation()
         {
             //Arrange
-            var recoverPswdPage = new _RecoverPassword();
+            var recoverPswdPage = new RecoverPasswordPage();
             userService.Setup(a => a.GetUserByEmail(It.IsAny<string>())).Returns(new ApplicationUser());
             emailService.Setup(a => a.SendPasswordReminderEmail(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()));
 
@@ -242,25 +203,11 @@ namespace Tests
         public void CreateUser_Should_Call_ServiceMethod()
         {
             //Arrange
-            var rvm = new RegistrationViewModel()
-            {
-                BirthDate = new DateTime(),
-                Country = "Ukraine",
-                Town = "Lviv",
-                Email = "s@gmail.com",
-                FirstName = "FirstName",
-                LastName = "LastName",
-                Gender = "Man",
-                Married = true,
-                Password = "123456",
-                PasswordConfirm = "123456",
-                PhoneNumber = "0992304226",
-                UserName = "UserName"
-            };
+            var rvm = new CreateUserViewModel();
             var user = new ApplicationUser();
 
-            mappingService.Setup(a => a.Map<RegistrationViewModel, ApplicationUser>(rvm)).Returns(user);
-            userService.Setup(a => a.CreateUser(It.IsAny<Profile>(), It.IsAny<ApplicationUser>(), It.IsAny<Func<string>>())).Returns(new OperationResult { Succedeed = true });
+            mappingService.Setup(a => a.Map<CreateUserViewModel, ApplicationUser>(rvm)).Returns(user);
+            userService.Setup(a => a.CreateUser(It.IsAny<Core.POCO.Profile>(), It.IsAny<ApplicationUser>(), It.IsAny<Func<string>>())).Returns(new OperationResult { Succedeed = true });
 
             var form = new NameValueCollection();
             form.Add("Country", "P");
@@ -269,51 +216,25 @@ namespace Tests
             form.Add("BirthMonth", "10");
             form.Add("BirthDay", "10");
 
-            var registrationPage = new Registration();
+            var registrationPage = new CreateUserPage();
 
             httpRequestBase.Setup(a => a.Form).Returns(form);
-
-            registrationPage.Request = httpRequestBase.Object;
-
+           
+            registrationPage.RequestBase = httpRequestBase.Object;
             registrationPage.MappingService = mappingService.Object;
-
             registrationPage.UserService = userService.Object;
+            registrationPage.Redirect = redirectService.Object;
 
             //Act
             registrationPage.CreateUser(rvm);
 
             //Assert
             Assert.IsTrue(registrationPage.ModelState.IsValid);
-
-            mappingService.Verify(a => a.Map<RegistrationViewModel, ApplicationUser>(rvm));
-            userService.Verify(a => a.CreateUser(It.IsAny<Profile>(), It.IsAny<ApplicationUser>(), It.IsAny<Func<string>>()));
-
+            mappingService.Verify(a => a.Map<CreateUserViewModel, ApplicationUser>(rvm));
+            userService.Verify(a => a.CreateUser(It.IsAny<Core.POCO.Profile>(), It.IsAny<ApplicationUser>(), It.IsAny<Func<string>>()));
+            redirectService.Verify(a => a.GoToLoginPage());
         }
-
-        public void ArrangePageForPostback(ModelStateDictionary ModelState, Dictionary<string, string> values, object viewModel)
-        {
-
-            var executionContext = new ModelBindingExecutionContext(httpContextBase.Object, ModelState);
-
-
-            var bindingContext = new ModelBindingContext
-            {
-                ModelMetadata = ModelMetadataProviders.Current.GetMetadataForType(() => viewModel, viewModel.GetType()),
-                ValueProvider = new DictionaryValueProvider<string>(values, null),
-                Model = viewModel
-            };
-
-
-            var binder = ModelBinders.Binders[viewModel.GetType()];
-            if (binder == null)
-                binder = ModelBinders.Binders.DefaultBinder;
-
-            binder.BindModel(executionContext, bindingContext);
-        }
-
-
-
+        
     }
-
 
 }

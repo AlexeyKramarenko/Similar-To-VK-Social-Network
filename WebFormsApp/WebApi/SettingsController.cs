@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using WebFormsApp.Services;
 
 namespace WebFormsApp.WebApi
 {
@@ -15,10 +16,19 @@ namespace WebFormsApp.WebApi
 
         ISettingsService settingsService;
         IProfileService profileService;
-        public SettingsController(ISettingsService _settingsService, IProfileService _profileService)
+        ISessionService sessionService;
+        public string CurrentUserId
         {
-            settingsService = _settingsService;
-            profileService = _profileService;
+            get
+            {
+                return sessionService.CurrentUserId;
+            }
+        }
+        public SettingsController(ISettingsService settingsService, IProfileService profileService, ISessionService sessionService)
+        {
+            this.settingsService = settingsService;
+            this.profileService = profileService;
+            this.sessionService = sessionService;
         }
 
         [HttpGet]
@@ -40,7 +50,7 @@ namespace WebFormsApp.WebApi
         [ActionName("GetProfileID")]
         public int GetProfileID()
         {
-            string userId = User.Identity.GetUserId();
+            string userId = sessionService.CurrentUserId;
             return profileService.GetProfile(userId).ProfileID;
         }
 

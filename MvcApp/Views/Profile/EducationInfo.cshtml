@@ -5,7 +5,7 @@
     <tr>
         <td class="profiles">Страна:</td>
         <td>
-            @Html.DropDownListFor(a => a.SchoolCountry, Model.SchoolCountries, new { onchange = "ddlCountryQueryForTowns()" })
+            @Html.DropDownListFor(a => a.SchoolCountry, Model.SchoolCountries, new { onchange = "vm.getProfileSchoolTown()" })
         </td>
     </tr>
     <tr>
@@ -23,7 +23,7 @@
     <tr>
         <td class="profiles">Год начала обучения:</td>
         <td>
-            @Html.DropDownListFor(a => a.StartSchoolYear, Model.StartYears, new { onchange = "updateFinishYears()" })
+            @Html.DropDownListFor(a => a.StartSchoolYear, Model.StartYears, new { onchange = "vm.updateFinishYears($('#FinishSchoolYear').val())" })
         </td>
     </tr>
     <tr>
@@ -40,7 +40,7 @@
 
 <input id="btnSaveEducationInfo"
        type="button"
-       onclick="updateEducationInfo()"
+       onclick="vm.updateEducationInfo()"
        class="btnSave"
        value="Save education info" />
 <br />

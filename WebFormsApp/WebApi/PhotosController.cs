@@ -10,19 +10,29 @@ using System.Net;
 using Microsoft.AspNet.Identity;
 using Core.BLL.Interfaces;
 using Core.POCO;
+using WebFormsApp.Services;
 
 namespace WebFormsApp.WebApi
 {
     public class PhotosController : ApiController
     {
         private static int? _albumId; //null - Avatar, 0,1,2.. - id of album         
-        private string userId;
-
+             
         IPhotoService photoService;
-        public PhotosController(IPhotoService _photoService)
+        ISessionService sessionService;
+
+        public string CurrentUserId
         {
-            userId = User.Identity.GetUserId();
-            photoService = _photoService;
+            get
+            {
+                return sessionService.CurrentUserId;
+            }
+        }
+
+        public PhotosController(IPhotoService photoService, ISessionService sessionService)
+        { 
+            this.photoService =  photoService;
+            this.sessionService = sessionService;
         }
 
         [HttpGet]
@@ -61,7 +71,7 @@ namespace WebFormsApp.WebApi
         [ActionName("GetPhotoAlbums")]
         public IHttpActionResult GetPhotoAlbums()
         {
-            object[] albums = photoService.GetPhotoAlbums(userId);
+            object[] albums = photoService.GetPhotoAlbums(CurrentUserId);
 
             if (albums != null)
                 return Ok(albums);
@@ -83,7 +93,7 @@ namespace WebFormsApp.WebApi
                     #region Variables
                     if (_albumId == 0) //Wall main album
                     {
-                        PhotoAlbum album = photoService.GetWallMainAlbum(userId);
+                        PhotoAlbum album = photoService.GetWallMainAlbum(CurrentUserId);
 
                         if (album != null)
                             _albumId = album.PhotoAlbumID;
@@ -91,7 +101,7 @@ namespace WebFormsApp.WebApi
 
                     // Validate the uploaded image(optional)
                     string path = HttpContext.Current.Server.MapPath("~/UsersFolder/");
-                    string subpath = userId;
+                    string subpath = CurrentUserId;
 
                     string foldersPath = "UsersFolder/" + subpath + "/";
                     string virtualPathFolder = "~/" + foldersPath;
@@ -146,7 +156,7 @@ namespace WebFormsApp.WebApi
                     var photo = new Photo
                     {
                         PhotoAlbumID = _albumId,
-                        UserID = userId,
+                        UserID = CurrentUserId,
                         PhotoUrl = fileUrl,
                         ThumbnailPhotoUrl = thumbFileUrl,
                         Name = fileNameWithExtension
@@ -158,7 +168,7 @@ namespace WebFormsApp.WebApi
                         albumID = photoService.AddPhoto(photo);
 
                     else
-                        photoService.UpdateAvatar(photo, userId);
+                        photoService.UpdateAvatar(photo, CurrentUserId);
 
                     _albumId = null; //reset for the next reqest
                     #endregion
@@ -219,9 +229,8 @@ namespace WebFormsApp.WebApi
         [ActionName("DownloadImage")]
         public HttpResponseMessage DownloadImage([FromUri] string Name)
         {
-            //начало
             HttpResponseMessage result = null;
-            var localFilePath = HttpContext.Current.Server.MapPath("~/UsersFolder/" + userId + "/" + Name);
+            var localFilePath = HttpContext.Current.Server.MapPath("~/UsersFolder/" + CurrentUserId + "/" + Name);
 
             // check if parameter is valid
             if (String.IsNullOrEmpty(Name))
@@ -251,7 +260,7 @@ namespace WebFormsApp.WebApi
         [ActionName("GetPhotoAlbumsIds")]
         public IHttpActionResult GetPhotoAlbumsIds()
         {
-            int[] ids = photoService.GetPhotoAlbumsIds(userId);
+            int[] ids = photoService.GetPhotoAlbumsIds(CurrentUserId);
 
             if (ids != null)
                 return Ok(ids);
@@ -264,7 +273,7 @@ namespace WebFormsApp.WebApi
         [ActionName("GetPhotoUrlsByAlbumID")]
         public IHttpActionResult GetPhotoUrlsByAlbumID(int Id)
         {
-            object[] urls = photoService.GetPhotoUrlsByAlbumID(Id, userId);
+            object[] urls = photoService.GetPhotoUrlsByAlbumID(Id, CurrentUserId);
 
             if (urls != null)
                 return Ok(urls);
@@ -285,7 +294,7 @@ namespace WebFormsApp.WebApi
         [ActionName("GetAlbumsCountByUserID")]
         public IHttpActionResult GetAlbumsCountByUserID()
         {
-            int count = photoService.GetAlbumsCountByUserID(userId);
+            int count = photoService.GetAlbumsCountByUserID(CurrentUserId);
 
             if (count >= 0)
                 return Ok(count);
@@ -314,7 +323,7 @@ namespace WebFormsApp.WebApi
         {
             if (PhotoAlbum != null)
             {
-                int albumId = photoService.CreatePhotoAlbum(PhotoAlbum, userId);
+                int albumId = photoService.CreatePhotoAlbum(PhotoAlbum, CurrentUserId);
 
                 return Created(Request.RequestUri, albumId);
             }
@@ -326,7 +335,7 @@ namespace WebFormsApp.WebApi
         [ActionName("DeletePhotoFromAlbum")]
         public void DeletePhotoFromAlbum([FromBody] Photo photo)
         {
-            photoService.DeletePhotoFromAlbum(photo, userId);
+            photoService.DeletePhotoFromAlbum(photo, CurrentUserId);
             photoService.DeletePhotoFromFolder(photo);
         }
     }

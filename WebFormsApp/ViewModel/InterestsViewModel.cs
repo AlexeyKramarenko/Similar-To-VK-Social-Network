@@ -13,5 +13,7 @@ namespace WebFormsApp.ViewModel
         public string Games { get; set; }
         public string Quotes { get; set; }
         public string AboutMe { get; set; }
+
+        public InterestsViewModel() { }
     }
 }

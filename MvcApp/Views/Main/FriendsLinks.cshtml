@@ -9,9 +9,9 @@
     @if (Model != null)
     {
         foreach (var item in Model)
-        {
+        {           
             <a href='@item.FriendsPageUrl'>
-                <img src='@item.ImageUrl' width="100" />
+                <img src='@Url.Content("~/"+ item.ImageUrl)' width="100" />
             </a>
         }
     }

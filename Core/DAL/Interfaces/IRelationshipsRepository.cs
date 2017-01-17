@@ -11,8 +11,8 @@ namespace  Core.DAL.Interfaces
         void AddToFriendsMessage(Message message);
         List<string> GetFriendsIDsOfUser(string UserID);
         int GetRelationshipDefinitionIdOfPageVisitor(string visitorId, string pageOfUserId);
-        IQueryable<Relationship> GetRelationship(string FirstUserID, string SecondUserID);
-        void RemoveFromFriends(IQueryable<Relationship> friendship);
+        Relationship GetRelationship(string FirstUserID, string SecondUserID);
+        void RemoveFromFriends(Relationship friendship);
         void SaveRelationshipDefinition(string senderUserId, string receiverUserId, int relationshipId);
     }
 }

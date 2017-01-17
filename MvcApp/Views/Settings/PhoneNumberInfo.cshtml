@@ -1,6 +1,6 @@
 ﻿@model MvcApp.ViewModel.PhoneNumberViewModel
 
-@using (Ajax.BeginForm("PhoneNumberInfo", "Settings", new AjaxOptions { HttpMethod = "POST", OnFailure = "onPhoneNumberFailure", OnSuccess = "onSuccess", UpdateTargetId = "PhoneNumberInfo" }))
+@using (Ajax.BeginForm("PhoneNumberInfo", "Settings", new AjaxOptions { HttpMethod = "POST", OnFailure = "view.onPhoneNumberFailure", OnSuccess = "view.onSuccess", UpdateTargetId = "PhoneNumberInfo" }))
 {
     <table>
         <tr>

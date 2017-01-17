@@ -10,52 +10,16 @@
 namespace WebFormsApp {
     
     
-    public partial class _Profile {
+    public partial class Profile {
         
         /// <summary>
-        /// ddlGender control.
+        /// ScriptManager1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlGender;
-        
-        /// <summary>
-        /// ddlMarried control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlMarried;
-        
-        /// <summary>
-        /// ddlBirthDay control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlBirthDay;
-        
-        /// <summary>
-        /// ddlBirthMonth control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlBirthMonth;
-        
-        /// <summary>
-        /// ddlBirthYear control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlBirthYear;
+        protected global::System.Web.UI.ScriptManager ScriptManager1;
         
         /// <summary>
         /// UpdatePanel1 control.
@@ -65,15 +29,6 @@ namespace WebFormsApp {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.UpdatePanel UpdatePanel1;
-        
-        /// <summary>
-        /// ScriptManagerProxy0 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.ScriptManagerProxy ScriptManagerProxy0;
         
         /// <summary>
         /// FormView1 control.
@@ -94,15 +49,6 @@ namespace WebFormsApp {
         protected global::System.Web.UI.UpdatePanel UpdatePanel2;
         
         /// <summary>
-        /// ScriptManagerProxy1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.ScriptManagerProxy ScriptManagerProxy1;
-        
-        /// <summary>
         /// formViewContacts control.
         /// </summary>
         /// <remarks>
@@ -121,15 +67,6 @@ namespace WebFormsApp {
         protected global::System.Web.UI.UpdatePanel UpdatePanel3;
         
         /// <summary>
-        /// ScriptManagerProxy2 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.ScriptManagerProxy ScriptManagerProxy2;
-        
-        /// <summary>
         /// formViewHobby control.
         /// </summary>
         /// <remarks>
@@ -139,57 +76,30 @@ namespace WebFormsApp {
         protected global::System.Web.UI.WebControls.FormView formViewHobby;
         
         /// <summary>
-        /// ddlSchoolCountry control.
+        /// UpdatePanel4 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlSchoolCountry;
+        protected global::System.Web.UI.UpdatePanel UpdatePanel4;
         
         /// <summary>
-        /// ddlSchoolTown control.
+        /// EducationInfoFormView control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlSchoolTown;
+        protected global::System.Web.UI.WebControls.FormView EducationInfoFormView;
         
         /// <summary>
-        /// txtSchool control.
+        /// Chat control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtSchool;
-        
-        /// <summary>
-        /// ddlSchoolBeginningYear control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlSchoolBeginningYear;
-        
-        /// <summary>
-        /// ddlSchoolGraduationYear control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlSchoolGraduationYear;
-        
-        /// <summary>
-        /// btnSave control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnSave;
+        protected global::WebFormsApp.CustomControls.Chat Chat;
     }
 }

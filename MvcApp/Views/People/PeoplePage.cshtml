@@ -5,9 +5,10 @@
 }
 
 @section styles{
-    <link href="@Url.Content("~/Content/people_friends.css")" rel="stylesheet" />
-    <link href="@Url.Content("~/Content/friends.css")" rel="stylesheet" />
+    <link href='@Url.Content("~/Content/people_friends.css")' rel="stylesheet" />
+    <link href='@Url.Content("~/Content/friends.css")' rel="stylesheet" />
 }
+
 
 <div id="searchForm" data-userid="">
     <ul>
@@ -16,13 +17,21 @@
         </li>
         <li>
 
-            <select id="ddlCountry" name="D1" class="auto-style1"></select>
+            <select id="ddlCountry"
+                    name="D1"
+                    class="auto-style1"
+                    onchange="vm.setTownsToDefault();
+                              vm.getTownsBySelectedCountry();
+                              vm.getUsers()"></select>
 
             <br />
             <div id="Towns">
                 Город :<br />
 
-                <select id="ddlTown" name="D1" class="auto-style2">
+                <select id="ddlTown"
+                        name="D1"
+                        class="auto-style2"
+                        onchange="vm.getUsers()">
                     <option value="0"></option>
                 </select>
             </div>
@@ -32,9 +41,16 @@
             Возраст :
         </li>
         <li>
-            <select id="ddlFrom" name="D1" class="auto-style3"></select>
+            <select id="ddlFrom"
+                    name="D1"
+                    class="auto-style3"
+                    onchange="vm.updateAgeValue();
+                              vm.getUsers()"></select>
             -
-            <select id="ddlTo" name="D1" class="auto-style4"></select>
+            <select id="ddlTo"
+                    name="D1"
+                    class="auto-style4"
+                    onchange="vm.getUsers()"></select>
 
         </li>
         <li>
@@ -43,9 +59,9 @@
 
 
         <li style="margin-left: 0px">
-            <input name="gender" type="radio" value="Any" checked="checked" />All<br />
-            <input name="gender" type="radio" value="Man" />Man<br />
-            <input name="gender" type="radio" value="Woman" />Woman<br />
+            <input onchange="vm.getUsers()" name="gender" type="radio" value="Any" checked="checked" />All<br />
+            <input onchange="vm.getUsers()" name="gender" type="radio" value="Male" />Male<br />
+            <input onchange="vm.getUsers()" name="gender" type="radio" value="Female" />Female<br />
         </li>
 
     </ul>
@@ -68,26 +84,34 @@
         <div>
             <span>Message</span>
             <textarea id="messageBody"></textarea>
-            <input type="button" id="sendBtn" onclick="createNewDialog()" value="Send" />
+            <input type="button" id="sendBtn" onclick="vm.createNewDialog()" value="Send" />
         </div>
     </div>
 </div>
 
 
-
-
-
 @section scripts{
 
-    @Scripts.Render("~/bundles/modalPopLite")
-
-    <script src="@Url.Content("~/Scripts/shared.js")"></script>
-    <script src="@Url.Content("~/Scripts/people.js")"></script>
-
-    <script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"></script>
-
-    @Scripts.Render("~/bundles/bootstrap")
-
-    <script src="@Url.Content("~/Scripts/sweetalert.min.js")"></script>
+    <script>
+        var ROOT = '@Url.Content("~/")';
+    </script>
+    <script src="@Url.Content("~/Scripts/jquery-1.7.1.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/modalPopLite.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/_base/promise.js")"></script>
+    <script src="@Url.Content("~/Scripts/_base/ajax.js")"></script>
+    <script src="@Url.Content("~/Scripts/_people/view.js")"></script>
+    <script src="@Url.Content("~/Scripts/_people/service.js")"></script>
+    <script src="@Url.Content("~/Scripts/_people/controller.js")"></script>
+    <script>
+        var view = new PeopleView(),
+            service = new PeopleService(),
+            vm = new PeopleController(view, service);
+    </script>
 }
 
+
+
+
+@{
+    Html.RenderAction("Chat", "Messages");
+}

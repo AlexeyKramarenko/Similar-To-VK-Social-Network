@@ -40,7 +40,7 @@ namespace MvcApp.ViewModel
 
         public string Town { get; set; }
 
-        public bool Married { get; set; }
+        public string MaritalStatus { get; set; }
 
         public string Gender { get; set; }
 

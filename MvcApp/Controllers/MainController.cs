@@ -25,14 +25,6 @@ namespace MvcApp.Controllers
         ISettingsService settingsService;
         ISessionService sessionService;
 
-        string BaseUrl
-        {
-            get
-            {
-                return Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath;
-            }
-        }
-
         public string CurrentUserId
         {
             get
@@ -60,8 +52,8 @@ namespace MvcApp.Controllers
 
             ViewBag.DisplayPosts = Privacy.DisplayPosts;
             ViewBag.DisplayMessageForm = Privacy.DisplayMessageForm;
-
-            ViewBag.OnlineFriendsLink = "/people/peoplepage/" + UserID + "/true";
+         
+            ViewBag.OnlineFriendsLink = "/people/UserID=" + UserID + "/Online=true";
 
             return View();
         }
@@ -85,12 +77,7 @@ namespace MvcApp.Controllers
                 UserID = CurrentUserId;
 
             AlbumDTO[] albumsDto = profileService.GetAlbums(UserID);
-
-            for (int i = 0; i < albumsDto.Length; i++)
-            {
-                albumsDto[i].ThumbnailPhotoUrl = BaseUrl + albumsDto[i].ThumbnailPhotoUrl;
-            }
-
+            
             AlbumViewModel[] albumsVM = albumsDto.Select(a => mappingService.Map<AlbumDTO, AlbumViewModel>(a)).ToArray();
 
             return PartialView(albumsVM);
@@ -125,7 +112,7 @@ namespace MvcApp.Controllers
 
             foreach (var s in statuses)
             {
-                s.AvatarUrl = BaseUrl + photoService.GetAvatar(s.PostByUserID);
+                s.AvatarUrl = photoService.GetAvatar(s.PostByUserID);
                 s.Comments = profileService.GetCommentsByStatusID(s.ID);
             }
 
@@ -142,10 +129,7 @@ namespace MvcApp.Controllers
 
             return PartialView();
         }
-
-
-
-
+        
         private PrivacyRestrictions Privacy
         {
             get
@@ -163,9 +147,7 @@ namespace MvcApp.Controllers
                         DisplayComments = true,
                         DisplayDetailsInfo = true,
                         DisplayMessageForm = true,
-                        DisplayPosts = true,
-                        SendMessagePossibility = true,
-                        ShowInSearch = true
+                        DisplayPosts = true
                     };
             }
         }
@@ -187,7 +169,6 @@ namespace MvcApp.Controllers
                 string pageOfUserID = HttpContext.Request.RequestContext.RouteData.Values["UserID"] as string;
 
                 if (pageOfUserID != null && pageOfUserID != CurrentUserId)
-                    //get data from cache
                     return relationshipsService.GetRelationshipDefinitionIdOfPageVisitor(CurrentUserId, pageOfUserID);
 
                 return 1;

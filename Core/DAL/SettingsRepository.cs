@@ -48,15 +48,13 @@ namespace  Core.DAL
                 new PrivacyFlag  { PrivacyFlagTypeID = 2 },
                 new PrivacyFlag  { PrivacyFlagTypeID = 3 },
                 new PrivacyFlag  { PrivacyFlagTypeID = 4 },
-                new PrivacyFlag  { PrivacyFlagTypeID = 5 },
-                new PrivacyFlag  { PrivacyFlagTypeID = 6 },
-                new PrivacyFlag  { PrivacyFlagTypeID = 7 }
+                new PrivacyFlag  { PrivacyFlagTypeID = 5 }
             };
 
             foreach (var pf in flags)
             {
                 pf.ProfileID = profileId;
-                pf.VisibilityLevelID = 1;
+                pf.VisibilityLevelID = 3;
             }
 
             db.PrivacyFlags.AddRange(flags);

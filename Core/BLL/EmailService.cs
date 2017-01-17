@@ -1,11 +1,12 @@
 ﻿
-using  Core.BLL.Interfaces;
+using Core.BLL.Interfaces;
+using Core.POCO;
 using System;
 using System.Configuration;
 using System.Net;
 using System.Net.Mail;
 
-namespace  Core.BLL
+namespace Core.BLL
 {
     public class EmailService : IEmailService
     {
@@ -22,14 +23,7 @@ namespace  Core.BLL
             EMAIL_PORT = ConfigurationManager.AppSettings["EMAIL_PORT"];
         }
 
-        public void SendPasswordReminderEmail(string To, string EncryptedPassword, string Username)
-        {
-            string Message = "Here is the password you requested: " + EncryptedPassword;
-
-            SendEmail(To, "", "", "Password Reminder", Message);
-        }
-
-        public string SendEmailAddressVerificationEmail(string Username, string To, string RootURL)
+        public OperationResult SendEmailAddressVerificationEmail(string Username, string To, string RootURL)
         {
             string msg = "Please click on the link below.<br/><br/>" +
                          "<a href=\"" + RootURL + "/EmailVerification/" + Username + "\"   > EmailVerification </a>";
@@ -37,21 +31,19 @@ namespace  Core.BLL
             return SendEmail(To, "", "", "Account created! Email verification required.", msg);
         }
 
-
-        public string SendEmail(string To, string CC, string BCC, string Subject, string Message)
+        public OperationResult SendEmail(string To, string CC, string BCC, string Subject, string Message)
         {
             try
             {
-                var smtp_client = new SmtpClient(EMAIL_HOST, Convert.ToInt32(EMAIL_PORT));
-                smtp_client.UseDefaultCredentials = false;
-                smtp_client.Credentials = new NetworkCredential(FROM_EMAIL_ADDRESS, FROM_EMAIL_ADDRESS_PASSWORD);
-                smtp_client.EnableSsl = true;
+                var msg = new MailMessage
+                {
+                    From = new MailAddress(FROM_EMAIL_ADDRESS),
+                    Subject = Subject,
+                    IsBodyHtml = true,
+                    Body = Message
+                };
 
-
-                MailMessage msg = new MailMessage();
-                msg.From = new MailAddress(FROM_EMAIL_ADDRESS);
-
-                if (To != null)
+                if (!string.IsNullOrEmpty(To))
                     msg.To.Add(new MailAddress(To));
 
                 if (!string.IsNullOrEmpty(CC))
@@ -60,22 +52,31 @@ namespace  Core.BLL
                 if (!string.IsNullOrEmpty(BCC))
                     msg.Bcc.Add(new MailAddress(BCC));
 
-                msg.Subject = Subject;
-                msg.Body = Message;
-                msg.IsBodyHtml = true;
 
-                smtp_client.Send(msg);
+                var smtpClient = new SmtpClient()
+                {
+                    Host = "smtp.gmail.com",
+                    Port = 587,
+                    EnableSsl = true,
+                    Credentials = new System.Net.NetworkCredential(FROM_EMAIL_ADDRESS, FROM_EMAIL_ADDRESS_PASSWORD)
+                };
 
+                smtpClient.Send(msg);
             }
             catch (Exception e)
             {
-                return e.Message;
+                return new OperationResult { Message = e.Message, Succedeed = false };
             }
 
-            return string.Empty;
+            return new OperationResult { Succedeed = true };
         }
 
+        public void SendPasswordReminderEmail(string To, string EncryptedPassword, string Username)
+        {
+            string Message = "Here is the password you requested: " + EncryptedPassword;
 
+            SendEmail(To, "", "", "Password Reminder", Message);
+        }
     }
 
 

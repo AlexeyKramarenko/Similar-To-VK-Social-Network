@@ -48,6 +48,10 @@
       <HintPath>..\packages\AutoMapper.4.0.4\lib\net45\AutoMapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.4.9.5, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.4.9.5\lib\Net45\HtmlAgilityPack.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
       <Private>True</Private>
@@ -247,8 +251,10 @@
     <Compile Include="SignalR\ChatHub.cs" />
     <Compile Include="SignalR\IChatHub.cs" />
     <Compile Include="ViewModel\AlbumViewModel.cs" />
+    <Compile Include="ViewModel\CommentViewModel.cs" />
     <Compile Include="ViewModel\ContactsViewModel.cs" />
     <Compile Include="ViewModel\CreatePhotoAlbumViewModel.cs" />
+    <Compile Include="ViewModel\DialogViewModel.cs" />
     <Compile Include="ViewModel\EducationViewModel.cs" />
     <Compile Include="ViewModel\EmailViewModel.cs" />
     <Compile Include="ViewModel\FriendsViewModel.cs" />
@@ -259,6 +265,7 @@
     <Compile Include="ViewModel\MessagesViewModel.cs" />
     <Compile Include="ViewModel\PasswordViewModel.cs" />
     <Compile Include="ViewModel\PhoneNumberViewModel.cs" />
+    <Compile Include="ViewModel\PrivacyFlagViewModel.cs" />
     <Compile Include="ViewModel\ProfileViewModel.cs" />
     <Compile Include="ViewModel\RegistrationViewModel.cs" />
     <Compile Include="ViewModel\UserViewModel.cs" />
@@ -384,6 +391,7 @@
     <Content Include="Content\fonts\lg.eot" />
     <Content Include="Content\fonts\lg.ttf" />
     <Content Include="Content\fonts\lg.woff" />
+    <None Include="Properties\PublishProfiles\aaa.pubxml" />
     <None Include="Scripts\jquery-1.6.4-vsdoc.js" />
     <Content Include="Scripts\gallery\lg-autoplay.js" />
     <Content Include="Scripts\gallery\lg-autoplay.min.js" />
@@ -407,12 +415,20 @@
     <Content Include="Scripts\img\video-play.png" />
     <Content Include="Scripts\img\vimeo-play.png" />
     <Content Include="Scripts\img\youtube-play.png" />
+    <Content Include="Scripts\jasmine-2.5.2\boot.js" />
+    <Content Include="Scripts\jasmine-2.5.2\console.js" />
+    <Content Include="Scripts\jasmine-2.5.2\jasmine-html.js" />
+    <Content Include="Scripts\jasmine-2.5.2\jasmine.css" />
+    <Content Include="Scripts\jasmine-2.5.2\jasmine.js" />
+    <Content Include="Scripts\jasmine-2.5.2\jasmine_favicon.png" />
     <Content Include="Scripts\jquery-1.6.4.js" />
     <Content Include="Scripts\jquery-1.6.4.min.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />
     <None Include="Scripts\jquery-1.8.0.intellisense.js" />
     <Content Include="Scripts\jquery-1.8.0.js" />
     <Content Include="Scripts\jquery-1.8.0.min.js" />
+    <Content Include="Scripts\jquery-2.1.4.min - Copy %282%29.js" />
+    <Content Include="Scripts\jquery-2.1.4.min - Copy.js" />
     <Content Include="Scripts\jquery-2.1.4.min.js" />
     <Content Include="Scripts\jquery-multidownload.js" />
     <Content Include="Scripts\jquery.scrollto.min.js" />
@@ -422,20 +438,55 @@
     <Content Include="Scripts\jquery.simulate.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
-    <Content Include="Scripts\main.js" />
-    <Content Include="Scripts\messages.js" />
     <Content Include="Scripts\modalPopLite.min.js" />
-    <Content Include="Scripts\nestedSiteMaster.js" />
-    <Content Include="Scripts\people.js" />
-    <Content Include="Scripts\photos.js" />
-    <Content Include="Scripts\profile.js" />
-    <Content Include="Scripts\registration.js" />
-    <Content Include="Scripts\settings.js" />
-    <Content Include="Scripts\shared.js" />
-    <Content Include="Scripts\signalRmainPage.js" />
-    <Content Include="Scripts\signalRmessagesPage.js" />
-    <Content Include="Scripts\signalRscriptForDefaultPages.js" />
     <Content Include="Scripts\sweetalert.min.js" />
+    <Content Include="Scripts\users.js" />
+    <Content Include="Scripts\_base\ajax.js" />
+    <Content Include="Scripts\_base\promise.js" />
+    <Content Include="Scripts\_main\controller.js" />
+    <Content Include="Scripts\_main\service.js" />
+    <Content Include="Scripts\_main\test\SpecRunner.html" />
+    <Content Include="Scripts\_main\test\test.js" />
+    <Content Include="Scripts\_main\view.js" />
+    <Content Include="Scripts\_messages\controller.js" />
+    <Content Include="Scripts\_messages\service.js" />
+    <Content Include="Scripts\_messages\test\SpecRunner.html" />
+    <Content Include="Scripts\_messages\test\test.js" />
+    <Content Include="Scripts\_messages\view.js" />
+    <Content Include="Scripts\_people\controller.js" />
+    <Content Include="Scripts\_people\service.js" />
+    <Content Include="Scripts\_people\test\SpecRunner.html" />
+    <Content Include="Scripts\_people\test\test.js" />
+    <Content Include="Scripts\_people\view.js" />
+    <Content Include="Scripts\_photos\controller.js" />
+    <Content Include="Scripts\_photos\service.js" />
+    <Content Include="Scripts\_photos\test\SpecRunner.html" />
+    <Content Include="Scripts\_photos\test\test.js" />
+    <Content Include="Scripts\_photos\view.js" />
+    <Content Include="Scripts\_profile\controller.js" />
+    <Content Include="Scripts\_profile\service.js" />
+    <Content Include="Scripts\_profile\test\SpecRunner.html" />
+    <Content Include="Scripts\_profile\test\test.js" />
+    <Content Include="Scripts\_profile\view.js" />
+    <Content Include="Scripts\_registration\controller.js" />
+    <Content Include="Scripts\_registration\service.js" />
+    <Content Include="Scripts\_registration\test\SpecRunner.html" />
+    <Content Include="Scripts\_registration\test\test.js" />
+    <Content Include="Scripts\_registration\view.js" />
+    <Content Include="Scripts\_settings\controller.js" />
+    <Content Include="Scripts\_settings\service.js" />
+    <Content Include="Scripts\_settings\test\SpecRunner.html" />
+    <Content Include="Scripts\_settings\test\test.js" />
+    <Content Include="Scripts\_settings\view.js" />
+    <Content Include="Scripts\_signalr.chat\controller.js" />
+    <Content Include="Scripts\_signalr.chat\service.js" />
+    <Content Include="Scripts\_signalr.chat\test\SpecRunner.html" />
+    <Content Include="Scripts\_signalr.chat\test\test.js" />
+    <Content Include="Scripts\_signalr.chat\view.js" />
+    <Content Include="Scripts\_signalr.messages\controller.js" />
+    <Content Include="Scripts\_signalr.messages\test\SpecRunner.html" />
+    <Content Include="Scripts\_signalr.messages\test\test.js" />
+    <Content Include="Scripts\_signalr.messages\view.js" />
     <Content Include="WebServices\DialogService.asmx" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -505,9 +556,10 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\VisitorAndPageOwnerId.cshtml" />
     <Content Include="Views\Photos\PhotosPage.cshtml" />
-    <Content Include="Views\Main\DetailsInfo.cshtml" />
+    <Content Include="Views\Main\Details.cshtml" />
     <Content Include="Views\Main\MessageForm.cshtml" />
     <Content Include="Views\Main\Comments.cshtml" />
+    <Content Include="Views\Messages\Chat.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -526,6 +578,24 @@
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
@@ -540,7 +610,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>63245</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:50117/</IISUrl>
+          <IISUrl>http://localhost:50118/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

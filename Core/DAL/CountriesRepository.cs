@@ -40,8 +40,9 @@ namespace  Core.DAL
             var country = db.Countries.FirstOrDefault(a => a.CountryName == id);
 
             if (country != null)
-            { 
-                return GetTownsByCountry(country.CountryID);
+            {
+                Town[] towns = GetTownsByCountry(country.CountryID);
+                return towns;
             }
             return null;
         }

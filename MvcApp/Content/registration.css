@@ -14,9 +14,17 @@
 
 .modelErrorMessage {
     display: block;
-    color:blue;
+    color: blue;
 }
 
 #valSummary {
     margin-left: 200px;
+}
+
+#validationSummary {
+    margin-top: -700px;
+}
+
+.redText {
+    color: red;
 }

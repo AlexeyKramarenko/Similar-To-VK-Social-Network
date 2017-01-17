@@ -9,6 +9,6 @@ namespace Core.DAL.Interfaces
 {
     public interface IUserRightsRepository
     {
-        List<UserRights> GetUserRights();
+        List<RightsOfVisitorOnThePage> GetUserRights();
     }
 }

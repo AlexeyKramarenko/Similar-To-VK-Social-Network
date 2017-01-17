@@ -15,14 +15,10 @@ namespace  Core.POCO
         public string SendersUserID { get; set; }
         public string ReceiversUserID { get; set; }
         public string Body { get; set; }
-        public string RequestDate { get; set; }
+        public DateTime RequestDate { get; set; }
         public bool ViewedByReceiver { get; set; }
         public bool Invitation { get; set; }
 
-        public Message()
-        {
-
-        }
-
+       
     }
 }

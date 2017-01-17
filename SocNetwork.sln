@@ -1,38 +1,62 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebFormsApp", "WebFormsApp\WebFormsApp.csproj", "{5BB87AA1-5744-4807-B68E-BCFF6806E105}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{227B1705-3074-4899-B936-3B358835E0DC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{66DD8ECE-C286-48C7-BC21-CBA7085E05C4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcApp", "MvcApp\MvcApp.csproj", "{DF884978-55C7-40C0-B2E5-8116CE238E79}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebFormsApp", "WebFormsApp\WebFormsApp.csproj", "{4D907769-97B7-4AEB-B6F7-021AB237404C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C9CF5F2F-CD49-4B2C-AC8F-B13DA6BA065A}"
+	ProjectSection(SolutionItems) = preProject
+		WE-Palette.css = WE-Palette.css
+		WebEssentials2015-Settings.json = WebEssentials2015-Settings.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
 		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{5BB87AA1-5744-4807-B68E-BCFF6806E105}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5BB87AA1-5744-4807-B68E-BCFF6806E105}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5BB87AA1-5744-4807-B68E-BCFF6806E105}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5BB87AA1-5744-4807-B68E-BCFF6806E105}.Release|Any CPU.Build.0 = Release|Any CPU
 		{227B1705-3074-4899-B936-3B358835E0DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{227B1705-3074-4899-B936-3B358835E0DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{227B1705-3074-4899-B936-3B358835E0DC}.Debug|x64.ActiveCfg = Debug|x64
+		{227B1705-3074-4899-B936-3B358835E0DC}.Debug|x64.Build.0 = Debug|x64
 		{227B1705-3074-4899-B936-3B358835E0DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{227B1705-3074-4899-B936-3B358835E0DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{227B1705-3074-4899-B936-3B358835E0DC}.Release|x64.ActiveCfg = Release|x64
+		{227B1705-3074-4899-B936-3B358835E0DC}.Release|x64.Build.0 = Release|x64
 		{66DD8ECE-C286-48C7-BC21-CBA7085E05C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{66DD8ECE-C286-48C7-BC21-CBA7085E05C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66DD8ECE-C286-48C7-BC21-CBA7085E05C4}.Debug|x64.ActiveCfg = Debug|x64
+		{66DD8ECE-C286-48C7-BC21-CBA7085E05C4}.Debug|x64.Build.0 = Debug|x64
 		{66DD8ECE-C286-48C7-BC21-CBA7085E05C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{66DD8ECE-C286-48C7-BC21-CBA7085E05C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66DD8ECE-C286-48C7-BC21-CBA7085E05C4}.Release|x64.ActiveCfg = Release|x64
+		{66DD8ECE-C286-48C7-BC21-CBA7085E05C4}.Release|x64.Build.0 = Release|x64
 		{DF884978-55C7-40C0-B2E5-8116CE238E79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DF884978-55C7-40C0-B2E5-8116CE238E79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF884978-55C7-40C0-B2E5-8116CE238E79}.Debug|x64.ActiveCfg = Debug|x64
+		{DF884978-55C7-40C0-B2E5-8116CE238E79}.Debug|x64.Build.0 = Debug|x64
 		{DF884978-55C7-40C0-B2E5-8116CE238E79}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF884978-55C7-40C0-B2E5-8116CE238E79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF884978-55C7-40C0-B2E5-8116CE238E79}.Release|x64.ActiveCfg = Release|x64
+		{DF884978-55C7-40C0-B2E5-8116CE238E79}.Release|x64.Build.0 = Release|x64
+		{4D907769-97B7-4AEB-B6F7-021AB237404C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D907769-97B7-4AEB-B6F7-021AB237404C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D907769-97B7-4AEB-B6F7-021AB237404C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4D907769-97B7-4AEB-B6F7-021AB237404C}.Debug|x64.Build.0 = Debug|Any CPU
+		{4D907769-97B7-4AEB-B6F7-021AB237404C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D907769-97B7-4AEB-B6F7-021AB237404C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D907769-97B7-4AEB-B6F7-021AB237404C}.Release|x64.ActiveCfg = Release|Any CPU
+		{4D907769-97B7-4AEB-B6F7-021AB237404C}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

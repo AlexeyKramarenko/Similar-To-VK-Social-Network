@@ -8,6 +8,7 @@
     background-color: #F7F7F7;
     margin-top: -4px;
     border: 1px solid gray;
+    border-top:none;
     min-height: 465px;
 }
 

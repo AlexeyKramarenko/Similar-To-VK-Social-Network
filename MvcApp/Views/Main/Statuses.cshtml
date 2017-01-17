@@ -5,17 +5,17 @@
     foreach (var status in Model)
     {
         <li>
-            <div class="table3">
-                <div class="table3row">
-                    <div class="table3leftCell">
-                        <img src="@status.AvatarUrl" class="post_image" width="30" />
+            <div class="table_">
+                <div class="table_row">
+                    <div class="table_leftCell">
+                        <img src='@Url.Content("~/"+status.AvatarUrl)' class="post_image" width="30" />
                     </div>
-                    <div class="table3rightCell">
+                    <div class="table_rightCell">
                         <b>@status.UserName</b>
 
-                        @if (ViewBag.CurrentVisitorIsOwnerOfCurrentPage==true)
+                        @if (ViewBag.CurrentVisitorIsOwnerOfCurrentPage == true)
                         {
-                            @Html.Raw("<a class='delete' onclick='deletePost(this)'>delete</a>")
+                            @Html.Raw("<a class='delete' onclick='vm.deletePost(this)'>delete</a>")
                         }
 
                         <br />
@@ -27,11 +27,15 @@
 
             @status.CreateDate  |
 
+            @if (ViewBag.DisplayCommentLink == true)
+            {
+                @Html.Raw("<a onclick='vm.createCommentsForm(this)'>Comment</a>")
+            }
+            <hr />
             @if (ViewBag.DisplayComments == true)
-            { 
+            {
                 @Html.Partial("Comments", status)
             }
-             
         </li>
     }
 

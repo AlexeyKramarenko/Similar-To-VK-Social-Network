@@ -20,24 +20,6 @@ namespace Core.BLL
             this.countriesRepository = countriesRepository;
             this.mappingService = mappingService;
         }
-
-
-        public List<SelectListItem> GetBirthDay(string userId)
-        {
-            string key = "BirthDay_of_userID_" + userId;
-
-            List<SelectListItem> birthDay = null;
-
-            if (Cache[key] != null)
-                birthDay = (List<SelectListItem>)Cache[key];
-            else
-            {
-                birthDay = Database.Profiles.GetBirthDay(userId);
-                Cache[key] = birthDay;
-            }
-
-            return birthDay;
-        }
         public void UpdateBirthDay(Profile profile)
         {
             Database.Profiles.UpdateBirthDay(profile);
@@ -46,22 +28,23 @@ namespace Core.BLL
             string key = "BirthDay_of_userID_" + profile.UserID;
             PurgeCacheItems(key);
         }
-        public List<SelectListItem> GetBirthMonth(string userId)
+
+        public Education GetEducation(string userId)
         {
-            string key = "BirthMonth_of_userID_" + userId;
-
-            List<SelectListItem> birthMonth = null;
-
-            if (Cache[key] != null)
-                birthMonth = (List<SelectListItem>)Cache[key];
-            else
-            {
-                birthMonth = Database.Profiles.GetBirthMonth(userId);
-                Cache[key] = birthMonth;
-            }
-
-            return birthMonth;
+            return Database.Profiles.GetEducation(userId);
         }
+
+        public List<Comment> GetCommentsByStatusID(int Id)
+        {
+            var comments = Database.Profiles.GetCommentsByStatusID(Id);
+            return comments;
+        }
+        public List<Status> GetStatuses(string UserID)
+        {
+            var statuses = Database.Profiles.GetStatuses(UserID);
+            return statuses;
+        }
+
         public void UpdateBirthMonth(Profile profile)
         {
             Database.Profiles.UpdateBirthMonth(profile);
@@ -70,23 +53,7 @@ namespace Core.BLL
             string key = "BirthMonth_of_userID_" + profile.UserID;
             PurgeCacheItems(key);
         }
-        public List<SelectListItem> GetBirthYear(string userId)
-        {
-            string key = "BirthYear_of_userID_" + userId;
 
-            List<SelectListItem> birthYear = null;
-
-            if (Cache[key] != null)
-                birthYear = (List<SelectListItem>)Cache[key];
-            else
-            {
-                birthYear = Database.Profiles.GetBirthYear(userId);
-                Cache[key] = birthYear;
-            }
-
-            return birthYear;
-
-        }
         public void UpdateBirthYear(Profile profile)
         {
             Database.Profiles.UpdateBirthYear(profile);
@@ -214,6 +181,7 @@ namespace Core.BLL
             PurgeCacheItems(key);
         }
 
+
         public EducationDTO GetEducationInfoOfUser(string CurrentUserId)
         {
             Profile profile = GetProfileByUserId(CurrentUserId);
@@ -222,30 +190,11 @@ namespace Core.BLL
             var countries = countriesRepository.GetAllCountries().Select(a => a.CountryName).ToArray();
             var startYears = GetSchoolStartYears(CurrentUserId);
 
-            var countriesList = countries.Select(a => mappingService.Map<string, SelectListItem>(a)).ToArray();
+            if (string.IsNullOrEmpty(educationDto.SchoolCountry))
+                educationDto.SchoolCountry = countries.First();
 
-            string selectedCountry = null;
-
-            var country = countriesList.FirstOrDefault(a => a.Selected == true);
-
-            if (country == null)
-            {
-                countriesList.First().Selected = true;
-                selectedCountry = countriesList.First().Value;
-            }
-            else
-                selectedCountry = country.Value;
-
-
-            var towns = countriesRepository.GetTownsByCountryName(selectedCountry);
+            var towns = countriesRepository.GetTownsByCountryName(educationDto.SchoolCountry);
             var finishYears = GetSchoolFinishYears(CurrentUserId);
-
-            //check selected field 
-            if (!string.IsNullOrEmpty(profile.SchoolCountry))
-                countriesList.First(a => a.Value == profile.SchoolCountry).Selected = true;
-            else
-                countriesList.First().Selected = true;
-
 
             //skip all finish years behind current start year
             int index = Array.IndexOf(finishYears, profile.StartSchoolYear.ToString());
@@ -253,7 +202,7 @@ namespace Core.BLL
             finishYears = finishYears.Skip(index).Take(restElements).ToArray();
 
 
-            educationDto.CountriesList = countriesList;
+            educationDto.CountriesList = countries;
             educationDto.FinishYears = finishYears;
             educationDto.StartYears = startYears;
             educationDto.Towns = towns;
@@ -271,56 +220,7 @@ namespace Core.BLL
             finishYears = finishYears.Skip(index).Take(restElements).ToArray();
             return finishYears;
         }
-        public Education GetEducation(string userId)
-        {
-            return Database.Profiles.GetEducation(userId);
-        }
 
-        public List<Comment> GetCommentsByStatusID(int Id)
-        {
-            var comments = Database.Profiles.GetCommentsByStatusID(Id);
-            return comments;
-        }
-        public List<Status> GetStatuses(string UserID)
-        {
-            var statuses = Database.Profiles.GetStatuses(UserID);
-            return statuses;
-        }
-        public List<SelectListItem> GetLanguages(string userId)
-        {
-            var languages = Database.Profiles.GetLanguages(userId);
-            return languages;
-        }
-        public List<SelectListItem> GetMaritalStatus(string userId)
-        {
-            var status = Database.Profiles.GetMaritalStatus(userId);
-            return status;
-        }
-        public List<SelectListItem> GetGender(string userId)
-        {
-            var gender = Database.Profiles.GetGender(userId);
-            return gender;
-        }
-        public List<SelectListItem> GetSchoolTown(string userId)
-        {
-            var schoolTown = Database.Profiles.GetSchoolTown(userId);
-            return schoolTown;
-        }
-        public List<SelectListItem> GetSchoolStartYear(string userId)
-        {
-            var schoolStartYear = Database.Profiles.GetSchoolStartYear(userId);
-            return schoolStartYear;
-        }
-        public List<SelectListItem> GetSchoolFinishYear(string userId)
-        {
-            var year = Database.Profiles.GetSchoolFinishYear(userId);
-            return year;
-        }
-        public List<SelectListItem> GetSchoolCountry(string userId)
-        {
-            var country = Database.Profiles.GetSchoolCountry(userId);
-            return country;
-        }
         public List<string> GetProfileTowns(string countryName)
         {
             var towns = Database.Profiles.GetProfileTowns(countryName);
@@ -451,7 +351,7 @@ namespace Core.BLL
 
             string defaultUrl = ConfigurationManager.AppSettings["defaultUrl"];
 
-            if (minPhotosToDisplayAlbums.Count == 2)
+            if (minPhotosToDisplayAlbums.Count > 0)
             {
                 int[] albumIds = GetAlbumIds(UserID);
 
@@ -488,6 +388,11 @@ namespace Core.BLL
                 }
             }
             return albums;
+        }
+
+        public string GetProfileSchoolTown(string currentUserId)
+        {
+            return Database.Profiles.GetProfileSchoolTown(currentUserId);
         }
     }
 }

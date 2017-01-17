@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNet.Identity; 
+﻿using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -9,17 +9,27 @@ using System.Web;
 using System.Web.Http;
 using Core.POCO;
 using Core.BLL.Interfaces;
+using WebFormsApp.Services;
+using System.Web.Http.Results;
 
 namespace WebFormsApp.WebApi
 {
     public class ProfileController : ApiController
-    {        
-        string currentUserId;
+    {
         IProfileService profileService;
-        public ProfileController(IProfileService _profileService)
+        ISessionService sessionService;
+
+        public string CurrentUserId
         {
-            currentUserId = User.Identity.GetUserId();
-            profileService = _profileService;
+            get
+            {
+                return sessionService.CurrentUserId;
+            }
+        }
+        public ProfileController(IProfileService profileService, ISessionService sessionService)
+        {
+            this.profileService = profileService;
+            this.sessionService = sessionService;
         }
 
         [HttpGet]
@@ -39,7 +49,7 @@ namespace WebFormsApp.WebApi
         [ActionName("GetProfileSchoolStartYears")]
         public string[] GetProfileSchoolStartYears()
         {
-            return profileService.GetSchoolStartYears(currentUserId);
+            return profileService.GetSchoolStartYears(CurrentUserId);
         }
 
 
@@ -47,47 +57,47 @@ namespace WebFormsApp.WebApi
         [ActionName("GetProfileSchoolFinishYears")]
         public string[] GetProfileSchoolFinishYears()
         {
-            return profileService.GetSchoolFinishYears(currentUserId);
+            return profileService.GetSchoolFinishYears(CurrentUserId);
         }
 
         [HttpGet]
         [ActionName("GetProfileBirthYears")]
         public string[] GetProfileBirthYears()
         {
-            return profileService.GetBirthYears(currentUserId);
-        }
-
-        [HttpGet]
-        [ActionName("GetEducationInfo")]
-        public List<string> GetEducationInfo()
-        {
-            return profileService.GetEducationInfo(currentUserId);
-        }
+            return profileService.GetBirthYears(CurrentUserId);
+        } 
         [HttpPut]
         [ActionName("UpdateUserBirthDay")]
-        public void UpdateUserBirthDay([FromBody] Profile profile)
+        public void UpdateUserBirthDay([FromBody] Core.POCO.Profile profile)
         {
             profileService.UpdateBirthDay(profile);
         }
         [HttpPut]
         [ActionName("UpdateUserBirthMonth")]
-        public void UpdateUserBirthMonth([FromBody] Profile profile)
+        public void UpdateUserBirthMonth([FromBody] Core.POCO.Profile profile)
         {
             profileService.UpdateBirthMonth(profile);
         }
         [HttpPut]
         [ActionName("UpdateUserBirthYear")]
-        public void UpdateUserBirthYear([FromBody] Profile profile)
+        public void UpdateUserBirthYear([FromBody] Core.POCO.Profile profile)
         {
             profileService.UpdateBirthYear(profile);
         }
         [HttpPut]
         [ActionName("UpdateProfileEducationData")]
-        public void UpdateProfileEducationData([FromBody]Profile profile)
+        public void UpdateProfileEducationData([FromBody]Core.POCO.Profile profile)
         {
-            profileService.SaveEducation(profile, currentUserId);
+            profileService.SaveEducation(profile, CurrentUserId);
         }
+        [HttpGet]
+        [ActionName("GetFinishYears")]
+        public string[] GetFinishYears(int selectedStartYear)
+        {
+            string[] finishYears = profileService.GetFinishYears(selectedStartYear, CurrentUserId);
 
+            return finishYears;
+        }
 
 
     }

@@ -7,24 +7,33 @@ using System.Text;
 using System.Web.Http;
 using Core.BLL.Interfaces;
 using Core.POCO;
+using WebFormsApp.Services;
+using WebFormsApp.ViewModel;
 
 namespace WebFormsApp.WebApi
-{ 
+{
     public class MainController : ApiController
     {
-        string currentUserId;
-        string userName;
-
         IWallStatusService wallStatusService;
         IRelationshipsService relationshipsService;
+        ISessionService sessionService;
+        IPhotoService photoService;
+        IUserService userService;
 
-        public MainController(IWallStatusService _wallStatusService, IRelationshipsService _relationshipsService)
+        public string CurrentUserId
         {
-            wallStatusService = _wallStatusService;
-            relationshipsService = _relationshipsService;
-
-            currentUserId = User.Identity.GetUserId();
-            userName = User.Identity.Name;
+            get
+            {
+                return sessionService.CurrentUserId;
+            }
+        }
+        public MainController(IWallStatusService wallStatusService, IRelationshipsService relationshipsService, ISessionService sessionService, IPhotoService photoService, IUserService userService)
+        {
+            this.wallStatusService = wallStatusService;
+            this.relationshipsService = relationshipsService;
+            this.sessionService = sessionService;
+            this.photoService = photoService;
+            this.userService = userService;
         }
 
         [HttpPost]
@@ -35,13 +44,19 @@ namespace WebFormsApp.WebApi
 
             if (com != null)
             {
-                com.UserID = currentUserId;
-                com.UserName = userName;
-                var result = wallStatusService.InsertComment(com);
+                com.UserID = CurrentUserId;
+                wallStatusService.InsertComment(com);
+
+                var cvm = new CommentViewModel
+                {
+                    CommentID = com.ID,
+                    CommentatorsUserName = userService.GetUserNameByUserID(com.UserID),
+                    CommentText = com.CommentText
+                };
 
                 response = Request.CreateResponse();
                 response.StatusCode = HttpStatusCode.Created;
-                response.Content = new ObjectContent<object>(result, new JsonMediaTypeFormatter());
+                response.Content = new ObjectContent<CommentViewModel>(cvm, new JsonMediaTypeFormatter());
             }
             else
             {
@@ -56,7 +71,7 @@ namespace WebFormsApp.WebApi
         [ActionName("DeleteComment")]
         public HttpResponseMessage DeleteComment(int id)
         {
-            var comment = wallStatusService.GetComment(id, currentUserId);
+            var comment = wallStatusService.GetComment(id, CurrentUserId);
 
             if (comment == null)
                 return Request.CreateResponse(HttpStatusCode.NotFound);
@@ -76,8 +91,8 @@ namespace WebFormsApp.WebApi
 
             if (status != null)
             {
-                status.PostByUserID = currentUserId;
-                status.UserName = userName;
+                status.PostByUserID = CurrentUserId;
+                status.UserName = User.Identity.Name;
 
                 var result = wallStatusService.InsertStatus(status);
 
@@ -118,28 +133,14 @@ namespace WebFormsApp.WebApi
             if (Message != null)
             {
                 Message.Invitation = true;
-                Message.SendersUserID = currentUserId;
+                Message.SendersUserID = CurrentUserId;
 
                 bool invitationIsAlreadyInDb = relationshipsService.CheckIfTheSameInvitationAlreadyExistsInDB(Message);
 
                 if (!invitationIsAlreadyInDb)
                 {
-                    Message.RequestDate = string.Format("{0}.{1}.{2}  {3}:{4}", DateTime.Today.Month, DateTime.Today.Day, DateTime.Today.Year, DateTime.Today.Hour, DateTime.Today.Minute);
-                    Message.Body = "<p>Hello! I wanna be your friend!<br/>" +
-                                      "FROM: " + userName +
-                                        "<br/>" +
-                                        "Choose status for this human:" +
-                                        "<select class='relationshipType'>" +
-
-                                            "<option value='1'>Add to friends</option>" +
-                                            "<option value='2'>Add to subscribers</option>" +
-                                            "<option value='3'>Ignore this human</option>" +
-
-                                        "</select>" +
-                                        //"<br/>" +
-                                        "<input type = 'submit' value = 'Отправить' data-senderid='" + currentUserId + "' onclick = 'CheckRelationshipType(this);return false;' /> " +
-                                       "</p>";
-
+                    Message.RequestDate = DateTime.Now;
+                    Message.Body = Message.Body.Replace("--userNamePlaceHolder--", User.Identity.Name);
                     Message.ViewedByReceiver = false;
 
                     relationshipsService.AddToFriendsMessage(Message);

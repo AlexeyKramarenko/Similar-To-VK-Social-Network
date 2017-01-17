@@ -5,7 +5,9 @@
     foreach (var item in Model)
     {
         <div class="album">
-            <img src='@item.ThumbnailPhotoUrl' onclick='@string.Concat("getPhotosByAlbumID(" + item.AlbumID + ");return false;")' data-albumid='@item.AlbumID' />
+            <img src='@Url.Content("~/"+item.ThumbnailPhotoUrl)'
+                 onclick='@string.Concat("return vm.getPhotosByAlbumID(" + item.AlbumID + ")")' 
+                 data-albumid='@item.AlbumID' />
         </div>
         <div class="albumTitle">@item.AlbumTitle</div>
     }

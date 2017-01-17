@@ -1,16 +1,18 @@
-﻿function checkUrl(UserID) {
+﻿function goToPeoplePage(friendsOnly, online) {
 
-    var currentPage = window.location.pathname;
+    var targetUrl = '/people';
 
-    sessionStorage.setItem('human', document.getElementById('txtName').value);  
+    if (online == undefined)
+        online = false;
 
-    if (currentPage != '/people.aspx') {
+    var UserID = '0';
 
-        var url = '/people.aspx';
+    if (friendsOnly == true) {
 
-        if (UserID != null)
-            url += '?UserID=' + UserID;
-
-        location.href = url;
+        UserID = document.getElementById('hdnCurrentUserID').value;
     }
+
+    targetUrl += "/UserID=" + UserID + "/Online=" + online;
+
+    location.href = targetUrl;
 }

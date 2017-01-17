@@ -1,0 +1,50 @@
+﻿@model IEnumerable<MvcApp.ViewModel.MessagesViewModel>
+
+ 
+<link href="@Url.Content("~/Content/chat.css")" rel="stylesheet" />
+<script src="@Url.Content("~/Scripts/jquery-2.1.4.min.js")"></script>
+<script src="@Url.Content("~/Scripts/jquery.signalR-2.2.0.min.js")"></script>
+<script src="@Url.Content("~/signalr/hubs")"></script>
+<script src="@Url.Content("~/Scripts/_base/promise.js")"></script>
+<script src="@Url.Content("~/Scripts/_base/ajax.js")"></script>
+<script src="@Url.Content("~/Scripts/_signalr.chat/view.js")"></script>
+<script src="@Url.Content("~/Scripts/_signalr.chat/service.js")"></script>
+<script src="@Url.Content("~/Scripts/_signalr.messages/controller.js")"></script>
+<script src="@Url.Content("~/Scripts/_signalr.chat/controller.js")"></script>
+<script>
+    var chat = new ChatSignalrController($.connection.hub, $.connection.chatHub.client, $.connection.chatHub.server, new ChatSignalrView(), new ChatService());
+</script>
+
+
+<div id="chat">
+    <div id="chatContent" class="chatInvisible">
+        <div id="close">
+            <a href="#" onclick="chat.closeChatWindow()">close</a>
+        </div>
+        <div id="messages">
+        </div>
+        <div id="messageForm">
+            <input type="text" placeholder="type your message..." />
+            <button type="button" onclick="chat.sendMessageToInterlocutor()">Send</button>
+        </div>
+    </div>
+
+    <input type="hidden" id="hdnActiveDialogID" />
+    <input type="hidden" id="hdnMyCurrentInterlocutor" />
+
+    <div id="chatUsers">
+        @foreach (var item in Model)
+        {
+            <div class="linkToDialog"
+                 data-dialogid='@item.DialogID'
+                 data-interlocutoruserid="@item.InterlocutorUserID"
+                 data-connectionid=''
+                 onclick="chat.setWhoIsMyCurrentInterlocutor(this);
+                          chat.goToDialog(this);">
+                <span class="onlineFlag"></span>
+                <img src='@Url.Content("~/" + item.InterlocutorAvatar)' width="30" height="30">
+                <span>@item.InterlocutorUserName</span>
+            </div>
+        }
+    </div>
+</div>

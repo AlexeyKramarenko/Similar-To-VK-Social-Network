@@ -11,7 +11,7 @@ namespace MvcApp.ViewModel
     {
         public string OldEmail { get; set; }
 
-        [EmailAddress]
+        [DataType(DataType.EmailAddress)]
         [Required(ErrorMessage = "Поле \"Email\" должно быть установлено")]
         public string NewEmail { get; set; }
     }

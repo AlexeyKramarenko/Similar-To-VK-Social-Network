@@ -175,7 +175,7 @@ namespace MvcApp.App_Start
             kernel.Bind<IWallStatusService>().To<WallStatusService>().InRequestScope();
             kernel.Bind<IMessagesService>().To<MessagesService>().InRequestScope();
             kernel.Bind<IChatHub>().To<ChatHub>().InRequestScope();
-            kernel.Bind<ISessionService>().To<SessionService>().InRequestScope();
+            kernel.Bind<ISessionService>().To<SessionService>();
 
         }
     }

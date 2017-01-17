@@ -1,12 +1,15 @@
 ﻿@model Core.POCO.Status
 
-@if (ViewBag.DisplayCommentLink == true)
-{
-    @Html.Raw("<a onclick='createCommentsForm(this)'>Comment</a>")
-}
 
-<hr />
-<a class="showDetails" onclick="scrollToCommentsForm(this);showAllComments(this);">Show all <span class="commentsCount">@Model.CommentsCount</span> comments</a>
+<a class="showDetails"
+   onclick="vm.scrollToCommentsForm(this);
+            vm.showAllComments(this)">
+
+    @if(Model.CommentsCount>0)
+    {
+        @Html.Raw("Show all <span class='commentsCount'>" + Model.CommentsCount + "</span> comments")
+    }
+</a>
 
 <div class="COMMENT">
 
@@ -22,7 +25,7 @@
 
                     @if (ViewBag.CurrentVisitorIsOwnerOfCurrentPage == true)
                     {
-                        @Html.Raw("<a class='delete' onclick='deleteComment(this)'>delete</a>")
+                        @Html.Raw("<a class='delete' onclick='vm.deleteComment(this)'>delete</a>")
                     }
 
                     <input type="hidden" value="@comment.ID" />
@@ -36,4 +39,6 @@
         }
     }
 </div>
+
+
 <div class="commentContainer"></div>

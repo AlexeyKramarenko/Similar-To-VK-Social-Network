@@ -3,6 +3,7 @@ using Core.POCO;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Web;
 
@@ -87,13 +88,39 @@ namespace Core.DAL
             };
             db.Entry(photo).State = System.Data.Entity.EntityState.Added;
         }
-        public void DeletePhotoFromAlbum(Photo photo, string userId)
+        public void DeletePhotoFromAlbum(string photoUrl, string userId)
         {
-            var _photo = db.Photos.FirstOrDefault(p => p.PhotoUrl == photo.PhotoUrl && p.UserID == userId);
+            var _photo = db.Photos.FirstOrDefault(p => p.PhotoUrl == photoUrl && p.UserID == userId);
 
             if (_photo != null)
             {
                 db.Entry(_photo).State = System.Data.Entity.EntityState.Deleted;
+            }
+        }
+        public void DeletePhotoFromAlbum(Photo _photo, string userId)
+        {
+          //  var _photo = db.Photos.FirstOrDefault(p => p.PhotoID && p.UserID == userId);
+
+            if (_photo != null)
+            {
+                db.Entry(_photo).State = System.Data.Entity.EntityState.Deleted;
+            }
+        }
+        public void DeletePhotoFromFolder(string physicalPath)
+        {
+            if (File.Exists(physicalPath))
+            {
+                try
+                {
+                    File.Delete(physicalPath);
+                }
+                catch (IOException exc)
+                {
+                    System.GC.Collect();
+                    System.GC.WaitForPendingFinalizers();
+
+                    File.Delete(physicalPath);
+                }
             }
         }
         public void DeleteAlbum(int albumID)
@@ -222,6 +249,8 @@ namespace Core.DAL
 
             return defaultUrl;
         }
+
+
 
 
     }

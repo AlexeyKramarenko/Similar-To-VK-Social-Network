@@ -169,7 +169,7 @@ namespace Tests
                 Password = "ABC1234",
                 PasswordConfirm = "ABC1234",
                 PhoneNumber = "0992304226",
-                Married = true,
+                 MaritalStatus= "single",
                 Gender = "man"
             };
 
@@ -181,7 +181,8 @@ namespace Tests
             userService.Verify(a => a.CreateUser(It.IsAny<Profile>(), It.IsAny<ApplicationUser>(), It.IsAny<Func<string>>()));
             Assert.IsNotNull(result);
             Assert.IsInstanceOfType(result, typeof(RedirectToRouteResult));
-            Assert.AreEqual(((RedirectToRouteResult)result).RouteValues["action"], "WaitingForConfirmation");
+            //Assert.AreEqual(((RedirectToRouteResult)result).RouteValues["action"], "WaitingForConfirmation");
+            Assert.AreEqual(((RedirectToRouteResult)result).RouteValues["action"], "Login"); 
         }
 
         [TestMethod]
@@ -215,7 +216,7 @@ namespace Tests
                 Password = "ABC1234",
                 PasswordConfirm = "ABC1234",
                 PhoneNumber = "0992304226",
-                Married = true,
+                MaritalStatus = "Single",
                 Gender = "man"
             };
 
@@ -255,18 +256,14 @@ namespace Tests
             ViewResult result = accountController.EmailVerification("SomeUserName") as ViewResult;
 
             //Assert                  
-            Assert.AreEqual(result.ViewBag.Message, "Возникла неизвестная ошибка.");
+            Assert.AreEqual(result.ViewBag.Message, "Пользователя с таким именем нет.");
         }
-        //-----------------------
-
+      
         [TestMethod]
         public void MainInfo_Should_Return_CorrectPartialView()
         {
             //Arrange
             profileService.Setup(a => a.GetMainInfo(It.IsAny<string>())).Returns(new Profile());
-            profileService.Setup(a => a.GetLanguages(It.IsAny<string>())).Returns(new List<Core.POCO.SelectListItem>());
-            profileService.Setup(a => a.GetGender(It.IsAny<string>())).Returns(new List<Core.POCO.SelectListItem>());
-            profileService.Setup(a => a.GetMaritalStatus(It.IsAny<string>())).Returns(new List<Core.POCO.SelectListItem>());
             profileService.Setup(a => a.GetBirthDays()).Returns(new string[] { });
             profileService.Setup(a => a.GetBirthMonths()).Returns(new string[] { });
             profileService.Setup(a => a.GetBirthYears(It.IsAny<string>())).Returns(new string[] { });
@@ -316,21 +313,23 @@ namespace Tests
             Assert.IsInstanceOfType(result.Model, typeof(ContactsViewModel));
             Assert.AreEqual(((ContactsViewModel)result.Model).Country, "Ukraine");
         }
-         
+
         [TestMethod]
         public void ContactInfo_Should_Return_EmptyResult()
         {
+            profileService.Setup(a => a.SaveContacts(It.IsAny<Profile>()));
+            userService.Setup(a => a.UpdatePhoneNumber(It.IsAny<string>(), It.IsAny<string>()));
+          
             //Arrange   
-            profileController = new ProfileController(userService.Object, mappingService.Object, profileService.Object, countriesService.Object, sessionService.Object);
-            profileController.ViewData.ModelState.AddModelError("", "");
-
+            profileController = new ProfileController(userService.Object, mappingService.Object, profileService.Object, countriesService.Object, sessionService.Object);            
+            var model = new ContactsViewModel();
             //Act
-            ActionResult result = profileController.ContactInfo(new ContactsViewModel());
+            ActionResult result = profileController.ContactInfo(model);
 
             //Assert                  
-            Assert.IsFalse(profileController.ViewData.ModelState.IsValid);
+            Assert.IsTrue(profileController.ViewData.ModelState.IsValid);
             Assert.IsNotNull(result);
-            Assert.IsInstanceOfType(result, typeof(EmptyResult));
+            Assert.IsInstanceOfType(result, typeof(PartialViewResult));
         }
 
         [TestMethod]

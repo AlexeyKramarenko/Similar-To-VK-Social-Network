@@ -13,24 +13,10 @@ namespace MvcApp.ViewModel
         public string InterlocutorUserID { get; set; }
         public string CurrentUserAvatar { get; set; }
         public string CurrentUserName { get; set; }
-        public DateTime CreateDate { get; set; }
+        public string CreateDate { get; set; }
         public string MessageText { get; set; }
         public int DialogID { get; set; }
 
-        public MessagesViewModel()
-        {
-
-        }
-        public MessagesViewModel(string InterlocutorAvatar, string InterlocutorUserName, string InterlocutorUserID, string CurrentUserAvatar, string CurrentUserName, DateTime CreateDate, string MessageText, int DialogID)
-        {
-            this.InterlocutorAvatar = InterlocutorAvatar;
-            this.InterlocutorUserName = InterlocutorUserName;
-            this.InterlocutorUserID = InterlocutorUserID;
-            this.CurrentUserAvatar = CurrentUserAvatar;
-            this.CurrentUserName = CurrentUserName;
-            this.CreateDate = CreateDate;
-            this.MessageText = MessageText;
-            this.DialogID = DialogID;
-        }
+       
     }
 }

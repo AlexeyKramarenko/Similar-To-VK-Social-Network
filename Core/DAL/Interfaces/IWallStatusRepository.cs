@@ -8,7 +8,7 @@ namespace  Core.DAL.Interfaces
         Comment GetComment(int id, string userId);
         void DeleteComment(Comment comment);
         void DeleteStatus(Status status);
-        object InsertComment(Comment com);
+        void InsertComment(Comment com);
         InsertStatusResult InsertStatus(Status status); 
         Status GetStatusById(int id);
     }

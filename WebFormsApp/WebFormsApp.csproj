@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -9,7 +10,7 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{5BB87AA1-5744-4807-B68E-BCFF6806E105}</ProjectGuid>
+    <ProjectGuid>{4D907769-97B7-4AEB-B6F7-021AB237404C}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -24,7 +25,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
+    <TypeScriptToolsVersion>2.0</TypeScriptToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -44,28 +45,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Antlr3.Runtime, Version=3.4.1.9004, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="AutoMapper, Version=4.0.4.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.4.0.4\lib\net45\AutoMapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.dll</HintPath>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    <Reference Include="Lucene.Net, Version=3.0.3.0, Culture=neutral, PublicKeyToken=85089178b9ac3181, processorArchitecture=MSIL">
+      <HintPath>..\packages\Lucene.Net.3.0.3\lib\NET40\Lucene.Net.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.Core, Version=2.2.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -81,30 +70,6 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.3.0.1\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Owin.Security, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.Security.3.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Owin.Security.Cookies, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.3.0.1\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\packages\Ninject.3.2.0.0\lib\net45-full\Ninject.dll</HintPath>
       <Private>True</Private>
@@ -121,8 +86,13 @@
       <HintPath>..\packages\Ninject.Web.WebApi.3.2.4.0\lib\net45-full\Ninject.Web.WebApi.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
-      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Linq.Dynamic, Version=1.0.5840.25917, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Linq.Dynamic.1.0.6\lib\net40\System.Linq.Dynamic.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http" />
@@ -130,14 +100,6 @@
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Web.DynamicData" />
-    <Reference Include="System.Web.Entity" />
-    <Reference Include="System.Web.ApplicationServices" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
@@ -147,10 +109,6 @@
       <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
@@ -158,21 +116,104 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="AspNet.ScriptManager.bootstrap">
+      <HintPath>..\packages\AspNet.ScriptManager.bootstrap.3.0.0\lib\net45\AspNet.ScriptManager.bootstrap.dll</HintPath>
+    </Reference>
+    <Reference Include="AspNet.ScriptManager.jQuery">
+      <HintPath>..\packages\AspNet.ScriptManager.jQuery.1.10.2\lib\net45\AspNet.ScriptManager.jQuery.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ScriptManager.MSAjax">
+      <HintPath>..\packages\Microsoft.AspNet.ScriptManager.MSAjax.5.0.0\lib\net45\Microsoft.ScriptManager.MSAjax.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ScriptManager.WebForms">
+      <HintPath>..\packages\Microsoft.AspNet.ScriptManager.WebForms.5.0.0\lib\net45\Microsoft.ScriptManager.WebForms.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
     <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
       <HintPath>..\packages\WebActivatorEx.2.0\lib\net40\WebActivatorEx.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="WebGrease, Version=1.5.2.14234, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+    <Reference Include="WebGrease">
       <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <Private>True</Private>
+      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <Private>True</Private>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Web.Optimization.WebForms">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.WebForms.1.1.3\lib\net45\Microsoft.AspNet.Web.Optimization.WebForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.FriendlyUrls">
+      <HintPath>..\packages\Microsoft.AspNet.FriendlyUrls.Core.1.0.2\lib\net45\Microsoft.AspNet.FriendlyUrls.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.1\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Providers">
+      <HintPath>..\packages\Microsoft.AspNet.Providers.Core.2.0.0\lib\net40\System.Web.Providers.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin">
+      <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.3.0.1\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security">
+      <HintPath>..\packages\Microsoft.Owin.Security.3.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Facebook">
+      <HintPath>..\packages\Microsoft.Owin.Security.Facebook.3.0.1\lib\net45\Microsoft.Owin.Security.Facebook.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies">
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.3.0.1\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Google">
+      <HintPath>..\packages\Microsoft.Owin.Security.Google.3.0.1\lib\net45\Microsoft.Owin.Security.Google.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Twitter">
+      <HintPath>..\packages\Microsoft.Owin.Security.Twitter.3.0.1\lib\net45\Microsoft.Owin.Security.Twitter.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.MicrosoftAccount">
+      <HintPath>..\packages\Microsoft.Owin.Security.MicrosoftAccount.3.0.1\lib\net45\Microsoft.Owin.Security.MicrosoftAccount.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth">
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.3.0.1\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="404.aspx" />
-    <Content Include="App_Data\NW_DB.mdf" />
-    <Content Include="App_Data\NW_DB_log.ldf">
-      <DependentUpon>NW_DB.mdf</DependentUpon>
-    </Content>
     <Content Include="Content\assets\bootstrap\css\bootstrap-theme.css" />
     <Content Include="Content\assets\bootstrap\css\bootstrap-theme.min.css" />
     <Content Include="Content\assets\bootstrap\css\bootstrap.css" />
@@ -206,6 +247,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap_settings_page.css" />
+    <Content Include="Content\chat.css" />
     <Content Include="Content\default.css" />
     <Content Include="Content\email_verification.css" />
     <Content Include="Content\fonts\lg.svg" />
@@ -223,6 +265,8 @@
     <Content Include="Content\img\vimeo-play.png" />
     <Content Include="Content\img\youtube-play.png" />
     <Content Include="Content\index.css" />
+    <Content Include="Content\jasmine\jasmine.css" />
+    <Content Include="Content\jasmine\jasmine_favicon.png" />
     <Content Include="Content\Jcrop.gif" />
     <Content Include="Content\jquery.Jcrop.css" />
     <Content Include="Content\login.css" />
@@ -238,65 +282,9 @@
     <Content Include="Content\recoverPassword.css" />
     <Content Include="Content\registration.css" />
     <Content Include="Content\settings_profile.css" />
+    <Content Include="Content\Site.css" />
     <Content Include="Content\sweetalert.css" />
-    <Content Include="EmailVerification.aspx" />
-    <Content Include="Global.asax" />
-    <Content Include="Login.aspx" />
-    <Content Include="Main.aspx" />
-    <Content Include="Messages.aspx" />
-    <Content Include="packages.config">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="NestedSiteMaster.master" />
-    <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Scripts\gallery\lg-autoplay.js" />
-    <Content Include="Scripts\gallery\lg-autoplay.min.js" />
-    <Content Include="Scripts\gallery\lg-fullscreen.js" />
-    <Content Include="Scripts\gallery\lg-fullscreen.min.js" />
-    <Content Include="Scripts\gallery\lg-hash.js" />
-    <Content Include="Scripts\gallery\lg-hash.min.js" />
-    <Content Include="Scripts\gallery\lg-pager.js" />
-    <Content Include="Scripts\gallery\lg-pager.min.js" />
-    <Content Include="Scripts\gallery\lg-thumbnail.js" />
-    <Content Include="Scripts\gallery\lg-thumbnail.min.js" />
-    <Content Include="Scripts\gallery\lg-video.js" />
-    <Content Include="Scripts\gallery\lg-video.min.js" />
-    <Content Include="Scripts\gallery\lg-zoom.js" />
-    <Content Include="Scripts\gallery\lg-zoom.min.js" />
-    <Content Include="Scripts\gallery\lightgallery-all.js" />
-    <Content Include="Scripts\gallery\lightgallery-all.min.js" />
-    <Content Include="Scripts\gallery\lightgallery.js" />
-    <Content Include="Scripts\gallery\lightgallery.min.js" />
-    <Content Include="Scripts\hubs.js" />
-    <Content Include="Scripts\img\loading.gif" />
-    <Content Include="Scripts\img\video-play.png" />
-    <Content Include="Scripts\img\vimeo-play.png" />
-    <Content Include="Scripts\img\youtube-play.png" />
-    <Content Include="WebServices\DialogService.asmx" />
-    <None Include="Properties\PublishProfiles\MyNewProfile.pubxml" />
-    <Content Include="Scripts\jquery-1.10.2.min.js" />
-    <Content Include="Scripts\jquery-1.7.1.min.js" />
-    <Content Include="Scripts\jquery-2.1.4.min.js" />
-    <Content Include="Scripts\jquery-multidownload.js" />
-    <Content Include="Scripts\jquery.scrollto.min.js" />
-    <Content Include="Scripts\jquery.signalR-2.2.0.min.js" />
-    <Content Include="Scripts\jquery.simulate.js" />
-    <Content Include="Scripts\login.js" />
-    <Content Include="Scripts\main.js" />
-    <Content Include="Scripts\messages.js" />
-    <Content Include="Scripts\modalPopLite.min.js" />
-    <Content Include="Scripts\nestedSiteMaster.js" />
-    <Content Include="Scripts\people.js" />
-    <Content Include="Scripts\photos.js" />
-    <Content Include="Scripts\profile.js" />
-    <Content Include="Scripts\registration.js" />
-    <Content Include="Scripts\settings.js" />
-    <Content Include="Scripts\shared.js" />
-    <Content Include="Scripts\signalRmainPage.js" />
-    <Content Include="Scripts\signalRmessagesPage.js" />
-    <Content Include="Scripts\signalRscriptForDefaultPages.js" />
-    <Content Include="Scripts\sweetalert.min.js" />
-    <Content Include="SiteMaster.Master" />
+    <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\assets\bootstrap\css\bootstrap-theme.css.map" />
     <Content Include="Content\assets\bootstrap\css\bootstrap.css.map" />
     <Content Include="Content\assets\bootstrap\fonts\glyphicons-halflings-regular.eot" />
@@ -334,28 +322,175 @@
     <Content Include="Content\assets\font-awesome\scss\_rotated-flipped.scss" />
     <Content Include="Content\assets\font-awesome\scss\_stacked.scss" />
     <Content Include="Content\assets\font-awesome\scss\_variables.scss" />
-    <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\fonts\lg.eot" />
     <Content Include="Content\fonts\lg.ttf" />
     <Content Include="Content\fonts\lg.woff" />
+    <Content Include="CreateUserPage.aspx" />
+    <Content Include="CustomControls\Chat.ascx" />
+    <Content Include="CustomControls\Comments.ascx" />
+    <Content Include="CustomControls\DetailsInfo.ascx" />
+    <Content Include="CustomControls\MessageForm.ascx" />
+    <Content Include="CustomControls\Statuses.ascx" />
+    <Content Include="EmailVerification.aspx" />
+    <Content Include="Messages.aspx" />
+    <Content Include="MyPage.aspx" />
+    <Content Include="People.aspx" />
+    <Content Include="Photos.aspx" />
+    <Content Include="Profile.aspx" />
+    <Content Include="RecoverPasswordPage.aspx" />
+    <Content Include="Scripts\_base\ajax.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\gallery\lg-autoplay.js" />
+    <Content Include="Scripts\gallery\lg-autoplay.min.js" />
+    <Content Include="Scripts\gallery\lg-fullscreen.js" />
+    <Content Include="Scripts\gallery\lg-fullscreen.min.js" />
+    <Content Include="Scripts\gallery\lg-hash.js" />
+    <Content Include="Scripts\gallery\lg-hash.min.js" />
+    <Content Include="Scripts\gallery\lg-pager.js" />
+    <Content Include="Scripts\gallery\lg-pager.min.js" />
+    <Content Include="Scripts\gallery\lg-thumbnail.js" />
+    <Content Include="Scripts\gallery\lg-thumbnail.min.js" />
+    <Content Include="Scripts\gallery\lg-video.js" />
+    <Content Include="Scripts\gallery\lg-video.min.js" />
+    <Content Include="Scripts\gallery\lg-zoom.js" />
+    <Content Include="Scripts\gallery\lg-zoom.min.js" />
+    <Content Include="Scripts\gallery\lightgallery-all.js" />
+    <Content Include="Scripts\gallery\lightgallery-all.min.js" />
+    <Content Include="Scripts\gallery\lightgallery.js" />
+    <Content Include="Scripts\gallery\lightgallery.min.js" />
+    <Content Include="Scripts\hubs.js" />
+    <Content Include="Scripts\jasmine-2.5.2\boot.js" />
+    <Content Include="Scripts\jasmine-2.5.2\console.js" />
+    <Content Include="Scripts\jasmine-2.5.2\jasmine-html.js" />
+    <Content Include="Scripts\jasmine-2.5.2\jasmine.css" />
+    <Content Include="Scripts\jasmine-2.5.2\jasmine.js" />
+    <Content Include="Scripts\jasmine-2.5.2\jasmine_favicon.png" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="Scripts\jquery-1.7.1.min.js" />
+    <Content Include="Scripts\jquery-2.1.4.min.js" />
+    <Content Include="Scripts\jquery-multidownload.js" />
+    <Content Include="Scripts\jquery.scrollto.min.js" />
+    <Content Include="Scripts\jquery.signalR-2.2.0.min.js" />
+    <Content Include="Scripts\jquery.signalR-2.2.1.js" />
+    <Content Include="Scripts\jquery.signalR-2.2.1.min.js" />
+    <Content Include="Scripts\jquery.simulate.js" />
+    <Content Include="Scripts\modalPopLite.min.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\nestedSiteMaster.js" />
+    <Content Include="Scripts\_base\promise.js" />
+    <Content Include="Scripts\_signalr.chat\controller.js" />
+    <Content Include="Scripts\_signalr.chat\service.js" />
+    <Content Include="Scripts\_signalr.chat\test\SpecRunner.html" />
+    <Content Include="Scripts\_signalr.chat\test\test.js" />
+    <Content Include="Scripts\_signalr.chat\view.js" />
+    <Content Include="Scripts\_main\test\SpecRunner.html" />
+    <Content Include="Scripts\_main\test\test.js" />
+    <Content Include="Scripts\_signalr.messages\test\SpecRunner.html" />
+    <Content Include="Scripts\_signalr.messages\test\test.js" />
+    <Content Include="Scripts\_messages\test\SpecRunner.html" />
+    <Content Include="Scripts\_messages\test\test.js" />
+    <Content Include="Scripts\_people\test\SpecRunner.html" />
+    <Content Include="Scripts\_people\test\test.js" />
+    <Content Include="Scripts\_photos\test\SpecRunner.html" />
+    <Content Include="Scripts\_photos\test\test.js" />
+    <Content Include="Scripts\_profile\test\SpecRunner.html" />
+    <Content Include="Scripts\_profile\test\test.js" />
+    <Content Include="Scripts\_registration\test\SpecRunner.html" />
+    <Content Include="Scripts\_registration\test\test.js" />
+    <Content Include="Scripts\_settings\test\SpecRunner.html" />
+    <Content Include="Scripts\_settings\test\test.js" />
+    <Content Include="Scripts\_main\controller.js" />
+    <Content Include="Scripts\_main\service.js" />
+    <Content Include="Scripts\_main\view.js" />
+    <Content Include="Scripts\_signalr.messages\controller.js" />
+    <Content Include="Scripts\_signalr.messages\view.js" />
+    <Content Include="Scripts\_messages\controller.js" />
+    <Content Include="Scripts\_messages\service.js" />
+    <Content Include="Scripts\_messages\view.js" />
+    <Content Include="Scripts\_people\controller.js" />
+    <Content Include="Scripts\_people\service.js" />
+    <Content Include="Scripts\_people\view.js" />
+    <Content Include="Scripts\_photos\controller.js" />
+    <Content Include="Scripts\_photos\service.js" />
+    <Content Include="Scripts\_photos\view.js" />
+    <Content Include="Scripts\_profile\controller.js" />
+    <Content Include="Scripts\_profile\view.js" />
+    <Content Include="Scripts\_profile\service.js" />
+    <Content Include="Scripts\_registration\service.js" />
+    <Content Include="Scripts\_registration\controller.js" />
+    <Content Include="Scripts\respond.js" />
+    <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\sweetalert.min.js" />
+    <Content Include="Scripts\WebForms\DetailsView.js" />
+    <Content Include="Scripts\WebForms\Focus.js" />
+    <Content Include="Scripts\WebForms\GridView.js" />
+    <Content Include="Scripts\WebForms\Menu.js" />
+    <Content Include="Scripts\WebForms\MenuStandards.js" />
+    <Content Include="Scripts\WebForms\MSAjax\MicrosoftAjax.js" />
+    <Content Include="Scripts\WebForms\MSAjax\MicrosoftAjaxApplicationServices.js" />
+    <Content Include="Scripts\WebForms\MSAjax\MicrosoftAjaxComponentModel.js" />
+    <Content Include="Scripts\WebForms\MSAjax\MicrosoftAjaxCore.js" />
+    <Content Include="Scripts\WebForms\MSAjax\MicrosoftAjaxGlobalization.js" />
+    <Content Include="Scripts\WebForms\MSAjax\MicrosoftAjaxHistory.js" />
+    <Content Include="Scripts\WebForms\MSAjax\MicrosoftAjaxNetwork.js" />
+    <Content Include="Scripts\WebForms\MSAjax\MicrosoftAjaxSerialization.js" />
+    <Content Include="Scripts\WebForms\MSAjax\MicrosoftAjaxTimer.js" />
+    <Content Include="Scripts\WebForms\MSAjax\MicrosoftAjaxWebForms.js" />
+    <Content Include="Scripts\WebForms\MSAjax\MicrosoftAjaxWebServices.js" />
+    <Content Include="Scripts\WebForms\SmartNav.js" />
+    <Content Include="Scripts\WebForms\TreeView.js" />
+    <Content Include="Scripts\WebForms\WebForms.js" />
+    <Content Include="Scripts\WebForms\WebParts.js" />
+    <Content Include="Scripts\WebForms\WebUIValidation.js" />
+    <None Include="Scripts\_references.js" />
+    <Content Include="Scripts\_registration\view.js" />
+    <Content Include="Scripts\_settings\controller.js" />
+    <Content Include="Scripts\_settings\service.js" />
+    <Content Include="Scripts\_settings\view.js" />
+    <Content Include="Settings.aspx" />
+    <Content Include="WaitingForConfirmation.aspx" />
+    <Content Include="LoginPage.aspx" />
+    <Content Include="WebServices\DialogService.asmx" />
+    <Content Include="NestedMasterPage.master" />
+    <Content Include="Global.asax" />
+    <Content Include="UsersFolder\c339d83f-4224-4c68-a5ea-e833b6ac27b2\02f85d24-c4.jpg" />
+    <Content Include="UsersFolder\c339d83f-4224-4c68-a5ea-e833b6ac27b2\02f85d24-c4_thumb.jpg" />
+    <Content Include="UsersFolder\c339d83f-4224-4c68-a5ea-e833b6ac27b2\05b223b3-b6.jpg" />
+    <Content Include="UsersFolder\c339d83f-4224-4c68-a5ea-e833b6ac27b2\05b223b3-b6_thumb.jpg" />
+    <Content Include="UsersFolder\c339d83f-4224-4c68-a5ea-e833b6ac27b2\1e11c063-c14.jpg" />
+    <Content Include="UsersFolder\c339d83f-4224-4c68-a5ea-e833b6ac27b2\1e11c063-c14_thumb.jpg" />
+    <Content Include="UsersFolder\c339d83f-4224-4c68-a5ea-e833b6ac27b2\45105c2a-521.jpg" />
+    <Content Include="UsersFolder\c339d83f-4224-4c68-a5ea-e833b6ac27b2\45105c2a-521_thumb.jpg" />
+    <Content Include="UsersFolder\c339d83f-4224-4c68-a5ea-e833b6ac27b2\4700fa7f-42.jpg" />
+    <Content Include="UsersFolder\c339d83f-4224-4c68-a5ea-e833b6ac27b2\4700fa7f-42_thumb.jpg" />
+    <Content Include="UsersFolder\c339d83f-4224-4c68-a5ea-e833b6ac27b2\4d39ceef-e8.jpg" />
+    <Content Include="UsersFolder\c339d83f-4224-4c68-a5ea-e833b6ac27b2\4d39ceef-e8_thumb.jpg" />
+    <Content Include="UsersFolder\c339d83f-4224-4c68-a5ea-e833b6ac27b2\676d1f75-f24.jpg" />
+    <Content Include="UsersFolder\c339d83f-4224-4c68-a5ea-e833b6ac27b2\676d1f75-f24_thumb.jpg" />
+    <Content Include="UsersFolder\c339d83f-4224-4c68-a5ea-e833b6ac27b2\71cc6f25-97.jpg" />
+    <Content Include="UsersFolder\c339d83f-4224-4c68-a5ea-e833b6ac27b2\71cc6f25-97_thumb.jpg" />
+    <Content Include="UsersFolder\c339d83f-4224-4c68-a5ea-e833b6ac27b2\9eb314ba-71.jpg" />
+    <Content Include="UsersFolder\c339d83f-4224-4c68-a5ea-e833b6ac27b2\9eb314ba-71_thumb.jpg" />
+    <Content Include="UsersFolder\c339d83f-4224-4c68-a5ea-e833b6ac27b2\e90da35b-75.jpg" />
+    <Content Include="UsersFolder\c339d83f-4224-4c68-a5ea-e833b6ac27b2\e90da35b-75_thumb.jpg" />
+    <Content Include="UsersFolder\default.jpg" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Site.Master" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="People.aspx" />
-    <Content Include="Photos.aspx" />
-    <Content Include="Profile.aspx" />
-    <Content Include="RecoverPassword.aspx" />
-    <Content Include="Registration.aspx" />
-    <Content Include="Settings.aspx" />
-    <Content Include="WaitingForConfirmation.aspx" />
-    <Content Include="Web.config">
-      <SubType>Designer</SubType>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="404.aspx.cs">
@@ -372,16 +507,50 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Helpers\BasePage.cs">
+    <Compile Include="CreateUserPage.aspx.cs">
+      <DependentUpon>CreateUserPage.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Helpers\MasterPageBase.cs">
-      <SubType>ASPXCodeBehind</SubType>
+    <Compile Include="CreateUserPage.aspx.designer.cs">
+      <DependentUpon>CreateUserPage.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\PageExtensions.cs" />
-    <Compile Include="SignalR\ChatHub.cs" />
     <Compile Include="CustomControls\AuthorizationControl.cs" />
+    <Compile Include="CustomControls\Chat.ascx.cs">
+      <DependentUpon>Chat.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CustomControls\Chat.ascx.designer.cs">
+      <DependentUpon>Chat.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="CustomControls\Comments.ascx.cs">
+      <DependentUpon>Comments.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CustomControls\Comments.ascx.designer.cs">
+      <DependentUpon>Comments.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="CustomControls\DetailsInfo.ascx.cs">
+      <DependentUpon>DetailsInfo.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CustomControls\DetailsInfo.ascx.designer.cs">
+      <DependentUpon>DetailsInfo.ascx</DependentUpon>
+    </Compile>
     <Compile Include="CustomControls\MessageControl.cs" />
+    <Compile Include="CustomControls\MessageForm.ascx.cs">
+      <DependentUpon>MessageForm.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CustomControls\MessageForm.ascx.designer.cs">
+      <DependentUpon>MessageForm.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="CustomControls\Statuses.ascx.cs">
+      <DependentUpon>Statuses.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CustomControls\Statuses.ascx.designer.cs">
+      <DependentUpon>Statuses.ascx</DependentUpon>
+    </Compile>
     <Compile Include="EmailVerification.aspx.cs">
       <DependentUpon>EmailVerification.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -392,21 +561,13 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="SignalR\IChatHub.cs" />
-    <Compile Include="Login.aspx.cs">
-      <DependentUpon>Login.aspx</DependentUpon>
+    <Compile Include="Helpers\BasePage.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Login.aspx.designer.cs">
-      <DependentUpon>Login.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Main.aspx.cs">
-      <DependentUpon>Main.aspx</DependentUpon>
+    <Compile Include="Helpers\MasterPageBase.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Main.aspx.designer.cs">
-      <DependentUpon>Main.aspx</DependentUpon>
-    </Compile>
+    <Compile Include="Helpers\PageExtensions.cs" />
     <Compile Include="Messages.aspx.cs">
       <DependentUpon>Messages.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -414,12 +575,19 @@
     <Compile Include="Messages.aspx.designer.cs">
       <DependentUpon>Messages.aspx</DependentUpon>
     </Compile>
-    <Compile Include="NestedSiteMaster.master.cs">
-      <DependentUpon>NestedSiteMaster.master</DependentUpon>
+    <Compile Include="MyPage.aspx.cs">
+      <DependentUpon>MyPage.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="NestedSiteMaster.master.designer.cs">
-      <DependentUpon>NestedSiteMaster.master</DependentUpon>
+    <Compile Include="MyPage.aspx.designer.cs">
+      <DependentUpon>MyPage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="NestedMasterPage.master.cs">
+      <DependentUpon>NestedMasterPage.master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="NestedMasterPage.master.designer.cs">
+      <DependentUpon>NestedMasterPage.master</DependentUpon>
     </Compile>
     <Compile Include="People.aspx.cs">
       <DependentUpon>People.aspx</DependentUpon>
@@ -443,20 +611,17 @@
       <DependentUpon>Profile.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RecoverPassword.aspx.cs">
-      <DependentUpon>RecoverPassword.aspx</DependentUpon>
+    <Compile Include="RecoverPasswordPage.aspx.cs">
+      <DependentUpon>RecoverPasswordPage.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="RecoverPassword.aspx.designer.cs">
-      <DependentUpon>RecoverPassword.aspx</DependentUpon>
+    <Compile Include="RecoverPasswordPage.aspx.designer.cs">
+      <DependentUpon>RecoverPasswordPage.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Registration.aspx.cs">
-      <DependentUpon>Registration.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Registration.aspx.designer.cs">
-      <DependentUpon>Registration.aspx</DependentUpon>
-    </Compile>
+    <Compile Include="Services\Interfaces\IRedirectService.cs" />
+    <Compile Include="Services\Interfaces\ISessionService.cs" />
+    <Compile Include="Services\RedirectService.cs" />
+    <Compile Include="Services\SessionService.cs" />
     <Compile Include="Settings.aspx.cs">
       <DependentUpon>Settings.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -464,14 +629,17 @@
     <Compile Include="Settings.aspx.designer.cs">
       <DependentUpon>Settings.aspx</DependentUpon>
     </Compile>
-    <Compile Include="SiteMaster.Master.cs">
-      <DependentUpon>SiteMaster.Master</DependentUpon>
+    <Compile Include="SignalR\ChatHub.cs" />
+    <Compile Include="SignalR\IChatHub.cs" />
+    <Compile Include="Site.Master.cs">
+      <DependentUpon>Site.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="SiteMaster.Master.designer.cs">
-      <DependentUpon>SiteMaster.Master</DependentUpon>
+    <Compile Include="Site.Master.designer.cs">
+      <DependentUpon>Site.Master</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\AlbumViewModel.cs" />
+    <Compile Include="ViewModel\CommentViewModel.cs" />
     <Compile Include="ViewModel\ContactsViewModel.cs" />
     <Compile Include="ViewModel\CreatePhotoAlbumViewModel.cs" />
     <Compile Include="ViewModel\EducationViewModel.cs" />
@@ -481,7 +649,7 @@
     <Compile Include="ViewModel\LoginViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\MessagesFormViewModel.cs" />
-    <Compile Include="ViewModel\MessagesViewModel.cs" />
+    <Compile Include="ViewModel\MessageViewModel.cs" />
     <Compile Include="ViewModel\PasswordViewModel.cs" />
     <Compile Include="ViewModel\PhoneNumberViewModel.cs" />
     <Compile Include="ViewModel\ProfileViewModel.cs" />
@@ -500,10 +668,20 @@
     <Compile Include="WebApi\ProfileController.cs" />
     <Compile Include="WebApi\SettingsController.cs" />
     <Compile Include="WebApi\SharedController.cs" />
+    <Compile Include="LoginPage.aspx.cs">
+      <DependentUpon>LoginPage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="LoginPage.aspx.designer.cs">
+      <DependentUpon>LoginPage.aspx</DependentUpon>
+    </Compile>
     <Compile Include="WebServices\DialogService.asmx.cs">
       <DependentUpon>DialogService.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">
@@ -512,13 +690,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="UsersFolder\" />
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <ProjectExtensions>
@@ -527,9 +707,9 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>50115</DevelopmentServerPort>
+          <DevelopmentServerPort>50103</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:50115/</IISUrl>
+          <IISUrl>http://localhost:50200/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

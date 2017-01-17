@@ -1,8 +1,10 @@
-﻿using  Core.BLL.Interfaces;
-using  Core.DAL.Interfaces;
-using  Core.POCO;
+﻿using Core.BLL.Interfaces;
+using Core.DAL.Interfaces;
+using Core.POCO;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -10,7 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace  Core.BLL
+namespace Core.BLL
 {
     public class PhotoService : LogicLayer, IPhotoService
     {
@@ -89,8 +91,12 @@ namespace  Core.BLL
             string path = Database.Photos.GetLargeAvatarImg(userId);
             string thumbPath = Database.Photos.GetThumbAvatarImg(userId);
 
-            DeletePhotoFromFolder(path);
-            DeletePhotoFromFolder(thumbPath);
+            if ((path != "UsersFolder/default.jpg" && thumbPath != "UsersFolder/default.jpg"))
+            {
+                DeletePhotoFromFolder(path);
+                DeletePhotoFromFolder(thumbPath);
+            }
+
             #endregion
 
             Database.Photos.UpdateAvatar(photo, userId);
@@ -105,8 +111,23 @@ namespace  Core.BLL
 
         public void DeletePhotoFromAlbum(Photo photo, string userId)
         {
-            Database.Photos.DeletePhotoFromAlbum(photo, userId);
+            #region Delete from database
+            string photoUrl = photo.PhotoUrl;
+            photoUrl = photoUrl.Substring(photoUrl.IndexOf("UsersFolder"));
+
+            Database.Photos.DeletePhotoFromAlbum(photoUrl, userId);
             Database.Save();
+            #endregion
+
+            #region Delete from folder
+            photoUrl = HttpContext.Current.Server.MapPath("~/" + photoUrl);
+            string extension = Path.GetExtension(photoUrl);
+            int index = photoUrl.IndexOf(extension);
+            string thumbnailPhotoUrl = photoUrl.Remove(index, photoUrl.Count() - index) + "_thumb" + extension; 
+            
+            Database.Photos.DeletePhotoFromFolder(photoUrl);
+            Database.Photos.DeletePhotoFromFolder(thumbnailPhotoUrl);
+            #endregion
         }
 
 
@@ -142,18 +163,13 @@ namespace  Core.BLL
 
         public void DeletePhotoFromFolder(string path)
         {
+            path = path.Substring(path.IndexOf("UsersFolder"));
+
             string physicalPath = HttpContext.Current.Server.MapPath("~/" + path);
 
-            if ((File.GetAttributes(physicalPath) & FileAttributes.Hidden) == FileAttributes.ReadOnly)
-            {
-                File.SetAttributes(physicalPath, FileAttributes.Normal);
-
-                if (File.Exists(physicalPath))
-                {
-                    File.Delete(physicalPath);
-                }
-            }
+            Database.Photos.DeletePhotoFromFolder(physicalPath);
         }
+
         public int[] GetPhotoAlbumsIds(string userId)
         {
             int[] ids = Database.Photos.GetPhotoAlbumsIds(userId);

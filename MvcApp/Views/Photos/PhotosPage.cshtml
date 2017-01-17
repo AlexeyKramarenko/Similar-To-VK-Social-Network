@@ -1,13 +1,12 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "PhotosPage";
     Layout = "~/Views/Shared/_NestedLayout.cshtml";
 }
 
 
 @section styles{
-    <link href="@Url.Content("~/Content/photos.css")" rel="stylesheet" />
-    <link href="@Url.Content("~/Content/sweetalert.css")" rel="stylesheet" />
+    <link href='@Url.Content("~/Content/photos.css")' rel="stylesheet" />
+    <link href='@Url.Content("~/Content/sweetalert.css")' rel="stylesheet" />
 }
 
 
@@ -21,10 +20,18 @@
 
 
 @section scripts{
-
-    <script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script>
+        var ROOT = '@Url.Content("~/")';
+    </script> 
+    <script src="@Url.Content("~/Scripts/jquery-2.1.4.min.js")"></script>
     <script src="@Url.Content("~/Scripts/sweetalert.min.js")"></script>
-    <script src="@Url.Content("~/Scripts/photos.js")"></script>
     <script src="@Url.Content("~/Scripts/jquery-multidownload.js")"></script>
+    @Scripts.Render("~/bundles/photos")
+    <script>
+        var vm = new PhotosController(new PhotosView(), new PhotosService());
+    </script>
 }
 
+@{
+    Html.RenderAction("Chat", "Messages");
+}

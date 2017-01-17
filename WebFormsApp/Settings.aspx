@@ -1,4 +1,9 @@
-﻿<%@ Page Title="" Async="true" Language="C#" MasterPageFile="~/NestedSiteMaster.master" AutoEventWireup="true" CodeBehind="Settings.aspx.cs" Inherits="WebFormsApp.Settings" %>
+﻿<%@ Page EnableViewState="false" Title="" Language="C#" MasterPageFile="~/NestedMasterPage.master" AutoEventWireup="true" CodeBehind="Settings.aspx.cs" Inherits="WebFormsApp.Settings" %>
+
+
+
+<%@ Import Namespace="System.Web.Optimization" %>
+<%@ Register Src="~/CustomControls/Chat.ascx" TagPrefix="uc1" TagName="Chat" %>
 
 
 
@@ -8,10 +13,8 @@
     <link href="Content/settings_profile.css" rel="stylesheet" />
 </asp:Content>
 
-
-
-
 <asp:Content ID="innerContent" ContentPlaceHolderID="NestedPlaceHolder" runat="server">
+    <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
 
     <div class="container">
         <ul class="nav nav-tabs">
@@ -32,8 +35,7 @@
                     UpdateMode="Conditional">
 
                     <ContentTemplate>
-                        <asp:ScriptManagerProxy ID="ScriptManagerProxy1" runat="server"></asp:ScriptManagerProxy>
-
+                       
                         <asp:FormView
                             DefaultMode="Insert"
                             ID="FormView1"
@@ -110,8 +112,7 @@
                     UpdateMode="Conditional">
 
                     <ContentTemplate>
-                        <asp:ScriptManagerProxy ID="ScriptManagerProxy2" runat="server"></asp:ScriptManagerProxy>
-
+                        
                         <asp:FormView
                             DefaultMode="Edit"
                             ID="FormView2"
@@ -129,7 +130,7 @@
                                                 ID="lblTelNum"
                                                 ClientIDMode="Static"
                                                 runat="server"
-                                                Text='<%# Item.OldEmail %>' />
+                                                Text='<%# BindItem.OldEmail %>' />
                                         </td>
                                     </tr>
                                     <tr>
@@ -180,8 +181,7 @@
                     runat="server"
                     UpdateMode="Conditional">
                     <ContentTemplate>
-                        <asp:ScriptManagerProxy ID="ScriptManagerProxy3" runat="server"></asp:ScriptManagerProxy>
-
+                       
                         <asp:FormView
                             DefaultMode="Edit"
                             ID="FormView3"
@@ -246,7 +246,7 @@
                     <tr>
                         <td class="settings_privacy_row2">Кто видит основную информацию моей страницы</td>
                         <td>
-                            <a class="privacy" id="privacy_1">секундочку...</a>
+                            <a class="privacy" id="privacy_1"></a>
                         </td>
                     </tr>
                 </table>
@@ -262,51 +262,25 @@
 
                 <table>
                     <tr>
-                        <td class="settings_privacy_row2">Кто видит чужие записи на моей странице</td>
+                        <td class="settings_privacy_row2">Кто видит записи на моей странице</td>
                         <td>
-                            <a class="privacy" id="privacy_2">секундочку...</a>
+                            <a class="privacy" id="privacy_2"></a>
                         </td>
                     </tr>
                     <tr>
                         <td class="settings_privacy_row2">Кто может оставлять записи на моей странице</td>
                         <td>
-                            <a class="privacy" id="privacy_3">секундочку...</a></td>
+                            <a class="privacy" id="privacy_3"></a></td>
                     </tr>
                     <tr>
                         <td class="settings_privacy_row2">Кто видит комментарии к записям</td>
                         <td>
-                            <a class="privacy" id="privacy_4">секундочку...</a></td>
+                            <a class="privacy" id="privacy_4"></a></td>
                     </tr>
                     <tr>
                         <td class="settings_privacy_row2">Кто может комментировать мои записи</td>
                         <td>
-                            <a class="privacy" id="privacy_5">секундочку...</a>
-                        </td>
-                    </tr>
-                </table>
-
-                <br />
-                <b>Связь со мной</b>
-                <hr />
-                <br />
-                <table>
-                    <tr>
-                        <td class="settings_privacy_row2">Кто может писать мне личные сообщения</td>
-                        <td>
-                            <a class="privacy" id="privacy_6">секундочку...</a>
-                        </td>
-                    </tr>
-                </table>
-
-                <br />
-                <b>Прочее</b>
-                <hr />
-                <br />
-                <table >
-                    <tr>
-                        <td class="settings_privacy_row2">Кому в интернете видна моя страница</td>
-                        <td>
-                            <a class="privacy" id="privacy_7">секундочку...</a>
+                            <a class="privacy" id="privacy_5"></a>
                         </td>
                     </tr>
                 </table>
@@ -322,6 +296,15 @@
 
 
 <asp:Content ContentPlaceHolderID="Scripts" runat="server">
+    <script src="Scripts/jquery-2.1.4.min.js"></script>
     <script src="Scripts/bootstrap.min.js"></script>
-    <script src="Scripts/settings.js"></script>
+    <%: Scripts.Render("~/bundles/settings") %>
+    <script>
+        var vm = new SettingsController(new SettingsView(), new SettingsService());
+
+        $('.privacy').click(function () {
+            vm.getPrivacy(this);
+        });        
+    </script>
+    <uc1:Chat runat="server" ID="Chat" />
 </asp:Content>

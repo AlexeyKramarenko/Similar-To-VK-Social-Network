@@ -11,6 +11,7 @@ using System.Web.Http;
 using Core.POCO;
 using Core.BLL.Interfaces;
 using Core.BLL.DTO;
+using WebFormsApp.Services;
 
 namespace WebFormsApp.WebApi
 {
@@ -24,27 +25,33 @@ namespace WebFormsApp.WebApi
         IProfileService profileService;
         IPhotoService photoService;
         IChatHub chathub;
+        ISessionService sessionService;
 
-        string currentUserId;
-
-        public PeopleController(IChatHub _chathub, IRelationshipsService _relationshipsService, ICountriesService _countriesService, IProfileService _profileService, IPhotoService _photoService, IUserService _userService, IMappingService _mappingService, ILuceneService _luceneService)
+        public string CurrentUserId
+        {
+            get
+            {
+                return sessionService.CurrentUserId;
+            }
+        }
+        public PeopleController(IChatHub _chathub, IRelationshipsService _relationshipsService, ICountriesService _countriesService, IProfileService _profileService, IPhotoService _photoService, IUserService _userService, IMappingService _mappingService, ILuceneService _luceneService, ISessionService sessionService)
         {
             relationshipsService = _relationshipsService;
             countriesService = _countriesService;
             profileService = _profileService;
-            photoService = _photoService; 
+            photoService = _photoService;
             userService = _userService;
             mappingService = _mappingService;
             chathub = _chathub;
             luceneService = _luceneService;
-            currentUserId = User.Identity.GetUserId();
+            this.sessionService = sessionService;
         }
 
         [HttpDelete]
         [ActionName("RemoveFromFriends")]
         public HttpResponseMessage RemoveFromFriends(string id)
         {
-            IQueryable<Relationship> relationship = relationshipsService.GetRelationship(currentUserId, id);
+            Relationship relationship = relationshipsService.GetRelationship(CurrentUserId, id);
 
             if (relationship == null)
             {
@@ -52,7 +59,7 @@ namespace WebFormsApp.WebApi
             }
             else
             {
-                relationshipsService.RemoveFromFriends(relationship, currentUserId, id);
+                relationshipsService.RemoveFromFriends(relationship, CurrentUserId, id);
                 return new HttpResponseMessage(HttpStatusCode.NoContent);
             }
         }
@@ -64,11 +71,11 @@ namespace WebFormsApp.WebApi
             HttpResponseMessage response = Request.CreateResponse();
 
             List<Country> countries = countriesService.GetAllCountries();
-
+            string[] _countries = countries.Select(a => a.CountryName).ToArray();
             if (countries != null)
             {
                 response.StatusCode = HttpStatusCode.OK;
-                response.Content = new ObjectContent<List<Country>>(countries, new JsonMediaTypeFormatter());
+                response.Content = new ObjectContent<string[]>(_countries, new JsonMediaTypeFormatter());
             }
             else
             {
@@ -76,19 +83,22 @@ namespace WebFormsApp.WebApi
                 throw new HttpResponseException(response);
             }
 
-            return response;            
+            return response;
         }
 
         [HttpGet]
         [ActionName("GetTownsByCountry")]
         public HttpResponseMessage GetTownsByCountry(int id)
         {
-            object[] towns = countriesService.GetTownsByCountry(id);
+            Town[] towns = countriesService.GetTownsByCountry(id);
 
             HttpResponseMessage response = null;
 
             if (towns != null)
-                response = Request.CreateResponse(HttpStatusCode.OK, towns);
+            {
+                response = Request.CreateResponse(HttpStatusCode.OK);
+                response.Content = new ObjectContent<Town[]>(towns, new JsonMediaTypeFormatter());
+            }
 
             else
                 response = Request.CreateResponse(HttpStatusCode.NotFound, "NotFound");
@@ -100,13 +110,20 @@ namespace WebFormsApp.WebApi
         [ActionName("GetTownsByCountryName")]
         public HttpResponseMessage GetTownsByCountryName(string id)
         {
-            object towns = countriesService.GetTownsByCountryName(id);
+            Town[] towns = countriesService.GetTownsByCountryName(id);
+
+            string[] townNames = null;
+
+            if (towns != null && towns.Length > 0)
+                townNames = towns.Select(a => a.TownName).ToArray();
 
             HttpResponseMessage response = null;
 
-            if (towns != null)
-                response = Request.CreateResponse(HttpStatusCode.OK, towns);
-
+            if (townNames != null)
+            {
+                response = Request.CreateResponse(HttpStatusCode.OK);
+                response.Content = new ObjectContent<string[]>(townNames, new JsonMediaTypeFormatter());
+            }
             else
                 response = Request.CreateResponse(HttpStatusCode.NotFound, "NotFound");
 
@@ -116,9 +133,9 @@ namespace WebFormsApp.WebApi
 
         [HttpGet]
         [ActionName("GetUsersList")]
-        public HttpResponseMessage GetUsersList(int from, int to, int country, int? town, string UserID, string gender, bool online = false)
+        public HttpResponseMessage GetUsersList(int from, int to, int countryId, int? townId, string UserID, string gender, bool online = false)
         {
-            List<UserViewModel> users = GetUsersList(from, to, country, town, UserID, gender, null, online);
+            List<UserViewModel> users = GetUsersList(from, to, countryId, townId, UserID, gender, null, online);
 
             HttpResponseMessage response = null;
 
@@ -139,10 +156,10 @@ namespace WebFormsApp.WebApi
 
         [HttpGet]
         [ActionName("GetUsersList")]
-        public List<UserViewModel> GetUsersList(int from, int to, int country, int? town, string UserID, string gender, string name, bool online = false)
+        public List<UserViewModel> GetUsersList(int from, int to, int countryId, int? townId, string UserID, string gender, string name, bool online = false)
         {
             List<UserViewModel> users = null;
-            List<Profile> filteredProfiles = null;
+            List<Core.POCO.Profile> filteredProfiles = null;
 
             //Friends list
             if (UserID != "0")
@@ -151,7 +168,7 @@ namespace WebFormsApp.WebApi
 
                 if (online == true)
                 {
-                    List<UserDetail> onlineFriends = chathub.GetOnlineFriends(UserID);
+                    List<UserInfo> onlineFriends = chathub.GetOnlineFriends(UserID);
                     userIds = onlineFriends.Select(a => a.UserID).ToList();
                 }
                 else
@@ -159,15 +176,15 @@ namespace WebFormsApp.WebApi
                     userIds = relationshipsService.GetFriendsIDsOfUser(UserID);
                 }
 
-                filteredProfiles = profileService.GetFriendsByUserID(from, to, country, town, UserID, gender, userIds);
+                filteredProfiles = profileService.GetFriendsByUserID(from, to, countryId, townId, UserID, gender, userIds);
             }
 
 
             //Common people list
             else
             {
-                IQueryable<Profile> profiles = profileService.GetAllProfiles();
-                filteredProfiles = profileService.GetUsers(from, to, country, town, gender, profiles);
+                IQueryable<Core.POCO.Profile> profiles = profileService.GetAllProfiles();
+                filteredProfiles = profileService.GetUsers(from, to, countryId, townId, gender, profiles);
             }
 
             //Mapping
@@ -183,9 +200,9 @@ namespace WebFormsApp.WebApi
                 .ToList();
 
             //Lucene search
-            if (users != null && users.Count > 1)
+            if (users != null && users.Count > 0)
             {
-                users = ExcludeFromResultCurrentUser(users, currentUserId);
+                users = ExcludeFromResultCurrentUser(users, CurrentUserId);
 
                 if (!string.IsNullOrEmpty(name) && name != "null")//js "null"
                 {
@@ -200,7 +217,7 @@ namespace WebFormsApp.WebApi
             return users;
         }
 
-        public List<UserViewModel> ExcludeFromResultCurrentUser(List<UserViewModel> users, string userId)
+        private List<UserViewModel> ExcludeFromResultCurrentUser(List<UserViewModel> users, string userId)
         {
             var currentUser = users.FirstOrDefault(a => a.UserID == userId);
 

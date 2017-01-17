@@ -54,8 +54,8 @@ namespace  Core.DAL
         {
             List<string> friends = new List<string>();
 
-            var senders = db.Relationships.Where(a => a.SenderAccountID == UserID && a.RelationshipDefinitionID == 1).ToArray();
-            var receivers = db.Relationships.Where(a => a.ReceiverAccountID == UserID && a.RelationshipDefinitionID == 1).ToArray();
+            var senders = db.Relationships.Where(a => a.SenderAccountID == UserID && a.RelationshipDefinitionID == 2).ToArray();
+            var receivers = db.Relationships.Where(a => a.ReceiverAccountID == UserID && a.RelationshipDefinitionID == 2).ToArray();
 
             for (int i = 0; i < senders.Length; i++)
             {
@@ -104,17 +104,17 @@ namespace  Core.DAL
             db.Entry(message).State = System.Data.Entity.EntityState.Added;
         }
 
-        public void RemoveFromFriends(IQueryable<Relationship> friendship)
+        public void RemoveFromFriends(Relationship friendship)
         {
             db.Entry(friendship).State = System.Data.Entity.EntityState.Deleted;
         }
 
-        public IQueryable<Relationship> GetRelationship(string FirstUserID, string SecondUserID)
+        public Relationship GetRelationship(string FirstUserID, string SecondUserID)
         {
-            IQueryable<Relationship> friendship = db.Relationships.Where(a => a.ReceiverAccountID == FirstUserID && a.SenderAccountID == SecondUserID);
+            Relationship friendship = db.Relationships.FirstOrDefault(a => a.ReceiverAccountID == FirstUserID && a.SenderAccountID == SecondUserID);
 
             if (friendship == null)
-                friendship = db.Relationships.Where(a => a.ReceiverAccountID == SecondUserID && a.SenderAccountID == FirstUserID);
+                friendship = db.Relationships.FirstOrDefault(a => a.ReceiverAccountID == SecondUserID && a.SenderAccountID == FirstUserID);
 
             return friendship;
         }

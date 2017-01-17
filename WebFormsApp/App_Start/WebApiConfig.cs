@@ -24,13 +24,13 @@ namespace WebFormsApp.App_Start
 
             config.Routes.MapHttpRoute(
                name: "GetUsersList1",
-               routeTemplate: "webapi/{controller}/{action}/{from}/{to}/{country}/{town}/{UserID}/{gender}/{online}",
+               routeTemplate: "webapi/{controller}/{action}/{from}/{to}/{countryId}/{townId}/{UserID}/{gender}/{online}",
                defaults: new
                {
                    from = RouteParameter.Optional,
                    to = RouteParameter.Optional,
-                   country = RouteParameter.Optional,
-                   town = RouteParameter.Optional,
+                   countryId = RouteParameter.Optional,
+                   townId = RouteParameter.Optional,
                    gender = RouteParameter.Optional,
                    UserID = RouteParameter.Optional,
                    online = RouteParameter.Optional
@@ -38,13 +38,13 @@ namespace WebFormsApp.App_Start
 
             config.Routes.MapHttpRoute(
                 name: "GetUsersList2",
-                routeTemplate: "webapi/{controller}/{action}/{from}/{to}/{country}/{town}/{UserID}/{gender}/{name}/{online}",
+                routeTemplate: "webapi/{controller}/{action}/{from}/{to}/{countryId}/{townId}/{UserID}/{gender}/{name}/{online}",
                 defaults: new
                 {
                     from = RouteParameter.Optional,
                     to = RouteParameter.Optional,
-                    country = RouteParameter.Optional,
-                    town = RouteParameter.Optional,
+                    countryId = RouteParameter.Optional,
+                    townId = RouteParameter.Optional,
                     gender = RouteParameter.Optional,
                     UserID = RouteParameter.Optional,
                     name = RouteParameter.Optional,

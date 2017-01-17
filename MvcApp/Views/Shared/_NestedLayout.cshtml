@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -12,10 +11,10 @@
 
     @RenderSection("styles", required: false)
 
-    <link href="@Url.Content("/Content/nestedSiteMaster.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/nestedSiteMaster.css")" rel="stylesheet" />
 }
 
-<script src="@Url.Content("~/Scripts/nestedSiteMaster.js")"></script>
+<script src="~/Scripts/users.js"></script>
  
 
 <div id="nav_content_footer">
@@ -23,27 +22,27 @@
     <div style="margin-left: 140px; margin-top: -52px;">
         <div style="padding: 15px 0 5px 10px;">
             <input id="txtName" type="text" />
-            <input id="btnPeople" type="button" value="People" onclick="goToPeoplePage(friendsOnly=false, online=false)" />
-            <input id="btnFriends" type="button" value="Friends" onclick="goToPeoplePage(friendsOnly=true, online=false)" />
+            <input id="btnPeople" type="button" value="People" onclick="users.findUsers(friendsOnly = false, online = false)" />
+            <input id="btnFriends" type="button" value="Friends" onclick="users.findUsers(friendsOnly = true, online = false)" />
             <span id="searchMode"></span>
         </div>
 
         <nav id="nav" style="margin-top: 40px;">
             <ul>
                 <li>
-                    @Html.ActionLink("Моя Страница", "MainPage", "Main", new { UserID = "" }, null)
+                    @Html.ActionLink("My Page", "MainPage", "Main", null, null)
                 </li>
                 <li>
-                    <a onclick="goToPeoplePage(friendsOnly = true, online = false)">Мои Друзья</a>
+                    <a onclick="users.findUsers(friendsOnly = true, online = false)">My Friends</a>
                 </li>
                 <li>
-                    @Html.ActionLink("Мои Фотографии", "PhotosPage", "Photos", null, null)
+                    @Html.ActionLink("My Photos", "PhotosPage", "Photos", null, null)
                 </li>
                 <li>
-                    @Html.ActionLink("Мои Сообщения", "MessagesPage", "Messages", null, null)
+                    @Html.ActionLink("My Messages", "MessagesPage", "Messages", null, null)
                 </li>
                 <li>
-                    @Html.ActionLink("Мои Настройки", "SettingsPage", "Settings", null, null)
+                    @Html.ActionLink("My Settings", "SettingsPage", "Settings", null, null)
                 </li>
             </ul>
         </nav>
@@ -61,11 +60,6 @@
 
     @RenderSection("scripts", false)
 
-
-
-    <script src="@Url.Content("~/Scripts/jquery.signalR-2.2.0.min.js")"></script>
-    <script src="@Url.Content("~/signalr/hubs")"></script>
-    <script src="@Url.Content("~/Scripts/signalRscriptForDefaultPages.js")"></script>
 }
 
 

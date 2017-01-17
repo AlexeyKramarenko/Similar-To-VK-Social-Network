@@ -19,7 +19,7 @@ namespace Core.BLL.DTO
 
         public string[] StartYears { get; set; }
         public string[] FinishYears { get; set; }
-        public SelectListItem[] CountriesList { get; set; }
+        public string[] CountriesList { get; set; }
         public Town[] Towns { get; set; }
     }
 }

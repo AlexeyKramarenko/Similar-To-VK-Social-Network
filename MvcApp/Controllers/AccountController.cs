@@ -132,8 +132,8 @@ namespace MvcApp.Controllers
                     BirthMonth = rvm.BirthDate.Month,
                     BirthYear = rvm.BirthDate.Year,
                     Gender = rvm.Gender,
-                    MaritalStatus = rvm.Married,
-                    CreateDate = DateTime.Now,
+                    MaritalStatus = rvm.MaritalStatus,
+                    CreationDate = DateTime.Now,
 
                     AboutMe = "",
                     Activity = "",
@@ -157,10 +157,11 @@ namespace MvcApp.Controllers
 
                 var user = mappingService.Map<RegistrationViewModel, ApplicationUser>(rvm);
 
-                var result = userService.CreateUser(profile, user, GetHost);
+                OperationResult result = userService.CreateUser(profile, user, GetHost);
 
                 if (result.Succedeed)
-                   return RedirectToAction("WaitingForConfirmation");
+                    //return RedirectToAction("WaitingForConfirmation");
+                    return RedirectToAction("Login");
 
                 else
                     ModelState.AddModelError("error", result.Message);
@@ -189,10 +190,10 @@ namespace MvcApp.Controllers
                             <br/><a href='/account/login' style='text-decoration:underline;color:blue;'>Войти в свой аккаунт</a>";
                 }
                 else
-                    ViewBag.Message = "Возникла неизвестная ошибка.";
+                    ViewBag.Message = "Пользователя с таким именем нет.";
             }
             else
-                ViewBag.Message = "";
+                ViewBag.Message = "Не указано имя пользователя.";
 
             return View();
         }

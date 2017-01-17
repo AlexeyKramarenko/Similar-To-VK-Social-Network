@@ -207,7 +207,7 @@ b {
 }
 /*-----------------------------*/
 
-.table3 {
+.table_ {
     /*border: solid 3px blue;*/
     background-color: #F1F1F1;
     width: 380px;
@@ -216,18 +216,18 @@ b {
     border: 1px solid gray;
 }
 
-.table3row {
+.table_row {
     display: table-row;
     /*border: solid 3px green;*/
 }
 
-.table3leftCell {
+.table_leftCell {
     display: table-cell;
     width: 70px;
     /*border: solid 3px red;*/
 }
 
-.table3rightCell {
+.table_rightCell {
     display: table-cell;
     /*border: solid 3px yellow;*/
     width: 300px;

@@ -1,4 +1,5 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/SiteMaster.Master" AutoEventWireup="true" CodeBehind="404.aspx.cs" Inherits="WebFormsApp._404" %>
+﻿<%@ Page EnableViewState="false" Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="404.aspx.cs" Inherits="WebFormsApp._404" %>
+
 
 <asp:Content ContentPlaceHolderID="_Styles" runat="server">
     <style>
@@ -10,7 +11,7 @@
             font-size: large;
             font-weight: bold;
             margin-top: 60px;
-        }   
+        }
     </style>
 </asp:Content>
 
@@ -20,4 +21,5 @@
 
     <span>404 Error</span>
 
+     
 </asp:Content>

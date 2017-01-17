@@ -1,15 +1,39 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/NestedSiteMaster.master" AutoEventWireup="true" CodeBehind="Messages.aspx.cs" Inherits="WebFormsApp.Messages" %>
+﻿<%@ Page EnableViewState="false" Title="" Language="C#" MasterPageFile="~/NestedMasterPage.master" AutoEventWireup="true" CodeBehind="Messages.aspx.cs" Inherits="WebFormsApp.Messages" %>
 
+<%@ Import Namespace="System.Web.Optimization" %>
 
 <asp:Content ContentPlaceHolderID="Styles" runat="server">
-    <link href="Content/bootstrap_settings_page.css" rel="stylesheet" />
-    <link href="Content/settings_profile.css" rel="stylesheet" />
-    <link href="Content/messages.css" rel="stylesheet" />
+    <link href="/Content/bootstrap_settings_page.css" rel="stylesheet" />
+    <link href="/Content/settings_profile.css" rel="stylesheet" />
+    <link href="/Content/messages.css" rel="stylesheet" />
+
+
 </asp:Content>
 
 
 
-<asp:Content ContentPlaceHolderID="NestedPlaceHolder" runat="server"> 
+
+<asp:Content ContentPlaceHolderID="NestedPlaceHolder" runat="server">
+
+    <script src="Scripts/jquery-2.1.4.min.js"></script>
+    <script src="Scripts/bootstrap.min.js"></script>
+    <script src="Scripts/sweetalert.min.js"></script>
+    <script src="Scripts/jquery.signalR-2.2.0.min.js"></script>
+    <script src="signalr/hubs"></script>
+    <%: Scripts.Render("~/bundles/signalr.messages") %>
+    <script>
+        var hub = $.connection.hub,
+            client = $.connection.chatHub.client,
+            server = $.connection.chatHub.server,
+            view = new MessagesSignalrView();
+
+        var signalr = new MessagesSignalrController(hub, client, server, view);
+    </script>
+    <%: Scripts.Render("~/bundles/messages") %>
+    <script>
+        var vm = new MessagesController(new MessagesView(), new MessagesService());
+    </script>
+
 
     <div class="container">
 
@@ -30,11 +54,12 @@
                 <asp:ListView
                     ID="ListView1"
                     runat="server"
-                    ItemType="WebFormsApp.ViewModel.MessagesViewModel"
+                    ItemType="WebFormsApp.ViewModel.MessageViewModel"
                     SelectMethod="GetDialogsList">
                     <LayoutTemplate>
                         <asp:HiddenField ID="hdnActiveDialogID" ClientIDMode="Static" runat="server" />
                         <asp:HiddenField ID="hdnMyCurrentInterlocutor" ClientIDMode="Static" runat="server" />
+
                         <asp:PlaceHolder ID="itemPlaceholder" runat="server" />
                     </LayoutTemplate>
                     <ItemTemplate>
@@ -44,12 +69,12 @@
                             data-dialogid='<%# Item.DialogID %>'
                             data-interlocutoruserid='<%# Item.InterlocutorUserID %>'
                             href="#menu1"
-                            onclick="goToDialog(this); getUsersInfoForDialogForm(this);"
-                            class="linkToDialog">
-
-                            <table
-                                class="dialogs_row_t">
-
+                            class="linkToDialog"
+                            onclick="signalr.setWhoIsMyCurrentInterlocutor(this);
+                                     signalr.goToDialog(this);                                      
+                                     vm.getUsersInfoForDialogForm(this);
+                                     vm.goToDialog(this)">
+                            <table class="dialogs_row_t">
                                 <tbody>
                                     <tr>
                                         <td class="dialogs_photo">
@@ -62,8 +87,7 @@
                                         </td>
                                         <td class="dialogs_msg_contents">
                                             <div class="dialogs_msg_body  clear_fix" style="opacity: 1;">
-                                                <img src='<%# Item.CurrentUserAvatar %>' runat="server" width="32" height="32">
-                                                <div class="dialogs_comment"><%# Item.MessageText %></div>
+                                                <div class="dialogs_comment"><%# Item.MessageText  %></div>
                                             </div>
                                         </td>
                                         <td class="dialogs_unread_td">
@@ -76,9 +100,6 @@
                     </ItemTemplate>
                 </asp:ListView>
             </div>
-
-
-
             <div id="menu1" class="tab-pane fade dialogs" style="">
                 <div class="myBox">
                     <table>
@@ -93,14 +114,9 @@
             </div>
         </div>
     </div>
-
 </asp:Content>
-
-
 
 <asp:Content ContentPlaceHolderID="Scripts" runat="server">
-    <script src="Scripts/bootstrap.min.js"></script>
-    <script src="Scripts/sweetalert.min.js"></script>
-    <script src="Scripts/signalRmessagesPage.js"></script>
-    <script src="Scripts/messages.js"></script>
 </asp:Content>
+
+
